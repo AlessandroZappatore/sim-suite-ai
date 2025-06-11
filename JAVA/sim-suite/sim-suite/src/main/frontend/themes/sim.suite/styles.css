@@ -1,0 +1,33 @@
+@import url('./views/home-view.css');
+@import url('./views/creation-view.css');
+@import url('./views/execution-view.css');
+/* styles.css */
+:host([theme~="dark"]) {
+    --lumo-base-color: #1d1d1d;
+    --lumo-body-text-color: #f3f3f3;
+    --lumo-primary-text-color: #a1c4fd;
+    --lumo-primary-color-10pct: rgba(161, 196, 253, 0.1);
+}
+
+/* Stili per light mode */
+:host([theme~="light"]) {
+    --lumo-base-color: #ffffff;
+    --lumo-body-text-color: #333333;
+    --lumo-primary-text-color: #2c68e8;
+    --lumo-primary-color-10pct: rgba(44, 104, 232, 0.1);
+}
+
+/* Stile header */
+[theme~="dark"] .app-header {
+    border-bottom: 1px solid var(--lumo-contrast-20pct);
+}
+
+[theme~="light"] .app-header {
+    border-bottom: 1px solid var(--lumo-contrast-10pct);
+}
+
+vaadin-grid-cell-content {
+    white-space: normal !important;
+    overflow: visible !important;
+    text-overflow: clip !important;
+}

@@ -1,0 +1,67 @@
+.info-card {
+    background-color: var(--lumo-base-color);
+    border-radius: var(--lumo-border-radius);
+    box-shadow: var(--lumo-box-shadow-xs);
+    padding: var(--lumo-space-l);
+    margin-bottom: var(--lumo-space-m);
+    width: 100%;
+}
+
+.time-card {
+    background-color: var(--lumo-contrast-5pct);
+    border-radius: var(--lumo-border-radius);
+    padding: var(--lumo-space-m);
+    margin-bottom: var(--lumo-space-s);
+    width: 100%;
+}
+
+.exam-card {
+    background-color: var(--lumo-base-color);
+    border-radius: var(--lumo-border-radius);
+    box-shadow: var(--lumo-box-shadow-xs);
+    padding: var(--lumo-space-m);
+    margin-bottom: var(--lumo-space-s);
+    width: 100%;
+}
+
+.media-preview {
+    border: 1px solid var(--lumo-contrast-10pct);
+    border-radius: var(--lumo-border-radius);
+    padding: var(--lumo-space-s);
+    margin: var(--lumo-space-s) 0;
+    background-color: var(--lumo-contrast-5pct);
+    text-align: center;
+}
+
+.pdf-preview {
+    display: flex;
+    align-items: center;
+    gap: var(--lumo-space-s);
+    padding: var(--lumo-space-s);
+}
+
+vaadin-accordion {
+    width: 100%;
+}
+
+vaadin-accordion-panel {
+    margin-bottom: var(--lumo-space-s);
+}
+
+vaadin-accordion-panel::part(content) {
+    padding: 0;
+}
+
+.pdf-container {
+    width: 100%;
+    height: 500px;
+    border: 1px solid var(--lumo-contrast-10pct);
+    border-radius: var(--lumo-border-radius);
+    overflow: hidden;
+}
+
+.pdf-container iframe {
+    width: 100%;
+    height: 100%;
+    border: none;
+}
