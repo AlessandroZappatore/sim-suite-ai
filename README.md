@@ -1,5 +1,5 @@
 # 🧠 SIMSUITEAI
-![SIMSUITEAI Logo](DOCS/img/icon.png)
+<img src="DOCS/img/icon.png" alt="SIMSUITEAI Logo" width="100" height="100">
 
 **Il Futuro della Simulazione Clinica**
 
@@ -8,11 +8,8 @@
 [![Python](https://img.shields.io/badge/Python-3.12+-blue.svg)](https://python.org)
 [![FastAPI](https://img.shields.io/badge/FastAPI-Latest-green.svg)](https://fastapi.tiangolo.com)
 [![AI Powered](https://img.shields.io/badge/AI-Powered-purple.svg)](https://ai.google.dev)
-[![License](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 
-[📖 Documentazione](DOCS/index.html) • [🚀 Demo](DOCS/videos/) • [🛠️ Installazione](#installazione)
-
-</div>
+[📖 Documentazione](https://alessandrozappatore.github.io/sim-suite-ai/) • [🛠️ Installazione](#installazione)
 
 ---
 
@@ -212,16 +209,6 @@ Siamo aperti a contributi! Segui questi passi:
 
 ---
 
-## 📋 Roadmap
-
-- [ ] **v2.0**: Integrazione con più provider AI
-- [ ] **v2.1**: Supporto multi-lingua
-- [ ] **v2.2**: Analytics e reporting avanzati
-- [ ] **v2.3**: Mobile app companion
-- [ ] **v3.0**: Realtà virtuale/aumentata
-
----
-
 ## 🐛 Troubleshooting
 
 ### Problemi Comuni
@@ -252,49 +239,8 @@ pip install -r requirements.txt --force-reinstall
 - **Esami di Laboratorio**: ~15-30 secondi
 - **Elaborazione Background**: Non blocca l'UI
 - **Memory Usage**: ~200-500MB
-- **Concurrent Users**: Fino a 10 utenti simultanei
 
 ---
-
-## 🔒 Sicurezza
-
-- **API Keys**: Crittografate e stored localmente
-- **Database**: SQLite con backup automatici
-- **Network**: Comunicazioni HTTPS quando possibile
-- **Privacy**: Dati scenari rimangono locali
-
----
-
-## 📞 Supporto
-
-- **📧 Email**: support@simsuiteai.com
-- **💬 Discord**: [Server Community](https://discord.gg/simsuiteai)
-- **📖 Wiki**: [Documentazione Completa](https://github.com/yourusername/sim-suite-ai/wiki)
-- **🐛 Issues**: [GitHub Issues](https://github.com/yourusername/sim-suite-ai/issues)
-
----
-
-## 📜 Licenza
-
-Questo progetto è rilasciato sotto licenza **MIT**. Vedi il file [LICENSE](LICENSE) per dettagli.
-
----
-
-## 🙏 Riconoscimenti
-
-- **SimSuite Team** - Per la piattaforma base eccellente
-- **Google AI** - Per le API di generazione avanzate  
-- **FastAPI** - Per il framework web veloce e moderno
-- **Community** - Per feedback e contributi continui
-
----
-
-<div align="center">
-
 **Realizzato con ❤️ per la formazione medica**
 
-*SIMSUITEAI - Dove l'intelligenza artificiale incontra l'eccellenza clinica*
-
 [⭐ Dai una stella](https://github.com/yourusername/sim-suite-ai) se questo progetto ti è utile!
-
-</div>
