@@ -25,4 +25,3 @@ class MedicalReportResponse(BaseModel):
     """The response model containing the generated medical report."""
     tipologia_esame: str = Field(description="The type of examination performed.")
     referto: str = Field(description="The complete medical report in Italian, formatted as plain text.")
-    esame_obiettivo: str = Field(description="Objective exam like eyes, neck, chest, abdomen, etc.")
