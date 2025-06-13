@@ -221,7 +221,7 @@ public class LabExamService {
                 int categoryId = rs.getInt("id_categoria_lab");
                 LabExamSet finalLabExamSet = labExamSet;
                 LabCategory category = categoryMap.computeIfAbsent(categoryId, id -> {
-                    LabCategory newCategory = null;
+                    LabCategory newCategory;
                     try {
                         newCategory = new LabCategory(id, rs.getString("nome_categoria"));
                     } catch (SQLException e) {
@@ -242,7 +242,7 @@ public class LabExamService {
                 category.addTest(test);
             }
 
-            if(labExamSet != null){
+            if (labExamSet != null) {
                 logger.info("Recuperati esami di laboratorio per lo scenario ID: {}", scenarioId);
             } else {
                 logger.warn("Nessun esame di laboratorio trovato per lo scenario ID: {}", scenarioId);

@@ -25,7 +25,7 @@ import org.slf4j.LoggerFactory;
  */
 public class MainLayout extends AppLayout {
 
-    private NotifierService notifierService;
+    private final NotifierService notifierService;
 
     // Usa l'iniezione tramite costruttore, che è la pratica migliore in Spring
     public MainLayout(NotifierService notifierService) {
@@ -66,6 +66,10 @@ public class MainLayout extends AppLayout {
                     // Sostituisci con il percorso della tua GIF per gli esami
                     gif = new Image(UIConstants.LAB_GIF_PATH, "Animazione esami");
                     // Il bottone ricarica la pagina corrente per mostrare la nuova card
+                    viewButton.addClickListener(event -> ui.getPage().reload());
+                } else if (message.contains("Nuovo referto")) {
+                    viewButton = new Button("Ricarica Pagina");
+                    gif = new Image(UIConstants.REF_GIF_PATH, "Animazione referti");
                     viewButton.addClickListener(event -> ui.getPage().reload());
                 } else {
                     // Fallback generico

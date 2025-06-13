@@ -1,11 +1,9 @@
 package it.uniupo.simnova.views.creation.paziente;
 
-import com.flowingcode.vaadin.addons.fontawesome.FontAwesome;
 import com.vaadin.flow.component.Composite;
 import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.button.ButtonVariant;
-import com.vaadin.flow.component.dialog.Dialog;
 import com.vaadin.flow.component.icon.Icon;
 import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.component.notification.Notification;
@@ -155,41 +153,6 @@ public class EsamiRefertiView extends Composite<VerticalLayout> implements HasUr
         backButton.addClickListener(e -> backButton.getUI().ifPresent(ui -> ui.navigate("materialeNecessario/" + scenarioId)));
         // Listener per il salvataggio e la navigazione successiva
         nextButton.addClickListener(e -> saveEsamiRefertiAndNavigate(nextButton.getUI()));
-
-        Button robotChatButton = new Button();
-        // Usa FontAwesome tramite un tag <i> custom, oppure un'icona simile di Vaadin se FontAwesome non è disponibile
-        Icon robotIcon = FontAwesome.Solid.ROBOT.create(); // Sostituire con FontAwesome se integrato
-        robotIcon.getStyle().set("font-size", "24px");
-        robotChatButton.setIcon(robotIcon);
-        robotChatButton.getElement().setAttribute("aria-label", "Apri chat robot");
-        robotChatButton.addThemeVariants(ButtonVariant.LUMO_PRIMARY);
-        robotChatButton.getStyle().set("position", "fixed");
-        robotChatButton.getStyle().set("bottom", "32px");
-        robotChatButton.getStyle().set("right", "32px");
-        robotChatButton.getStyle().set("z-index", "1000");
-
-        Dialog chatDialog = new Dialog();
-        chatDialog.setCloseOnEsc(true);
-        chatDialog.setCloseOnOutsideClick(true);
-        chatDialog.setWidth("350px");
-        chatDialog.setHeight("400px");
-        chatDialog.getElement().getStyle().set("border-radius", "16px");
-        chatDialog.getElement().getStyle().set("overflow", "hidden");
-
-        VerticalLayout chatLayout = new VerticalLayout();
-        chatLayout.setPadding(true);
-        chatLayout.setSpacing(false);
-        chatLayout.setWidthFull();
-        chatLayout.setHeightFull();
-        chatLayout.getStyle().set("background", "#f8f9fa");
-        chatLayout.add(new com.vaadin.flow.component.html.Span("Chat Robot (solo grafica)"));
-        chatLayout.add(new com.vaadin.flow.component.html.Span("👋 Ciao! Come posso aiutarti oggi?"));
-        chatLayout.add(new com.vaadin.flow.component.html.Span("[Messaggio statico di esempio]"));
-        chatDialog.add(chatLayout);
-
-        robotChatButton.addClickListener(e -> chatDialog.open());
-        getContent().add(robotChatButton);
-        getContent().add(chatDialog);
     }
 
     /**

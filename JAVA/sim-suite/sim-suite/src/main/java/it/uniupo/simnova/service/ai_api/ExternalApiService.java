@@ -1,6 +1,8 @@
 package it.uniupo.simnova.service.ai_api;
 
 import it.uniupo.simnova.domain.lab_exam.LabExamSet;
+import it.uniupo.simnova.domain.lab_exam.ReportSet;
+import it.uniupo.simnova.service.ai_api.model.ReportGenerationRequest;
 import it.uniupo.simnova.service.ai_api.model.ScenarioGenerationRequest;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -42,8 +44,8 @@ public class ExternalApiService {
 
         try {
             // URL dell'API Python
-            String labExamApiUrl = "http://localhost:8000/exam/generate-lab-exams";
-            logger.info("Invio richiesta a {}: {}", labExamApiUrl, requestBody);
+            String labExamApiUrl = "http://localhost:8001/exams/generate-lab-exams";
+            logger.info("Invio richiesta per esami di laboratorio a {}: {}", labExamApiUrl, requestBody);
             ResponseEntity<LabExamSet> response = restTemplate.postForEntity(labExamApiUrl, requestEntity, LabExamSet.class);
 
             if (response.getStatusCode() == HttpStatus.OK && response.getBody() != null) {
@@ -65,8 +67,8 @@ public class ExternalApiService {
         HttpEntity<ScenarioGenerationRequest> requestEntity = new HttpEntity<>(request, headers);
 
         try{
-            String scenarioApiUrl = "http://localhost:8000/medical/generate-scenario";
-            logger.info("Invio richiesta a {}: {}", scenarioApiUrl, request);
+            String scenarioApiUrl = "http://localhost:8001/scenarios/generate-scenario";
+            logger.info("Invio richiesta per creazione di scenario a {}: {}", scenarioApiUrl, request);
             ResponseEntity<String> response = restTemplate.postForEntity(scenarioApiUrl, requestEntity, String.class);
 
             if (response.getStatusCode() == HttpStatus.OK && response.getBody() != null) {
@@ -78,6 +80,29 @@ public class ExternalApiService {
             }
         } catch (RestClientException e) {
             logger.error("Errore durante la chiamata all'API di generazione scenario: {}", e.getMessage());
+            return Optional.empty();
+        }
+    }
+
+    public Optional<ReportSet> generateReport(ReportGenerationRequest request) {
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_JSON);
+        HttpEntity<ReportGenerationRequest> requestEntity = new HttpEntity<>(request, headers);
+
+        try{
+            String reportApiUrl = "http://localhost:8001/reports/generate-medical-report";
+            logger.info("Invio richiesta per creazione di referto a {}: {}", reportApiUrl, request);
+            ResponseEntity<ReportSet> response = restTemplate.postForEntity(reportApiUrl, requestEntity, ReportSet.class);
+
+            if (response.getStatusCode() == HttpStatus.OK && response.getBody() != null) {
+                logger.info("Risposta ricevuta con successo dall'API di generazione referto.");
+                return Optional.of(response.getBody());
+            } else {
+                logger.warn("Risposta non valida dall'API di generazione referto: Status {}", response.getStatusCode());
+                return Optional.empty();
+            }
+        } catch (RestClientException e) {
+            logger.error("Errore durante la chiamata all'API di generazione referto: {}", e.getMessage());
             return Optional.empty();
         }
     }

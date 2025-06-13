@@ -531,8 +531,8 @@ public class ScenarioDetailsView extends Composite<VerticalLayout> implements Ha
         // Bottoni per lo scorrimento della pagina (Torna su, Scorri giù).
         Button scrollToTopButton = StyleApp.getScrollButton();
         Button scrollDownButton = StyleApp.getScrollDownButton();
-        VerticalLayout scrollButtonContainer = new VerticalLayout(scrollToTopButton, scrollDownButton);
-        mainLayout.add(scrollButtonContainer);
+
+        UI.getCurrent().add(scrollToTopButton, scrollDownButton);
 
 
         // --- Listener per la modifica del titolo e degli autori ---
@@ -616,3 +616,4 @@ public class ScenarioDetailsView extends Composite<VerticalLayout> implements Ha
         });
     }
 }
+

@@ -1,5 +1,6 @@
 package it.uniupo.simnova.service.scenario.components;
 
+import it.uniupo.simnova.domain.lab_exam.ReportSet;
 import it.uniupo.simnova.domain.paziente.EsameReferto;
 import it.uniupo.simnova.service.storage.FileStorageService;
 import it.uniupo.simnova.utils.DBConnect;
@@ -13,6 +14,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 /**
  * Servizio per la gestione degli esami e dei referti associati ai pazienti all'interno degli scenari.
@@ -344,5 +346,31 @@ public class EsameRefertoService {
                 return 1; // Se non ci sono esami, inizia da 1
             }
         }
+    }
+
+    /**
+     * Crea e salva un nuovo EsameReferto partendo dai dati generati da un'API.
+     *
+     * @param scenarioId L'ID dello scenario a cui associare il referto.
+     * @param reportOptional L'Optional contenente i dati del referto.
+     * @return true se il salvataggio è andato a buon fine, false altrimenti.
+     */
+    public boolean createRefertoByJSON(int scenarioId, Optional<ReportSet> reportOptional) {
+        // Controlla se l'Optional contiene un valore
+        if (reportOptional.isEmpty()) {
+            logger.warn("Tentativo di creare un referto da un ReportSet vuoto per lo scenario ID: {}", scenarioId);
+            return false;
+        }
+
+        ReportSet report = reportOptional.get();
+
+        // Crea un nuovo oggetto EsameReferto
+        EsameReferto nuovoReferto = new EsameReferto();
+        nuovoReferto.setTipo(report.getTipologiaEsame());       // Imposta il tipo di esame
+        nuovoReferto.setRefertoTestuale(report.getDescrizioneEsame()); // Imposta il testo del referto
+        nuovoReferto.setMedia(null); // Non c'è un file media associato a questo tipo di referto
+
+        // Usa il metodo che abbiamo già creato per aggiungere il record al DB in modo sicuro
+        return addEsameReferto(nuovoReferto, scenarioId);
     }
 }
