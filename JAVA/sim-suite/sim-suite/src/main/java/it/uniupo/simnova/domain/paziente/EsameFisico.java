@@ -1,5 +1,10 @@
 package it.uniupo.simnova.domain.paziente;
 
+import lombok.Builder;
+import lombok.Getter;
+import lombok.ToString;
+
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -12,6 +17,8 @@ import java.util.Map;
  * @version 1.0
  */
 @SuppressWarnings("NonAsciiCharacters") // Sopprime l'avviso per caratteri non-ASCII
+@Getter
+@ToString
 public class EsameFisico {
 
     /**
@@ -42,40 +49,22 @@ public class EsameFisico {
      * @param neurologico   Risultati dell'esame "Neurologico".
      * @param fast          Risultati del FAST exam (Focused Assessment with Sonography for Trauma).
      */
+    @Builder
     public EsameFisico(int idEsameFisico, String generale, String pupille, String collo, String torace, String cuore, String addome, String retto, String cute, String estremità, String neurologico, String fast) {
         this.idEsameFisico = idEsameFisico;
-        this.sections = new HashMap<>();
-        // Inizializza la mappa con tutte le sezioni e i loro valori corrispondenti.
-        sections.put("Generale", generale);
-        sections.put("Pupille", pupille);
-        sections.put("Collo", collo);
-        sections.put("Torace", torace);
-        sections.put("Cuore", cuore);
-        sections.put("Addome", addome);
-        sections.put("Retto", retto);
-        sections.put("Cute", cute);
-        sections.put("Estremità", estremità);
-        sections.put("Neurologico", neurologico);
-        sections.put("FAST", fast);
-    }
-
-    /**
-     * Recupera la <strong>mappa completa</strong> di tutte le sezioni dell'esame fisico
-     * con i rispettivi risultati testuali.
-     *
-     * @return Una mappa dove le chiavi sono i nomi delle sezioni e i valori sono le descrizioni dei risultati.
-     */
-    public Map<String, String> getSections() {
-        return sections;
-    }
-
-    /**
-     * Restituisce l'<strong>identificativo univoco</strong> dell'esame fisico.
-     *
-     * @return L'ID dell'esame fisico.
-     */
-    @SuppressWarnings("unused") // Sopprime l'avviso se il metodo non viene usato direttamente nel codice Java.
-    public int getIdEsameFisico() {
-        return idEsameFisico;
+        // Use a temporary mutable map for initialization, then wrap it with Collections.unmodifiableMap
+        Map<String, String> tempSections = new HashMap<>();
+        tempSections.put("Generale", generale);
+        tempSections.put("Pupille", pupille);
+        tempSections.put("Collo", collo);
+        tempSections.put("Torace", torace);
+        tempSections.put("Cuore", cuore);
+        tempSections.put("Addome", addome);
+        tempSections.put("Retto", retto);
+        tempSections.put("Cute", cute);
+        tempSections.put("Estremità", estremità);
+        tempSections.put("Neurologico", neurologico);
+        tempSections.put("FAST", fast);
+        this.sections = Collections.unmodifiableMap(tempSections);
     }
 }
