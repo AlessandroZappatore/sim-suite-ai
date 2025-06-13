@@ -145,6 +145,19 @@ body {
     background-clip: text;
 }
 
+.nav-logo {
+    width: 2.5rem;
+    height: 2.5rem;
+    object-fit: contain;
+    transition: var(--transition-fast);
+    filter: drop-shadow(0 2px 4px rgba(0, 102, 255, 0.2));
+}
+
+.nav-logo:hover {
+    transform: scale(1.1);
+    filter: drop-shadow(0 4px 8px rgba(0, 102, 255, 0.3));
+}
+
 .nav-menu {
     display: flex;
     list-style: none;
@@ -561,6 +574,49 @@ body {
 
 .highlight i {
     color: var(--electric-green);
+}
+
+/* Video Demo Styles */
+.video-demo {
+    margin: var(--spacing-6) 0;
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: var(--radius-xl);
+    padding: var(--spacing-5);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.video-container {
+    position: relative;
+    width: 100%;
+    height: 0;
+    padding-bottom: 56.25%; /* 16:9 aspect ratio */
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+}
+
+.video-container video {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: var(--radius-lg);
+    transition: var(--transition-base);
+}
+
+.video-container video:hover {
+    transform: scale(1.02);
+}
+
+.video-caption {
+    text-align: center;
+    color: rgba(255, 255, 255, 0.8);
+    font-size: var(--font-size-sm);
+    font-style: italic;
+    margin-top: var(--spacing-3);
+    margin-bottom: 0;
 }
 
 .ai-workflow {
@@ -1401,9 +1457,13 @@ body {
         padding: var(--spacing-4) var(--spacing-4);
         min-height: 70px;
     }
-    
-    .nav-brand {
+      .nav-brand {
         font-size: var(--font-size-xl);
+    }
+    
+    .nav-logo {
+        width: 2rem;
+        height: 2rem;
     }
     
     .nav-brand i {
@@ -1473,9 +1533,17 @@ body {
     .workflow-steps {
         flex-direction: column;
     }
-    
-    .workflow-arrow {
+      .workflow-arrow {
         transform: rotate(90deg);
+    }
+    
+    .video-demo {
+        padding: var(--spacing-4);
+        margin: var(--spacing-4) 0;
+    }
+    
+    .video-container video:hover {
+        transform: scale(1.01);
     }
     
     .diagram {
