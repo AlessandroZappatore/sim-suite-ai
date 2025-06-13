@@ -1,0 +1,204 @@
+# Agents for Medical Scenario Generation
+# Version 4.2 - Refactored to follow consistent pattern
+
+import json
+import logging
+from typing import Any, Dict, List
+
+from agno.agent import Agent
+from fastapi import HTTPException
+from pydantic import ValidationError
+
+from models.scenario_models import (
+    BaseScenario,
+    FullScenario,
+    ScenarioRequest,
+    Timeline,
+    Sceneggiatura
+)
+from models.presidi_medici import PRESIDI_MEDICI
+from utils.common import extract_json_from_response, get_model
+
+# Configure logging
+logger = logging.getLogger(__name__)
+
+# Define agents
+info_agent = Agent(
+    name="Scenario Info Generator", 
+    role="An expert in creating the foundational elements of a medical simulation.", 
+    model=get_model(), 
+    instructions=[
+        "Your task is to generate the static, initial part of a medical scenario. "
+        "All text content must be in Italian. "
+        "Based on the user's request, you must create a JSON object that strictly matches the required Pydantic schema. "
+        "Respond ONLY with the valid JSON object."
+    ]
+)
+
+timeline_agent = Agent(
+    name="Clinical Timeline Generator", 
+    role="An expert in creating dynamic, evolving clinical timelines for medical simulations.", 
+    model=get_model(), 
+    instructions=[
+        "Your task is to generate a series of timeline events ('tempi'). "
+        "All text content must be in Italian. "
+        "Based on the provided initial scenario context, create a realistic clinical evolution. "
+        "You must respond ONLY with a valid JSON object strictly matching the Pydantic schema. "
+        "You have to start from T0 with the same parameters as pazienteT0 and then evolve the scenario with 4-5 events. "
+        "If the patient is pediatric, include a 'ruoloGenitore' field in each event if necessary."
+    ]
+)
+
+script_agent = Agent(
+    name="Patient Script Writer", 
+    role="A creative writer specializing in scripts for simulated patients.", 
+    model=get_model(), 
+    instructions=[
+        "Your task is to write a script ('sceneggiatura') for a simulated patient. "
+        "The script must be in Italian and enclosed in <p></p> tags. "
+        "Based on the complete scenario provided, write a script that the patient actor can follow. "
+        "Respond ONLY with a valid JSON object strictly matching the Pydantic schema."
+    ]
+)
+
+
+# Agent-specific prompt creation functions
+
+def create_info_prompt(request: ScenarioRequest) -> str:
+    """Creates the detailed prompt for the scenario info generation agent."""
+    return f"""Generate the base part of a medical scenario in JSON format.
+    USER REQUEST:
+    - Description: {request.description}
+    - Scenario Type: {request.scenario_type}
+    - Target Audience: {request.target}
+
+    INSTRUCTIONS:
+    1.  **CRITICAL**: You MUST create and adapt the ENTIRE scenario (pathology, complexity, key actions, objectives) for the specified **Target Audience**. A scenario for "Studenti di infermieristica" must be simpler and more focused on basics than one for "Medici di emergenza esperti".
+    2.  The `scenario.target` field in the final JSON MUST match the 'Target Audience' from the user request.
+    3.  Strictly follow the JSON schema provided below.
+    4.  All descriptive text MUST be in ITALIAN.
+    5.  FORMATTING RULES:
+        - The fields inside 'esameFisico.sections' (like Generale, Cute, etc.) MUST be formatted as HTML paragraphs, e.g., '<p>text in italian</p>'.
+        - The fields 'patologia', 'target', 'autori', and 'Monitor' MUST be plain text without any HTML tags.
+        - All other descriptive fields like 'descrizione', 'briefing', 'moulage', 'liquidi', 'obiettivo' etc. must be HTML formatted text.
+    6.  For the 'presidi' field, choose ONLY from this list: {PRESIDI_MEDICI}
+    7.  Based on the primary pathology ('patologia') and the user's description, you MUST identify and list some crucial medical actions in the 'azioniChiave' field. These actions must be appropriate for the target audience.
+    8.  **Vascular Access**: If the clinical context suggests it (e.g., trauma, shock), you MUST populate 'pazienteT0.accessiVenosi' and/or 'pazienteT0.accessiArteriosi'.
+    9.  **Parent/Guardian Role**: If 'tipologia' is 'Pediatrico', 'Neonatale', or 'Prematuro', provide context in 'scenario.infoGenitore', describing the parent at the start of the scenario.
+
+    JSON SCHEMA TO FOLLOW:
+    {json.dumps(BaseScenario.model_json_schema(), indent=2)}
+
+    Respond ONLY with the valid JSON object."""
+
+
+def create_timeline_prompt(context: Dict[str, Any]) -> str:
+    """Creates the detailed prompt for the timeline generation agent."""
+    return f"""Given the following medical scenario context, generate a clinical timeline.
+    CONTEXT: {json.dumps(context, indent=2)}
+    
+    INSTRUCTIONS:
+    1. Generate a list of 4-5 timeline events ('tempi'), starting from T0 which must reflect the initial state.
+    2. All descriptive text MUST be in ITALIAN.
+    3. **Parent/Guardian Role Explanation**: If the patient is pediatric ('Pediatrico'), the 'ruoloGenitore' field in each 'Tempo' MUST be used to describe the parent's or guardian's actions, words, or emotional state during that specific phase of the timeline. This shows their reaction to the patient's evolving condition.
+       - Example for T1: '<p>La madre diventa sempre più agitata, chiede continuamente se il bambino morirà e interferisce con le manovre del team.</p>'
+       - Example for T2: '<p>Dopo la somministrazione del farmaco, il padre nota il miglioramento e appare sollevato. Ringrazia i medici.</p>'
+       If the parent's role is not relevant for a specific step, you can omit the field or leave it as null.
+    4. Strictly follow the JSON schema provided.
+    
+    JSON SCHEMA TO FOLLOW:
+    {json.dumps(Timeline.model_json_schema(), indent=2)}
+    
+    Respond ONLY with the valid JSON object."""
+
+
+def create_script_prompt(context: Dict[str, Any]) -> str:
+    """Creates the detailed prompt for the script generation agent."""
+    return f"""Given the following complete medical scenario, write a script for the simulated patient.
+    FULL SCENARIO CONTEXT: {json.dumps(context, indent=2)}
+    INSTRUCTIONS:
+    1. Write a detailed script in ITALIAN for the patient actor.
+    2. The script must reflect the pathology, symptoms, and evolution.
+    3. Enclose the entire script in a single <p> HTML tag.
+    4. Strictly follow the JSON schema.
+    JSON SCHEMA TO FOLLOW: {json.dumps(Sceneggiatura.model_json_schema(), indent=2)}
+    Respond ONLY with the valid JSON object."""
+
+
+class MedicalScenarioTeam:
+    def __init__(self, members: List[Agent]):
+        self.members = {agent.name: agent for agent in members}
+
+    def _get_agent(self, name: str) -> Agent:
+        if name not in self.members:
+            raise ValueError(f"Agent '{name}' not found in team members.")
+        return self.members[name]
+
+    def run(self, request: ScenarioRequest) -> FullScenario:
+        try:
+            # STEP 1: Run Info Agent
+            logger.info("Team Pipeline: Running 'Scenario Info Generator'...")
+            info_prompt = create_info_prompt(request)
+            info_response = self._get_agent("Scenario Info Generator").run(info_prompt) # type: ignore
+            base_scenario_dict = extract_json_from_response(info_response.content)
+            BaseScenario.model_validate(base_scenario_dict)
+            
+            full_scenario_data = base_scenario_dict.copy()
+            full_scenario_data["tempi"] = []
+            full_scenario_data["sceneggiatura"] = "" 
+    
+            # STEP 2: Run Timeline Agent (if needed)
+            if request.scenario_type in ["Advanced Scenario", "Patient Simulated Scenario"]:
+                logger.info("Team Pipeline: Running 'Clinical Timeline Generator'...")
+                context = {
+                    "pathology": base_scenario_dict["scenario"]["patologia"], 
+                    "patient_t0": base_scenario_dict["pazienteT0"], 
+                    "patient_typology": base_scenario_dict["scenario"]["tipologia"]
+                }
+                timeline_prompt = create_timeline_prompt(context)
+                timeline_response = self._get_agent("Clinical Timeline Generator").run(timeline_prompt) # type: ignore
+                timeline_dict = extract_json_from_response(timeline_response.content)
+                full_scenario_data["tempi"] = Timeline.model_validate(timeline_dict).model_dump()["tempi"]
+    
+            # STEP 3: Run Script Agent (if needed)
+            if request.scenario_type == "Patient Simulated Scenario":
+                logger.info("Team Pipeline: Running 'Patient Script Writer'...")
+                # Usiamo una copia dei dati per evitare di passare la sceneggiatura vuota all'agente
+                script_context = full_scenario_data.copy()
+                script_prompt = create_script_prompt(script_context)
+                script_response = self._get_agent("Patient Script Writer").run(script_prompt) # type: ignore
+                script_dict = extract_json_from_response(script_response.content)
+                  # CORREZIONE FINALE: Assegnazione spostata all'interno del blocco if
+                full_scenario_data["sceneggiatura"] = script_dict["sceneggiatura"]
+    
+            # STEP 4: Final Validation
+            logger.info("Team Pipeline: Assembling and validating final scenario...")
+            return FullScenario.model_validate(full_scenario_data)
+            
+        except (ValidationError, ValueError) as e:
+            logger.error(f"Data validation or extraction error in pipeline: {e}", exc_info=True)
+            raise HTTPException(status_code=422, detail={"error": "Generated content failed validation or parsing.", "details": str(e)})
+        except Exception as e:
+            logger.error(f"Unexpected error in pipeline: {e}", exc_info=True)
+            raise HTTPException(status_code=500, detail={"error": "Failed to generate scenario", "message": str(e)})
+
+
+# Create team instance
+medical_team = MedicalScenarioTeam(members=[info_agent, timeline_agent, script_agent])
+
+
+def generate_medical_scenario(request: ScenarioRequest) -> FullScenario:
+    """
+    Generate a complete medical scenario based on the request parameters.
+    
+    Args:
+        request: The scenario request containing description, type, and target audience
+        
+    Returns:
+        FullScenario: The generated medical scenario
+        
+    Raises:
+        HTTPException: If generation fails
+    """
+    logger.info(f"Received request to generate medical scenario: {request.scenario_type} for {request.target}")
+    return medical_team.run(request)
