@@ -83,6 +83,8 @@ public class CreationView extends Composite<VerticalLayout> {
                 "Scenario generato automaticamente da un modello di intelligenza artificiale"
         );
 
+        aiGeneratedScenarioButton.addThemeVariants(ButtonVariant.LUMO_SUCCESS);
+
         Button visualizzaScenari = createScenarioButton(
                 "Visualizza Scenari Salvati",
                 VaadinIcon.ARCHIVE.create(),
