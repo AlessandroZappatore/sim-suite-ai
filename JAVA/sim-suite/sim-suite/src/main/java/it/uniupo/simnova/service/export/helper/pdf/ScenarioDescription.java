@@ -106,7 +106,7 @@ public class ScenarioDescription {
             StringBuilder materialiNecessariFormattati = new StringBuilder();
             // Aggiunge un bullet point per ogni materiale necessario, con nome e descrizione
             for (Materiale materiale : materialiNecessari) {
-                materialiNecessariFormattati.append("• ").append(materiale.getNome()).append(": ").append(materiale.getDescrizione()).append("\n");
+                materialiNecessariFormattati.append("• ").append(materiale.nome()).append(": ").append(materiale.descrizione()).append("\n");
             }
             // Rimuove l'ultimo carattere di nuova riga se la stringa non è vuota
             if (!materialiNecessariFormattati.isEmpty()) {

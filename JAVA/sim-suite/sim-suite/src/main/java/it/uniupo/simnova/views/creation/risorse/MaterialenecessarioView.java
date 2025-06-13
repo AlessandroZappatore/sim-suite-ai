@@ -140,8 +140,8 @@ public class MaterialenecessarioView extends Composite<VerticalLayout> implement
         materialiDisponibiliGrid = new Grid<>();
         materialiDisponibiliGrid.addThemeVariants(GridVariant.LUMO_ROW_STRIPES);
         materialiDisponibiliGrid.setAllRowsVisible(true);
-        materialiDisponibiliGrid.addColumn(Materiale::getNome).setHeader("Materiale disponibile").setFlexGrow(1);
-        materialiDisponibiliGrid.addColumn(Materiale::getDescrizione).setHeader("Descrizione").setFlexGrow(2);
+        materialiDisponibiliGrid.addColumn(Materiale::nome).setHeader("Materiale disponibile").setFlexGrow(1);
+        materialiDisponibiliGrid.addColumn(Materiale::descrizione).setHeader("Descrizione").setFlexGrow(2);
         // Colonna "Aggiungi" con pulsante
         materialiDisponibiliGrid.addColumn(
                         new ComponentRenderer<>(materiale -> {
@@ -181,8 +181,8 @@ public class MaterialenecessarioView extends Composite<VerticalLayout> implement
         materialiSelezionatiGrid = new Grid<>();
         materialiSelezionatiGrid.addThemeVariants(GridVariant.LUMO_ROW_STRIPES);
         materialiSelezionatiGrid.setAllRowsVisible(true);
-        materialiSelezionatiGrid.addColumn(Materiale::getNome).setHeader("Materiale selezionato").setFlexGrow(1);
-        materialiSelezionatiGrid.addColumn(Materiale::getDescrizione).setHeader("Descrizione").setFlexGrow(2);
+        materialiSelezionatiGrid.addColumn(Materiale::nome).setHeader("Materiale selezionato").setFlexGrow(1);
+        materialiSelezionatiGrid.addColumn(Materiale::descrizione).setHeader("Descrizione").setFlexGrow(2);
         // Colonna "Rimuovi" per i materiali selezionati (rimuove dalla lista dello scenario)
         materialiSelezionatiGrid.addColumn(
                         new ComponentRenderer<>(materiale -> {
@@ -345,8 +345,8 @@ public class MaterialenecessarioView extends Composite<VerticalLayout> implement
         if (searchTerm != null && !searchTerm.trim().isEmpty()) {
             String term = searchTerm.toLowerCase().trim();
             materialiDisponibiliNonSelezionati = materialiDisponibiliNonSelezionati.stream()
-                    .filter(m -> (m.getNome() != null && m.getNome().toLowerCase().contains(term)) ||
-                            (m.getDescrizione() != null && m.getDescrizione().toLowerCase().contains(term)))
+                    .filter(m -> (m.nome() != null && m.nome().toLowerCase().contains(term)) ||
+                            (m.descrizione() != null && m.descrizione().toLowerCase().contains(term)))
                     .collect(Collectors.toList());
         }
 
@@ -533,7 +533,7 @@ public class MaterialenecessarioView extends Composite<VerticalLayout> implement
         dialogLayout.setSpacing(true);
         dialogLayout.setAlignItems(FlexComponent.Alignment.STRETCH);
 
-        Paragraph message = new Paragraph("Sei sicuro di voler eliminare definitivamente il materiale \"" + materiale.getNome() + "\"?");
+        Paragraph message = new Paragraph("Sei sicuro di voler eliminare definitivamente il materiale \"" + materiale.nome() + "\"?");
 
         Paragraph warning = new Paragraph("L'operazione non può essere annullata e rimuoverà il materiale da TUTTI gli scenari che lo utilizzano.");
         warning.addClassNames(LumoUtility.TextColor.ERROR, LumoUtility.FontSize.SMALL);
@@ -577,17 +577,17 @@ public class MaterialenecessarioView extends Composite<VerticalLayout> implement
 
                 aggiornaGrids(); // Aggiorna le UI delle griglie
 
-                Notification.show("Materiale \"" + materiale.getNome() + "\" eliminato.",
+                Notification.show("Materiale \"" + materiale.nome() + "\" eliminato.",
                                 3000, Notification.Position.BOTTOM_START)
                         .addThemeVariants(NotificationVariant.LUMO_SUCCESS);
             } else {
-                String nomeMateriale = (materiale.getNome() != null) ? materiale.getNome() : "ID " + materialeId;
+                String nomeMateriale = (materiale.nome() != null) ? materiale.nome() : "ID " + materialeId;
                 Notification.show("Impossibile eliminare il materiale \"" + nomeMateriale + "\". Potrebbe essere in uso in altri scenari.",
                                 4000, Notification.Position.MIDDLE)
                         .addThemeVariants(NotificationVariant.LUMO_WARNING);
             }
         } catch (Exception ex) {
-            String nomeMateriale = (materiale.getNome() != null) ? materiale.getNome() : "ID " + materialeId;
+            String nomeMateriale = (materiale.nome() != null) ? materiale.nome() : "ID " + materialeId;
             logger.error("Errore durante l'eliminazione del materiale {}", nomeMateriale, ex);
             Notification.show("Errore tecnico durante l'eliminazione: " + ex.getMessage(),
                             5000, Notification.Position.MIDDLE)

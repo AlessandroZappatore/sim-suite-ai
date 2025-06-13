@@ -304,7 +304,7 @@ public class AccessSupport {
 
                 confirmDialog.addConfirmListener(event -> {
                     try {
-                        pazienteT0Service.deleteAccesso(scenarioId, accesso.getId(), isVenoso); // Elimina l'accesso
+                        pazienteT0Service.deleteAccesso(scenarioId, accesso.getIdAccesso(), isVenoso); // Elimina l'accesso
                         // Mostra notifica di successo
                         Notification.show("Accesso " + (isVenoso ? "venoso" : "arterioso") + " eliminato con successo", 3000, Notification.Position.BOTTOM_CENTER).addThemeVariants(NotificationVariant.LUMO_SUCCESS);
                         // Ricarica gli elementi nella griglia per riflettere la modifica

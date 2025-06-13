@@ -118,8 +118,8 @@ public class MaterialeService {
         try (Connection conn = DBConnect.getInstance().getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
 
-            stmt.setString(1, materiale.getNome());
-            stmt.setString(2, materiale.getDescrizione());
+            stmt.setString(1, materiale.nome());
+            stmt.setString(2, materiale.descrizione());
 
             int affectedRows = stmt.executeUpdate();
 
@@ -127,14 +127,14 @@ public class MaterialeService {
                 try (ResultSet generatedKeys = stmt.getGeneratedKeys()) {
                     if (generatedKeys.next()) {
                         int id = generatedKeys.getInt(1);
-                        logger.info("Materiale '{}' salvato con successo con ID: {}.", materiale.getNome(), id);
-                        return new Materiale(id, materiale.getNome(), materiale.getDescrizione());
+                        logger.info("Materiale '{}' salvato con successo con ID: {}.", materiale.nome(), id);
+                        return new Materiale(id, materiale.nome(), materiale.descrizione());
                     }
                 }
             }
             logger.warn("Nessun materiale salvato. Affected rows: {}.", affectedRows);
         } catch (SQLException e) {
-            logger.error("Errore durante il salvataggio del materiale '{}': {}", materiale.getNome(), e.getMessage(), e);
+            logger.error("Errore durante il salvataggio del materiale '{}': {}", materiale.nome(), e.getMessage(), e);
         }
         return null;
     }
@@ -279,9 +279,9 @@ public class MaterialeService {
             logger.info("Nessun materiale trovato per generare la stringa per lo scenario con ID {}.", scenarioId);
         }
         for (Materiale materiale : materiali) {
-            sb.append(materiale.getNome())
+            sb.append(materiale.nome())
                     .append(": ")
-                    .append(materiale.getDescrizione())
+                    .append(materiale.descrizione())
                     .append("\n");
         }
         return sb.toString();
