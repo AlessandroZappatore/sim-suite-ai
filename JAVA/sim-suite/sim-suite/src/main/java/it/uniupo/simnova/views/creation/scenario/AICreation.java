@@ -4,7 +4,7 @@ import com.flowingcode.vaadin.addons.fontawesome.FontAwesome;
 import com.vaadin.flow.component.Composite;
 import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.button.Button;
-import com.vaadin.flow.component.button.ButtonVariant; // Aggiunto import per ButtonVariant
+// Aggiunto import per ButtonVariant
 import com.vaadin.flow.component.html.Div;
 import com.vaadin.flow.component.html.Span;
 import com.vaadin.flow.component.icon.Icon;
@@ -55,30 +55,24 @@ public class AICreation extends Composite<VerticalLayout> {
     private HorizontalLayout aiMsgStep1;
     private HorizontalLayout aiMsgStepTarget; // Nuovo messaggio AI per il target
     private HorizontalLayout aiMsgStep2;
-    private HorizontalLayout aiMsgStepLabExams; // Nuovo messaggio AI per esami lab
 
     // Componenti UI riutilizzabili per gli input utente
     private Select<String> scenarioTypeSelect;
     private TextField scenarioTargetField; // Nuovo campo per il target
     private TextArea shortDescription;
     private Select<String> difficultySelect;
-    // Rimosso private Checkbox includeLabExamsCheckbox;
-    private Button yesLabExamsButton; // Nuovo pulsante Sì per esami lab
-    private Button noLabExamsButton;  // Nuovo pulsante No per esami lab
-    private boolean userWantsLabExams = false; // Flag per la scelta degli esami lab
+
 
     private VerticalLayout inputTypeLayout;
     private VerticalLayout inputTargetLayout; // Nuovo layout per l'input del target
     private VerticalLayout inputDescLayout;
     private VerticalLayout inputDiffLayout;
-    private VerticalLayout inputLabExamsLayout; // Layout per i pulsanti Sì/No
 
     // Pulsanti di invio riutilizzabili come campi di classe
     private Button sendType;
     private Button sendTarget; // Nuovo pulsante di invio per il target
     private Button sendDesc;
     private Button sendDiff;
-    // Rimosso private Button sendLabExams
 
 
     public AICreation(FileStorageService fileStorageService,
@@ -159,23 +153,7 @@ public class AICreation extends Composite<VerticalLayout> {
         sendDiff.addClickListener(e -> {
             step = 4; // Passa allo step degli esami di laboratorio
             updateChatLayout(chatLayout);
-        });
-        // Rimossa la gestione del listener per sendLabExams
-
-        yesLabExamsButton.addClickListener(e -> {
-            userWantsLabExams = true;
-            step = 5;
-            updateChatLayout(chatLayout);
-            startScenarioGeneration(); // <-- chiama il nuovo metodo
-            nextButton.setVisible(true);
-        });
-
-        noLabExamsButton.addClickListener(e -> {
-            userWantsLabExams = false;
-            step = 5;
-            updateChatLayout(chatLayout);
-            startScenarioGeneration(); // <-- chiama il nuovo metodo
-            nextButton.setVisible(true);
+            startScenarioGeneration();
         });
     }
 
@@ -256,33 +234,6 @@ public class AICreation extends Composite<VerticalLayout> {
         sendDiff = new Button("Invia", FontAwesome.Solid.PAPER_PLANE.create()); // Assegna al campo di classe
         styleSendButton(sendDiff);
         inputDiffLayout = createInputLayout(difficultySelect, sendDiff);
-
-        // STEP 4: Esami di Laboratorio
-        aiMsgStepLabExams = createAiMessage("Vuoi includere gli esami di laboratorio nello scenario?");
-
-        yesLabExamsButton = new Button("Sì", FontAwesome.Solid.CHECK.create());
-        yesLabExamsButton.addThemeVariants(ButtonVariant.LUMO_SUCCESS, ButtonVariant.LUMO_PRIMARY);
-        yesLabExamsButton.setWidth("100px");
-
-        noLabExamsButton = new Button("No", FontAwesome.Solid.TIMES.create());
-        noLabExamsButton.addThemeVariants(ButtonVariant.LUMO_ERROR, ButtonVariant.LUMO_PRIMARY);
-        noLabExamsButton.setWidth("100px");
-
-        HorizontalLayout labButtonsLayout = new HorizontalLayout(yesLabExamsButton, noLabExamsButton);
-        labButtonsLayout.setSpacing(true);
-        labButtonsLayout.setJustifyContentMode(FlexComponent.JustifyContentMode.CENTER);
-        labButtonsLayout.setWidthFull();
-
-        inputLabExamsLayout = new VerticalLayout(labButtonsLayout);
-        inputLabExamsLayout.setPadding(false);
-        inputLabExamsLayout.setSpacing(false);
-        inputLabExamsLayout.setWidthFull();
-        inputLabExamsLayout.getStyle()
-                .set("background", "white")
-                .set("border-radius", "12px")
-                .set("box-shadow", "0 2px 4px rgba(0,0,0,0.04)")
-                .set("padding", "1em");
-        // Rimosso styleSendButton per sendLabExams e inizializzazione checkbox
     }
 
     private void styleSendButton(Button button) {
@@ -366,14 +317,6 @@ public class AICreation extends Composite<VerticalLayout> {
         } else if (step >= 4 && difficultySelect.getValue() != null) {
             chatLayout.add(aiMsgStep2); // Mostra il messaggio AI precedente
             chatLayout.add(createUserMessage(difficultySelect.getValue()));
-        }
-
-        if (step == 4) { // Nuovo step per esami di laboratorio
-            chatLayout.add(aiMsgStepLabExams, inputLabExamsLayout); // Mostra i pulsanti Sì/No
-        } else if (step >= 5) { // Se si è oltre lo step degli esami lab, mostra il messaggio utente
-            chatLayout.add(aiMsgStepLabExams); // Mostra il messaggio AI precedente
-            chatLayout.add(createUserMessage(userWantsLabExams ? "Sì, includi esami di laboratorio" : "No, non includere esami di laboratorio"));
-            // Il messaggio di completamento viene aggiunto dai listener dei pulsanti Sì/No
         }
     }
 

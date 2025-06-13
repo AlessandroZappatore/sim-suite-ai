@@ -434,7 +434,8 @@ public class ScenarioDetailsView extends Composite<VerticalLayout> implements Ha
                 externalApiService,
                 labExamService,
                 executorService,
-                notifierService
+                notifierService,
+                esameFisicoService
         );
 
         // Componente EnhancedTabs per la navigazione tra le schede.

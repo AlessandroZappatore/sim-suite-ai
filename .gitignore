@@ -15,6 +15,7 @@ replay_pid*
 
 # Maven/Gradle
 /target/
+target/
 .settings/
 .project
 .classpath

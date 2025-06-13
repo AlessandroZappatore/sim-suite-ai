@@ -33,7 +33,9 @@ import it.uniupo.simnova.domain.scenario.Scenario;
 import it.uniupo.simnova.service.NotifierService;
 import it.uniupo.simnova.service.ai_api.ExternalApiService;
 import it.uniupo.simnova.service.ai_api.LabExamService;
+import it.uniupo.simnova.service.ai_api.model.LabExamGenerationRequest;
 import it.uniupo.simnova.service.ai_api.model.ReportGenerationRequest;
+import it.uniupo.simnova.service.scenario.components.EsameFisicoService;
 import it.uniupo.simnova.service.scenario.components.EsameRefertoService;
 import it.uniupo.simnova.service.storage.FileStorageService;
 import it.uniupo.simnova.views.common.utils.StyleApp;
@@ -83,7 +85,8 @@ public class ExamSupport {
                                                     ExternalApiService externalApiService,
                                                     LabExamService labExamService,
                                                     ExecutorService executorService,
-                                                    NotifierService notifierService) {
+                                                    NotifierService notifierService,
+                                                    EsameFisicoService esameFisicoService) {
         List<EsameReferto> esami = esameRefertoService.getEsamiRefertiByScenarioId(scenarioId);
         VerticalLayout layout = new VerticalLayout();
         layout.setPadding(false);
@@ -497,11 +500,13 @@ public class ExamSupport {
             executorService.submit(() -> {
                 String notificationMessage;
                 try {
-                    // Chiamata API per generare i dati degli esami
-                    Optional<LabExamSet> labExamSetOptional = externalApiService.generateLabExamsFromScenario(
+                    LabExamGenerationRequest request = new LabExamGenerationRequest(
                             scenario.getDescrizione(),
-                            scenario.getTipologia()
+                            scenario.getTipologia(),
+                            esameFisicoService.getEsameFisicoById(scenarioId).toString()
                     );
+                    // Chiamata API per generare i dati degli esami
+                    Optional<LabExamSet> labExamSetOptional = externalApiService.generateLabExamsFromScenario(request);
 
                     if (labExamSetOptional.isPresent()) {
                         // Se l'API ha risposto, salva i dati e il PDF
@@ -559,7 +564,12 @@ public class ExamSupport {
                 executorService.submit(() -> {
                     String notificationMessage;
                     try {
-                        ReportGenerationRequest request = new ReportGenerationRequest(scenario.getDescrizione(), scenario.getTipologia(), selectedExamType);
+                        ReportGenerationRequest request = new ReportGenerationRequest(
+                                scenario.getDescrizione(),
+                                scenario.getTipologia(),
+                                selectedExamType,
+                                esameFisicoService.getEsameFisicoById(scenarioId).toString());
+
                         Optional<ReportSet> refertoContent = externalApiService.generateReport(request);
 
                         if (refertoContent.isPresent()) {

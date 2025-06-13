@@ -5,9 +5,8 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 /**
  * DTO per la richiesta di generazione di un referto all'API Python.
  */
-public record ReportGenerationRequest(
+public record LabExamGenerationRequest(
         @JsonProperty("descrizione_scenario") String description,
         @JsonProperty("tipologia_paziente") String scenarioType,
-        @JsonProperty("tipologia_esame") String examType,
         @JsonProperty("esame_obiettivo") String objectiveExam
 ) {}
