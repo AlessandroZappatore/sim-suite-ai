@@ -48,7 +48,7 @@
                         <i class="fas fa-robot"></i>
                         Scopri l'AI
                     </a>
-                    <a href="#setup" class="btn btn-secondary">
+                    <a href="https://github.com/AlessandroZappatore/sim-suite-ai" class="btn btn-secondary">
                         <i class="fab fa-github"></i>
                         Inizia Subito
                     </a>
@@ -129,6 +129,64 @@
                     </div>                    <h3>Generazione Intelligente di Scenari</h3>
                     <p>L'AI analizza la tipologia di scenario richiesta, il target di riferimento e la descrizione fornita per creare scenari clinici realistici e didatticamente efficaci.</p>
                     
+                    <!-- Tabella Livelli di Difficoltà -->
+                    <div class="difficulty-levels">
+                        <h4>Livelli di Difficoltà</h4>
+                        <p>SIMSUITEAI offre tre livelli di difficoltà per adattare gli scenari al livello di formazione degli studenti:</p>
+                        <div class="difficulty-table-container">
+                            <table class="difficulty-table">
+                                <thead>
+                                    <tr>
+                                        <th>Livello</th>
+                                        <th>Caratteristiche</th>
+                                        <th>Target</th>
+                                        <th>Complessità Clinica</th>
+                                    </tr>
+                                </thead>                                <tbody>
+                                    <tr class="difficulty-easy">
+                                        <td data-label="Livello"><span class="difficulty-badge easy">Facile</span></td>
+                                        <td data-label="Caratteristiche">
+                                            <ul>
+                                                <li>Scenari lineari e diretti</li>
+                                                <li>Sintomi chiari e specifici</li>
+                                                <li>Procedure diagnostiche standard</li>
+                                                <li>Timeline semplificata</li>
+                                            </ul>
+                                        </td>
+                                        <td data-label="Target">Studenti principianti<br>Prime esperienze cliniche</td>
+                                        <td data-label="Complessità Clinica">Bassa - Casi comuni e ben definiti</td>
+                                    </tr>
+                                    <tr class="difficulty-medium">
+                                        <td data-label="Livello"><span class="difficulty-badge medium">Medio</span></td>
+                                        <td data-label="Caratteristiche">
+                                            <ul>
+                                                <li>Scenari con più variabili</li>
+                                                <li>Sintomi parzialmente ambigui</li>
+                                                <li>Richiede ragionamento clinico</li>
+                                                <li>Timeline articolata</li>
+                                            </ul>
+                                        </td>
+                                        <td data-label="Target">Studenti intermedi<br>Specializzandi</td>
+                                        <td data-label="Complessità Clinica">Media - Casi realistici con qualche complessità</td>
+                                    </tr>
+                                    <tr class="difficulty-hard">
+                                        <td data-label="Livello"><span class="difficulty-badge hard">Difficile</span></td>
+                                        <td data-label="Caratteristiche">
+                                            <ul>
+                                                <li>Scenari multipli e intrecciati</li>
+                                                <li>Sintomi ambigui e rari</li>
+                                                <li>Diagnosi differenziale complessa</li>
+                                                <li>Timeline con complicazioni</li>
+                                            </ul>
+                                        </td>
+                                        <td data-label="Target">Studenti avanzati<br>Professionisti esperti</td>
+                                        <td data-label="Complessità Clinica">Alta - Casi rari e molto complessi</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                    
                     <!-- Video Demo Generazione Scenari -->
                     <div class="video-demo">
                         <div class="video-container">
@@ -174,8 +232,7 @@
                         </div>
                         <p class="video-caption">Scopri come creare esami di laboratorio con un semplice click</p>
                     </div>
-                    
-                    <div class="feature-highlights">
+                      <div class="feature-highlights">
                         <div class="highlight">
                             <i class="fas fa-check-circle"></i>
                             <span>Referti medici accurati</span>
@@ -187,6 +244,99 @@
                         <div class="highlight">
                             <i class="fas fa-check-circle"></i>
                             <span>Correlazione con lo scenario</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="ai-feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-x-ray"></i>
+                    </div>
+                    <h3>Generazione Referti Diagnostici</h3>
+                    <p>Crea automaticamente referti medici realistici per esami diagnostici avanzati come Radiografie, TAC, Risonanza Magnetica, ECG, Ecocardiografie e altri esami strumentali, perfettamente correlati allo scenario clinico.</p>
+                    
+                    <!-- Video Demo Referti Medici -->
+                    <div class="video-demo">
+                        <div class="video-container">
+                            <video controls preload="metadata" poster="img/icon.png">
+                                <source src="videos/referti-medici.mp4" type="video/mp4">
+                                <source src="videos/referti-medici.webm" type="video/webm">
+                                Il tuo browser non supporta la riproduzione video.
+                            </video>
+                        </div>
+                        <p class="video-caption">Scopri come l'AI genera referti diagnostici specialistici accurati</p>
+                    </div>
+                    
+                    <div class="diagnostic-types">
+                        <h4>Tipologie di Referti Supportati</h4>
+                        <div class="diagnostic-grid">
+                            <div class="diagnostic-item">
+                                <div class="diagnostic-icon">
+                                    <i class="fas fa-x-ray"></i>
+                                </div>
+                                <span>Radiografie</span>
+                            </div>
+                            <div class="diagnostic-item">
+                                <div class="diagnostic-icon">
+                                    <i class="fas fa-brain"></i>
+                                </div>
+                                <span>TAC/CT</span>
+                            </div>
+                            <div class="diagnostic-item">
+                                <div class="diagnostic-icon">
+                                    <i class="fas fa-magnet"></i>
+                                </div>
+                                <span>Risonanza Magnetica</span>
+                            </div>
+                            <div class="diagnostic-item">
+                                <div class="diagnostic-icon">
+                                    <i class="fas fa-heartbeat"></i>
+                                </div>
+                                <span>ECG</span>
+                            </div>
+                            <div class="diagnostic-item">
+                                <div class="diagnostic-icon">
+                                    <i class="fas fa-heart"></i>
+                                </div>
+                                <span>Ecocardiografia</span>
+                            </div>
+                            <div class="diagnostic-item">
+                                <div class="diagnostic-icon">
+                                    <i class="fas fa-lungs"></i>
+                                </div>
+                                <span>Ecografia</span>
+                            </div>
+                            <div class="diagnostic-item">
+                                <div class="diagnostic-icon">
+                                    <i class="fas fa-eye"></i>
+                                </div>
+                                <span>Endoscopia</span>
+                            </div>
+                            <div class="diagnostic-item">
+                                <div class="diagnostic-icon">
+                                    <i class="fas fa-plus-circle"></i>
+                                </div>
+                                <span>Altri Esami</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="feature-highlights">
+                        <div class="highlight">
+                            <i class="fas fa-check-circle"></i>
+                            <span>Referti medici specialistici</span>
+                        </div>
+                        <div class="highlight">
+                            <i class="fas fa-check-circle"></i>
+                            <span>Terminologia clinica accurata</span>
+                        </div>
+                        <div class="highlight">
+                            <i class="fas fa-check-circle"></i>
+                            <span>Correlazione con patologia</span>
+                        </div>
+                        <div class="highlight">
+                            <i class="fas fa-check-circle"></i>
+                            <span>Formati standard professionali</span>
                         </div>
                     </div>
                 </div>
@@ -358,7 +508,7 @@
                         </div>
                         <h3>Repository GitHub</h3>
                         <p>Il codice sorgente completo è disponibile su GitHub. Clona il repository per iniziare:</p>
-                        <a href="#" class="btn btn-github">
+                        <a href="https://github.com/AlessandroZappatore/sim-suite-ai" class="btn btn-github">
                             <i class="fab fa-github"></i>
                             Vai al Repository
                         </a>

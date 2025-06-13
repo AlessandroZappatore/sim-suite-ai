@@ -66,17 +66,49 @@ script_agent = Agent(
 
 def create_info_prompt(request: ScenarioRequest) -> str:
     """Creates the detailed prompt for the scenario info generation agent."""
+    
+    # Definizioni per i livelli di difficoltà
+    difficulty_guidelines = {
+        "Facile": {
+            "complications": "Scenario semplice con poche complicazioni. Concentrarsi sui fondamentali.",
+            "parameters": "Parametri vitali stabili o con alterazioni lievi.",
+            "timeline": "Evoluzione lineare e prevedibile.",
+            "actions": "Azioni cliniche di base e procedure standard."
+        },
+        "Medio": {
+            "complications": "Scenario con complessità moderata. Includere 1-2 complicazioni gestibili.",
+            "parameters": "Parametri vitali con alterazioni moderate che richiedono intervento.",
+            "timeline": "Evoluzione con qualche imprevisto ma gestibile.",
+            "actions": "Combinazione di azioni di base e avanzate. Richiede pensiero critico."
+        },
+        "Difficile": {
+            "complications": "Scenario complesso con multiple complicazioni. Includere situazioni critiche e imprevisti.",
+            "parameters": "Parametri vitali instabili o critici. Possibili arresti o shock.",
+            "timeline": "Evoluzione rapida e imprevedibile con deterioramento clinico.",
+            "actions": "Procedure avanzate, farmaci complessi, decisioni critiche sotto pressione."
+        }
+    }
+    
+    difficulty = request.difficulty or "Medio"
+    guidelines = difficulty_guidelines[difficulty]
+    
     return f"""Generate the base part of a medical scenario in JSON format.
     USER REQUEST:
     - Description: {request.description}
     - Scenario Type: {request.scenario_type}
     - Target Audience: {request.target}
+    - Difficulty Level: {difficulty}
 
     INSTRUCTIONS:
     1.  **CRITICAL**: You MUST create and adapt the ENTIRE scenario (pathology, complexity, key actions, objectives) for the specified **Target Audience**. A scenario for "Studenti di infermieristica" must be simpler and more focused on basics than one for "Medici di emergenza esperti".
-    2.  The `scenario.target` field in the final JSON MUST match the 'Target Audience' from the user request.
-    3.  Strictly follow the JSON schema provided below.
-    4.  All descriptive text MUST be in ITALIAN.
+    2.  **DIFFICULTY ADAPTATION** - {difficulty}:
+        - Complicazioni: {guidelines['complications']}
+        - Parametri Vitali: {guidelines['parameters']}
+        - Evoluzione: {guidelines['timeline']}
+        - Azioni Richieste: {guidelines['actions']}
+    3.  The `scenario.target` field in the final JSON MUST match the 'Target Audience' from the user request.
+    4.  Strictly follow the JSON schema provided below.
+    5.  All descriptive text MUST be in ITALIAN.
     5.  FORMATTING RULES:
         - The fields inside 'esameFisico.sections' (like Generale, Cute, etc.) MUST be formatted as HTML paragraphs, e.g., '<p>text in italian</p>'.
         - The fields 'patologia', 'target', 'autori', and 'Monitor' MUST be plain text without any HTML tags.
@@ -94,13 +126,24 @@ def create_info_prompt(request: ScenarioRequest) -> str:
 
 def create_timeline_prompt(context: Dict[str, Any]) -> str:
     """Creates the detailed prompt for the timeline generation agent."""
+    
+    # Gestione della difficoltà per la timeline
+    difficulty = context.get('difficulty', 'Medio')
+    
+    difficulty_timeline_rules = {
+        "Facile": "Evoluzione graduale e stabile. Massimo 1 complicazione minore. Tempi di reazione lenti (5-10 minuti tra eventi).",
+        "Medio": "Evoluzione moderatamente dinamica. 1-2 complicazioni gestibili. Tempi di reazione normali (2-5 minuti tra eventi).",
+        "Difficile": "Evoluzione rapida e critica. Multiple complicazioni simultanee. Deterioramento rapido se non trattato. Tempi di reazione rapidi (30 secondi - 2 minuti)."
+    }
+    
     return f"""Given the following medical scenario context, generate a clinical timeline.
     CONTEXT: {json.dumps(context, indent=2)}
     
     INSTRUCTIONS:
     1. Generate a list of 4-5 timeline events ('tempi'), starting from T0 which must reflect the initial state.
     2. All descriptive text MUST be in ITALIAN.
-    3. **Parent/Guardian Role Explanation**: If the patient is pediatric ('Pediatrico'), the 'ruoloGenitore' field in each 'Tempo' MUST be used to describe the parent's or guardian's actions, words, or emotional state during that specific phase of the timeline. This shows their reaction to the patient's evolving condition.
+    3. **DIFFICULTY ADAPTATION - {difficulty}**: {difficulty_timeline_rules[difficulty]}
+    4. **Parent/Guardian Role Explanation**: If the patient is pediatric ('Pediatrico'), the 'ruoloGenitore' field in each 'Tempo' MUST be used to describe the parent's or guardian's actions, words, or emotional state during that specific phase of the timeline. This shows their reaction to the patient's evolving condition.
        - Example for T1: '<p>La madre diventa sempre più agitata, chiede continuamente se il bambino morirà e interferisce con le manovre del team.</p>'
        - Example for T2: '<p>Dopo la somministrazione del farmaco, il padre nota il miglioramento e appare sollevato. Ringrazia i medici.</p>'
        If the parent's role is not relevant for a specific step, you can omit the field or leave it as null.
@@ -145,15 +188,14 @@ class MedicalScenarioTeam:
             
             full_scenario_data = base_scenario_dict.copy()
             full_scenario_data["tempi"] = []
-            full_scenario_data["sceneggiatura"] = "" 
-    
-            # STEP 2: Run Timeline Agent (if needed)
+            full_scenario_data["sceneggiatura"] = ""            # STEP 2: Run Timeline Agent (if needed)
             if request.scenario_type in ["Advanced Scenario", "Patient Simulated Scenario"]:
                 logger.info("Team Pipeline: Running 'Clinical Timeline Generator'...")
                 context = {
                     "pathology": base_scenario_dict["scenario"]["patologia"], 
                     "patient_t0": base_scenario_dict["pazienteT0"], 
-                    "patient_typology": base_scenario_dict["scenario"]["tipologia"]
+                    "patient_typology": base_scenario_dict["scenario"]["tipologia"],
+                    "difficulty": request.difficulty
                 }
                 timeline_prompt = create_timeline_prompt(context)
                 timeline_response = self._get_agent("Clinical Timeline Generator").run(timeline_prompt) # type: ignore

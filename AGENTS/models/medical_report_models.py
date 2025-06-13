@@ -19,9 +19,10 @@ class MedicalReportRequest(BaseModel):
             "RM Encefalo", "TC Cranio (con mdc)", "TC Cranio (senza mdc)", "Doppler TSA (Tronchi Sovraortici)",
             "Angio-TC Polmonare", "Fundus oculi"
     ] = Field(description="Type of medical examination to generate report for.")
-
+    esame_obiettivo: str = Field(description="Objective exam like eyes, neck, chest, abdomen, etc.")
 
 class MedicalReportResponse(BaseModel):
     """The response model containing the generated medical report."""
     tipologia_esame: str = Field(description="The type of examination performed.")
     referto: str = Field(description="The complete medical report in Italian, formatted as plain text.")
+    esame_obiettivo: str = Field(description="Objective exam like eyes, neck, chest, abdomen, etc.")

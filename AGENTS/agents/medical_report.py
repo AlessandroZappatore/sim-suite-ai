@@ -22,9 +22,12 @@ medical_report_agent = Agent(
         "Your task is to generate realistic medical reports based on clinical scenarios.",
         "All text content must be in **Italian**.",
         "The reports must be medically accurate and appropriate for the described pathology.",
+        "Pay particular attention to the objective examination findings (esame_obiettivo) to ensure the report is consistent with clinical observations.",
+        "Use the objective examination information to guide the expected findings in the diagnostic report.",
         "Format the main report as plain text with clear structure and proper medical terminology.",
         "Generate ONLY the medical report content without adding conclusions, recommendations, or additional commentary.",
         "Focus on objective findings and observations without interpretative conclusions.",
+        "Correlate the diagnostic findings with the clinical examination findings when appropriate.",
         "You must respond ONLY with a valid JSON object that strictly matches the required Pydantic schema.",
     ]
 )
@@ -38,19 +41,25 @@ def create_medical_report_prompt(request: MedicalReportRequest) -> str:
     Generate a detailed medical report in JSON format for a diagnostic examination.
 
     CLINICAL CONTEXT:
-    - Patient Type: {request.tipologia_paziente}
+    - Patient Type: {request.tipologia_paziente}    
     - Scenario Description: {request.descrizione_scenario}
-    - Examination Type: {exam_type}    INSTRUCTIONS:
+    - Examination Type: {exam_type}
+    - Objective Examination (Esame obiettivo): {request.esame_obiettivo}
+
+    INSTRUCTIONS:
     1. Generate a realistic medical report appropriate for the clinical scenario and examination type.
-    2. All text content MUST be in ITALIAN.    
-    3. The `referto` field should contain ONLY the medical report formatted as plain text with clear structure:
+    2. All text content MUST be in ITALIAN.
+    3. Use the objective examination findings to guide the expected results in the diagnostic report.
+    4. Ensure the diagnostic findings are consistent with the clinical examination described in "Esame obiettivo".
+    5. The `referto` field should contain ONLY the medical report formatted as plain text with clear structure:
        - Include relevant anatomical details and measurements when applicable
        - Structure the text clearly without HTML tags
        - Focus on objective findings and observations
+       - Correlate diagnostic findings with clinical examination when relevant
        - DO NOT include conclusions, recommendations, or interpretative comments
        - DO NOT add summary sections or final remarks
-    4. Make the report consistent with the patient's age group ({request.tipologia_paziente}).
-    5. Ensure medical terminology is accurate and appropriate for the examination type.
+    6. Make the report consistent with the patient's age group ({request.tipologia_paziente}).
+    7. Ensure medical terminology is accurate and appropriate for the examination type.
 
     EXAMINATION-SPECIFIC GUIDELINES:
     - For imaging (X-ray, CT, MRI): Include technical parameters, anatomical structures examined, and specific findings

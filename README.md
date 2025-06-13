@@ -56,8 +56,12 @@ cd JAVA/sim-suite
 
 1. **Accedi a SimSuite** su porta 9090
 2. **Descrivi lo scenario** che vuoi creare
-3. **L'AI genera automaticamente**:
-   - Scenario completo con timeline
+3. **Seleziona il livello di difficoltà**:
+   - **Facile**: Scenario semplice, parametri stabili, evoluzione prevedibile
+   - **Medio**: Complessità moderata, 1-2 complicazioni gestibili
+   - **Difficile**: Scenario complesso, multiple complicazioni, evoluzione critica
+4. **L'AI genera automaticamente**:
+   - Scenario completo con timeline adattata alla difficoltà
    - Esami di laboratorio
    - Referti medici
    - Script per pazienti simulati
@@ -66,7 +70,8 @@ cd JAVA/sim-suite
 
 ## 📋 Funzionalità
 
-- ✅ **Scenari Completi**: Genera scenari medici dettagliati
+- ✅ **Scenari Completi**: Genera scenari medici dettagliati con difficoltà personalizzabile
+- ✅ **Livelli di Difficoltà**: Facile, Medio, Difficile per adattare la complessità
 - ✅ **Esami di Laboratorio**: Crea esami realistici con referti
 - ✅ **Timeline Clinica**: Evoluzione temporale degli scenari
 - ✅ **Referti Medici**: Genera referti radiologici, ECG, ecc.

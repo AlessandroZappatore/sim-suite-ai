@@ -8,5 +8,13 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 public record ScenarioGenerationRequest(
         @JsonProperty("description") String description,
         @JsonProperty("scenario_type") String scenarioType,
-        @JsonProperty("target") String target
-) {}
+        @JsonProperty("target") String target,
+        @JsonProperty("difficulty") String difficulty
+) {
+    /**
+     * Costruttore di convenienza con difficoltà predefinita "Medio"
+     */
+    public ScenarioGenerationRequest(String description, String scenarioType, String target) {
+        this(description, scenarioType, target, "Medio");
+    }
+}

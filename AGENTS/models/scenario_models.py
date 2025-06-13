@@ -147,3 +147,7 @@ class ScenarioRequest(BaseModel):
     description: str 
     scenario_type: Literal["Quick Scenario", "Advanced Scenario", "Patient Simulated Scenario"]
     target: Optional[str] = None
+    difficulty: Literal["Facile", "Medio", "Difficile"] = Field(
+        default="Facile", 
+        description="Livello di difficoltà dello scenario che influenza la complessità clinica, le complicazioni e i dettagli"
+    )

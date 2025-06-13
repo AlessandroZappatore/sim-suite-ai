@@ -32,3 +32,4 @@ class LabExamRequest(BaseModel):
     """The request model for generating lab exams."""
     descrizione_scenario: str = Field(description="A detailed description of the clinical scenario, including patient status and pathology.")
     tipologia_paziente: str = Field(default="Adulto", description="Type of patient to adjust reference ranges (e.g., 'Adulto', 'Pediatrico').")
+    esame_obiettivo: str = Field(description="Objective exam like eyes, neck, chest, abdomen, etc.")
