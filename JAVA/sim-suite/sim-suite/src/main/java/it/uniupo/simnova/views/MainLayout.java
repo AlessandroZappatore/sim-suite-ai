@@ -1,4 +1,4 @@
-package it.uniupo.simnova.views; // O un package dedicato ai layout/viste
+package it.uniupo.simnova.views;
 
 import com.vaadin.flow.component.AttachEvent;
 import com.vaadin.flow.component.DetachEvent;
@@ -13,6 +13,7 @@ import com.vaadin.flow.component.notification.NotificationVariant;
 import com.vaadin.flow.component.orderedlayout.FlexComponent;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
+import it.uniupo.simnova.service.ActiveNotifierManager;
 import it.uniupo.simnova.service.NotifierService;
 import it.uniupo.simnova.views.constant.UIConstants;
 import org.slf4j.LoggerFactory;
@@ -20,52 +21,62 @@ import org.slf4j.LoggerFactory;
 /**
  * Il layout principale dell'applicazione.
  * Estende AppLayout e funge da contenitore per tutte le altre viste.
- * È il posto ideale per la logica che deve vivere per tutta la sessione UI,
- * come l'ascoltatore di notifiche.
+ * Gestisce la registrazione e la visualizzazione delle notifiche provenienti da task in background.
  */
 public class MainLayout extends AppLayout {
 
     private final NotifierService notifierService;
+    private final ActiveNotifierManager activeNotifierManager; // <-- NUOVO: Inietta il manager per le notifiche attive
 
-    // Usa l'iniezione tramite costruttore, che è la pratica migliore in Spring
-    public MainLayout(NotifierService notifierService) {
+    /**
+     * Costruttore aggiornato per ricevere entrambi i servizi tramite dependency injection.
+     * @param notifierService Servizio per la comunicazione asincrona.
+     * @param activeNotifierManager Servizio per la gestione delle notifiche "fisse".
+     */
+    public MainLayout(NotifierService notifierService, ActiveNotifierManager activeNotifierManager) {
         this.notifierService = notifierService;
+        this.activeNotifierManager = activeNotifierManager; // <-- NUOVO: Inizializza il nuovo manager
     }
 
-    // Questo metodo viene chiamato quando il layout viene "attaccato" alla UI
-    // Dentro la classe MainLayout.java
-
+    /**
+     * Chiamato quando il layout viene "attaccato" alla UI.
+     * Registra un ascoltatore che gestisce le notifiche di completamento dei task in background.
+     */
     @Override
     protected void onAttach(AttachEvent attachEvent) {
         super.onAttach(attachEvent);
         final UI ui = attachEvent.getUI();
 
-        notifierService.register(ui, message -> {
-            LoggerFactory.getLogger(getClass()).info("Notifica ricevuta per UI {}: {}", ui.getUIId(), message);
+        // Registra un ascoltatore che ora accetta il 'NotificationPayload'
+        notifierService.register(ui, payload -> {
+
+            // 1. PRIMA AZIONE: Chiudi la notifica "fissa" di "lavori in corso"
+            activeNotifierManager.close(payload.notificationToCloseId());
+
+            // 2. SECONDA AZIONE: Estrai il messaggio e mostra la notifica di risultato finale
+            String message = payload.message();
+            LoggerFactory.getLogger(getClass()).info("Notifica di risultato ricevuta per UI {}: {}", ui.getUIId(), message);
 
             boolean isError = message.toLowerCase().contains("errore");
 
             if (isError) {
-                // Notifica di errore
+                // Notifica di errore (logica originale mantenuta)
                 Notification errorNotification = new Notification(message, 8000, Notification.Position.TOP_CENTER);
                 errorNotification.addThemeVariants(NotificationVariant.LUMO_ERROR);
                 errorNotification.open();
             } else {
-                // Notifica di successo personalizzata
+                // Notifica di successo personalizzata (logica originale mantenuta)
                 Span messageLabel = new Span(message);
                 Button viewButton;
                 Image gif;
 
-                // *** LOGICA PER SCEGLIERE GIF E BOTTONE ***
                 if (message.contains("Scenario")) {
                     viewButton = new Button("Vedi Scenari");
                     gif = new Image(UIConstants.AMBULANCE_GIF_PATH, "Animazione ambulanza");
                     viewButton.addClickListener(event -> ui.navigate("scenari"));
-                } else if (message.contains("Esami di laboratorio")) {
+                } else if (message.contains("Esami di laboratorio") || message.contains("Materiali necessari")) { // Aggiunto "Materiali" per coerenza
                     viewButton = new Button("Ricarica Pagina");
-                    // Sostituisci con il percorso della tua GIF per gli esami
                     gif = new Image(UIConstants.LAB_GIF_PATH, "Animazione esami");
-                    // Il bottone ricarica la pagina corrente per mostrare la nuova card
                     viewButton.addClickListener(event -> ui.getPage().reload());
                 } else if (message.contains("Nuovo referto")) {
                     viewButton = new Button("Ricarica Pagina");
@@ -103,10 +114,13 @@ public class MainLayout extends AppLayout {
         });
     }
 
-    // Questo metodo viene chiamato quando il layout viene "staccato" (l'utente chiude la scheda)
+    /**
+     * Chiamato quando il layout viene "staccato" (es. l'utente chiude la scheda del browser).
+     * Rimuove l'ascoltatore per evitare memory leak.
+     */
     @Override
     protected void onDetach(DetachEvent detachEvent) {
-        // Pulisce l'ascoltatore per evitare memory leak
+        // Pulisce l'ascoltatore per l'istanza UI specifica
         notifierService.unregister(detachEvent.getUI());
         super.onDetach(detachEvent);
     }

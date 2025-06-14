@@ -1,4 +1,4 @@
-package it.uniupo.simnova.domain.lab_exam;
+package it.uniupo.simnova.domain.respons_model;
 
 // Utilizza Lombok per ridurre il codice boilerplate (costruttori, getter, setter)
 // Se non usi Lombok, dovrai generarli manualmente.

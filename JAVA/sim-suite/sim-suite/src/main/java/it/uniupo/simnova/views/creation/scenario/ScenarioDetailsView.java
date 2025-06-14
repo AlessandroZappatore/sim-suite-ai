@@ -19,6 +19,7 @@ import com.vaadin.flow.router.*;
 import com.vaadin.flow.theme.lumo.LumoUtility;
 import it.uniupo.simnova.domain.scenario.Scenario;
 import it.uniupo.simnova.domain.common.Tempo;
+import it.uniupo.simnova.service.ActiveNotifierManager;
 import it.uniupo.simnova.service.NotifierService;
 import it.uniupo.simnova.service.ai_api.ExternalApiService;
 import it.uniupo.simnova.service.ai_api.LabExamService;
@@ -119,6 +120,7 @@ public class ScenarioDetailsView extends Composite<VerticalLayout> implements Ha
     private final LabExamService labExamService;
     private final ExecutorService executorService;
     private final NotifierService notifierService;
+    private final ActiveNotifierManager activeNotifierManager;
 
     /**
      * L'ID dello scenario attualmente visualizzato in questa vista.
@@ -190,7 +192,7 @@ public class ScenarioDetailsView extends Composite<VerticalLayout> implements Ha
                                MaterialeService materialeNecessario, AdvancedScenarioService advancedScenarioService,
                                PatientSimulatedScenarioService patientSimulatedScenarioService,
                                AzioneChiaveService azionechiaveService, EsameRefertoService esameRefertoService,
-                               EsameFisicoService esameFisicoService, PazienteT0Service pazienteT0Service, PresidiService presidiService, ExternalApiService externalApiService, LabExamService labExamService, ExecutorService executorService, NotifierService notifierService) {
+                               EsameFisicoService esameFisicoService, PazienteT0Service pazienteT0Service, PresidiService presidiService, ExternalApiService externalApiService, LabExamService labExamService, ExecutorService executorService, NotifierService notifierService, ActiveNotifierManager activeNotifierManager) {
         this.scenarioService = scenarioService;
         this.fileStorageService = fileStorageService;
         this.materialeNecessario = materialeNecessario;
@@ -210,6 +212,7 @@ public class ScenarioDetailsView extends Composite<VerticalLayout> implements Ha
         this.labExamService = labExamService;
         this.executorService = executorService;
         this.notifierService = notifierService;
+        this.activeNotifierManager = activeNotifierManager;
     }
 
     /**
@@ -413,7 +416,12 @@ public class ScenarioDetailsView extends Composite<VerticalLayout> implements Ha
                 this.scenario.getInfoGenitore(),
                 scenarioService,
                 materialeNecessario,
-                azioneChiaveService
+                azioneChiaveService,
+                executorService,
+                notifierService,
+                esameFisicoService,
+                externalApiService,
+                activeNotifierManager
         );
 
         Component statoPazienteContent = PatientT0Support.createPatientContent(
@@ -435,7 +443,8 @@ public class ScenarioDetailsView extends Composite<VerticalLayout> implements Ha
                 labExamService,
                 executorService,
                 notifierService,
-                esameFisicoService
+                esameFisicoService,
+                activeNotifierManager
         );
 
         // Componente EnhancedTabs per la navigazione tra le schede.

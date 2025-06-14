@@ -1,11 +1,13 @@
-package it.uniupo.simnova.domain.lab_exam;
+package it.uniupo.simnova.domain.respons_model;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 
 @Getter
 @Setter
+@Builder
 public class ReportSet {
     private int id;
     private int scenarioId;
@@ -15,12 +17,4 @@ public class ReportSet {
 
     @JsonProperty("referto")
     private String descrizioneEsame;
-
-    public ReportSet(int id, int scenarioId, String tipologiaEsame, String descrizioneEsame) {
-        this.id = id;
-        this.scenarioId = scenarioId;
-        this.tipologiaEsame = tipologiaEsame;
-        this.descrizioneEsame = descrizioneEsame;
-    }
-
 }

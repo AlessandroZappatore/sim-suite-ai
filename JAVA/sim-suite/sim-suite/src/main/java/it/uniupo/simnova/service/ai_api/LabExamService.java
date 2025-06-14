@@ -1,8 +1,8 @@
 package it.uniupo.simnova.service.ai_api;
 
-import it.uniupo.simnova.domain.lab_exam.LabCategory;
-import it.uniupo.simnova.domain.lab_exam.LabExamSet;
-import it.uniupo.simnova.domain.lab_exam.LabTest;
+import it.uniupo.simnova.domain.respons_model.LabCategory;
+import it.uniupo.simnova.domain.respons_model.LabExamSet;
+import it.uniupo.simnova.domain.respons_model.LabTest;
 import it.uniupo.simnova.domain.paziente.EsameReferto;
 import it.uniupo.simnova.domain.scenario.Scenario;
 import it.uniupo.simnova.service.export.LabExamPdfExportService;

@@ -1,4 +1,4 @@
-package it.uniupo.simnova.domain.lab_exam;
+package it.uniupo.simnova.domain.respons_model;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Getter;

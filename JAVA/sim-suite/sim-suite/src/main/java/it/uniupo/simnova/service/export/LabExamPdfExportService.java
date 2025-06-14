@@ -1,6 +1,6 @@
 package it.uniupo.simnova.service.export;
 
-import it.uniupo.simnova.domain.lab_exam.LabExamSet;
+import it.uniupo.simnova.domain.respons_model.LabExamSet;
 import it.uniupo.simnova.domain.scenario.Scenario;
 import it.uniupo.simnova.service.storage.FileStorageService;
 import org.apache.pdfbox.pdmodel.PDDocument;

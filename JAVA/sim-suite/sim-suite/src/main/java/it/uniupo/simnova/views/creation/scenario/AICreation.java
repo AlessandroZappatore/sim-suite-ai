@@ -4,11 +4,9 @@ import com.flowingcode.vaadin.addons.fontawesome.FontAwesome;
 import com.vaadin.flow.component.Composite;
 import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.button.Button;
-// Aggiunto import per ButtonVariant
 import com.vaadin.flow.component.html.Div;
 import com.vaadin.flow.component.html.Span;
 import com.vaadin.flow.component.icon.Icon;
-import com.vaadin.flow.component.notification.Notification;
 import com.vaadin.flow.component.orderedlayout.FlexComponent;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
@@ -18,6 +16,7 @@ import com.vaadin.flow.component.textfield.TextField; // Aggiunto import per Tex
 import com.vaadin.flow.data.value.ValueChangeMode; // Aggiunto import
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
+import it.uniupo.simnova.service.ActiveNotifierManager;
 import it.uniupo.simnova.service.NotifierService;
 import it.uniupo.simnova.service.ai_api.ExternalApiService;
 import it.uniupo.simnova.service.ai_api.model.ScenarioGenerationRequest;
@@ -48,6 +47,7 @@ public class AICreation extends Composite<VerticalLayout> {
     private final ExecutorService executorService; // Aggiunto per esecuzione in background
     // Icone riutilizzabili
     private final Icon aiIcon = FontAwesome.Solid.ROBOT.create();
+    private final ActiveNotifierManager activeNotifierManager;
     private int step = 0; // 0: tipo scenario, 1: target scenario, 2: descrizione, 3: difficoltà, 4: esami lab, 5: fine
     // Componenti UI riutilizzabili per i messaggi AI
     private HorizontalLayout aiPresentationMsg;
@@ -79,7 +79,7 @@ public class AICreation extends Composite<VerticalLayout> {
                       ScenarioImportService scenarioImportService,
                       ExternalApiService externalApiService,
                       NotifierService notifierService,
-                      ExecutorService executorService) {
+                      ExecutorService executorService, ActiveNotifierManager activeNotifierManager) {
         this.fileStorageService = fileStorageService;
         this.scenarioImportService = scenarioImportService;
         this.externalApiService = externalApiService;
@@ -90,6 +90,7 @@ public class AICreation extends Composite<VerticalLayout> {
         userIcon.setSize("20px");
 
         initView();
+        this.activeNotifierManager = activeNotifierManager;
     }
 
     void initView() {
@@ -153,44 +154,45 @@ public class AICreation extends Composite<VerticalLayout> {
         sendDiff.addClickListener(e -> {
             step = 4; // Passa allo step degli esami di laboratorio
             updateChatLayout(chatLayout);
-            startScenarioGeneration();
+            startScenarioGeneration(activeNotifierManager);
         });
     }
 
-    private void startScenarioGeneration() {
-        // Mostra un feedback immediato e non bloccante
-        Notification.show("Generazione dello scenario avviata. Riceverai una notifica al termine.", 4000, Notification.Position.MIDDLE);
+    private void startScenarioGeneration(ActiveNotifierManager activeNotifierManager) {
+        // 1. NUOVO: Mostra la notifica fissa di "lavori in corso" e ottieni il suo ID.
+        final String notificationId = activeNotifierManager.show("Generazione scenario in corso...");
 
-        // Cattura l'istanza UI corrente da passare al thread
+        // Cattura l'istanza UI corrente da passare al thread.
         final UI ui = UI.getCurrent();
 
-        // Raccogli i dati dal form
+        // Raccogli i dati dal form.
         ScenarioGenerationRequest request = new ScenarioGenerationRequest(
                 shortDescription.getValue(),
                 scenarioTypeSelect.getValue(),
                 scenarioTargetField.getValue()
         );
 
-        // Avvia l'operazione nel thread pool gestito
+        // 2. MODIFICATO: Avvia l'operazione nel thread pool gestito.
         executorService.submit(() -> {
-            String notificationMessage;
+            String finalMessage; // Rinominiamo per coerenza con il pattern.
             try {
-                // Esegui la chiamata API e l'importazione
+                // Esegui la chiamata API e l'importazione.
                 Optional<String> jsonResponseOptional = externalApiService.generateScenario(request);
 
                 if (jsonResponseOptional.isPresent()) {
                     scenarioImportService.createScenarioByJSON(jsonResponseOptional.get().getBytes(StandardCharsets.UTF_8));
-                    notificationMessage = "Scenario creato con successo!";
+                    finalMessage = "Scenario creato con successo!";
                 } else {
-                    notificationMessage = "Errore: Il servizio AI non ha restituito una risposta valida.";
+                    finalMessage = "Errore: Il servizio AI non ha restituito una risposta valida.";
                 }
             } catch (Exception e) {
                 logger.error("Fallimento nel task di generazione scenario in background.", e);
-                notificationMessage = "Errore critico durante la generazione dello scenario.";
+                finalMessage = "Errore critico durante la generazione dello scenario.";
             }
 
-            // Al termine del task, invia la notifica all'utente specifico
-            notifierService.notify(ui, notificationMessage);
+            // 3. NUOVO: Al termine del task, invia il payload completo (messaggio + ID).
+            NotifierService.NotificationPayload payload = new NotifierService.NotificationPayload(finalMessage, notificationId);
+            notifierService.notify(ui, payload);
         });
     }
 
@@ -219,7 +221,7 @@ public class AICreation extends Composite<VerticalLayout> {
         // STEP 2: Descrizione
         aiMsgStep1 = createAiMessage("Descrivimi brevemente lo scenario che vuoi che io crei");
         shortDescription = FieldGenerator.createTextArea("Breve Descrizione", "Inserisci una breve descrizione dello scenario che vuoi creare", true);
-        shortDescription.setMaxLength(200);
+        shortDescription.setMaxLength(500);
         shortDescription.setValueChangeMode(ValueChangeMode.EAGER);
         sendDesc = new Button("Invia", FontAwesome.Solid.PAPER_PLANE.create()); // Assegna al campo di classe
         styleSendButton(sendDesc);

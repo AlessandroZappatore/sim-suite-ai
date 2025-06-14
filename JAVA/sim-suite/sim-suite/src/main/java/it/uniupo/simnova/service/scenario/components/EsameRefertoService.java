@@ -1,6 +1,6 @@
 package it.uniupo.simnova.service.scenario.components;
 
-import it.uniupo.simnova.domain.lab_exam.ReportSet;
+import it.uniupo.simnova.domain.respons_model.ReportSet;
 import it.uniupo.simnova.domain.paziente.EsameReferto;
 import it.uniupo.simnova.service.storage.FileStorageService;
 import it.uniupo.simnova.utils.DBConnect;

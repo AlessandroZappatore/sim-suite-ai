@@ -1,5 +1,6 @@
 package it.uniupo.simnova.views.ui.helper;
 
+import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.button.ButtonVariant;
 import com.vaadin.flow.component.html.Div;
@@ -15,16 +16,26 @@ import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.theme.lumo.LumoUtility;
+import it.uniupo.simnova.domain.respons_model.MatSet;
 import it.uniupo.simnova.domain.scenario.Scenario;
+import it.uniupo.simnova.service.ActiveNotifierManager;
+import it.uniupo.simnova.service.NotifierService;
+import it.uniupo.simnova.service.ai_api.ExternalApiService;
+import it.uniupo.simnova.service.ai_api.model.MatGenerationRequest;
 import it.uniupo.simnova.service.scenario.ScenarioService;
 import it.uniupo.simnova.service.scenario.components.AzioneChiaveService;
+import it.uniupo.simnova.service.scenario.components.EsameFisicoService;
 import it.uniupo.simnova.service.scenario.components.MaterialeService;
 import it.uniupo.simnova.views.common.utils.StyleApp;
 import it.uniupo.simnova.views.common.utils.TinyEditor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.vaadin.tinymce.TinyMce;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
+import java.util.concurrent.ExecutorService;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
 
@@ -36,7 +47,7 @@ import java.util.stream.Collectors;
  * @version 1.0
  */
 public class GeneralSupport extends HorizontalLayout {
-
+    private static final Logger logger = LoggerFactory.getLogger(GeneralSupport.class);
     /**
      * Costruttore privato per evitare istanziazioni dirette.
      */
@@ -63,7 +74,12 @@ public class GeneralSupport extends HorizontalLayout {
             String infoGenitore,
             ScenarioService scenarioService,
             MaterialeService materialeService,
-            AzioneChiaveService azioneChiaveService) {
+            AzioneChiaveService azioneChiaveService,
+            ExecutorService executorService,
+            NotifierService notifierService,
+            EsameFisicoService esameFisicoService,
+            ExternalApiService externalApiService,
+            ActiveNotifierManager activeNotifierManager) {
 
         VerticalLayout mainLayout = new VerticalLayout();
         mainLayout.setPadding(true);
@@ -109,7 +125,7 @@ public class GeneralSupport extends HorizontalLayout {
         addInfoItemIfNotEmpty(scenario.getId(), cardContentLayout, "Moulage", scenario.getMoulage(), VaadinIcon.EYE, scenarioService);
         addInfoItemIfNotEmpty(scenario.getId(), cardContentLayout, "Liquidi e dosi farmaci", scenario.getLiquidi(), VaadinIcon.DROP, scenarioService);
 
-        addMaterialeNecessarioItem(scenario.getId(), cardContentLayout, materialeService);
+        addMaterialeNecessarioItem(scenario.getId(), cardContentLayout, materialeService, executorService, notifierService, scenario, esameFisicoService, externalApiService, activeNotifierManager);
 
         card.add(cardContentLayout);
         mainLayout.add(card);
@@ -528,7 +544,15 @@ public class GeneralSupport extends HorizontalLayout {
      * @param container        Il layout a cui aggiungere la sezione.
      * @param materialeService Il servizio per la gestione del materiale.
      */
-    private static void addMaterialeNecessarioItem(Integer scenarioId, VerticalLayout container, MaterialeService materialeService) {
+    private static void addMaterialeNecessarioItem(Integer scenarioId,
+                                                   VerticalLayout container,
+                                                   MaterialeService materialeService,
+                                                   ExecutorService executorService,
+                                                   NotifierService notifierService,
+                                                   Scenario scenario,
+                                                   EsameFisicoService esameFisicoService,
+                                                   ExternalApiService externalApiService,
+                                                   ActiveNotifierManager activeNotifierManager) {
         if (container.getComponentCount() > 0) {
             Hr divider = new Hr();
             divider.getStyle()
@@ -580,6 +604,55 @@ public class GeneralSupport extends HorizontalLayout {
 
         headerRow.add(titleGroup, buttonLayout);
         itemLayout.add(headerRow);
+
+        aiMaterialButton.addClickListener(event -> {
+            // 1. MOSTRA LA NOTIFICA FISSA e ottieni il suo ID univoco.
+            // Questa notifica rimarrà visibile fino alla chiusura esplicita.;
+            final String notificationId = activeNotifierManager.show("Generazione materiali in corso...");
+
+            // Cattura la UI corrente per poter comunicare con essa dal thread in background.
+            final UI ui = UI.getCurrent();
+
+            // 2. AVVIA IL TASK IN BACKGROUND usando l'executorService.
+            executorService.submit(() -> {
+                String finalMessage; // Messaggio di risultato da mostrare all'utente.
+
+                try {
+                    MatGenerationRequest request = new MatGenerationRequest(
+                            scenario.getDescrizione(),
+                            scenario.getTipologia(),
+                            scenario.getTarget(),
+                            esameFisicoService.getEsameFisicoById(scenarioId).toString()
+                    );
+
+                    // La chiamata ora restituisce una lista opzionale
+                    Optional<List<MatSet>> materialiOptional = externalApiService.generateMaterial(request);
+
+                    if (materialiOptional.isPresent()) {
+                        // Passa l'intera lista al service per il salvataggio
+                        boolean success = materialeService.saveAImaterials(scenarioId, materialiOptional.get());
+                        if (success) {
+                            finalMessage = "Materiali necessari creati e associati!";
+                        } else {
+                            finalMessage = "Errore durante il salvataggio dei materiali.";
+                        }
+                    } else {
+                        finalMessage = "Errore: Il servizio AI per i materiali non ha risposto.";
+                    }
+                } catch (Exception e) {
+                    // Gestisce qualsiasi errore imprevisto durante l'esecuzione del task.
+                    logger.error("Fallimento nel task di generazione materiali in background.", e);
+                    finalMessage = "Errore critico durante la generazione dei materiali.";
+                }
+
+                // 3. INVIA IL RISULTATO ALLA UI ALLA FINE DEL TASK.
+                // Crea il payload con il messaggio finale e l'ID della notifica fissa da chiudere.
+                NotifierService.NotificationPayload payload = new NotifierService.NotificationPayload(finalMessage, notificationId);
+
+                // Usa il NotifierService per inviare in modo sicuro il payload al MainLayout.
+                notifierService.notify(ui, payload);
+            });
+        });
 
         Div contentDisplay = new Div();
         contentDisplay.getStyle()

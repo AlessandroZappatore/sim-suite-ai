@@ -25,11 +25,12 @@ import com.vaadin.flow.component.upload.Upload;
 import com.vaadin.flow.component.upload.receivers.MemoryBuffer;
 import com.vaadin.flow.dom.Element;
 import com.vaadin.flow.component.dialog.Dialog;
-import it.uniupo.simnova.domain.lab_exam.LabExamSet;
-import it.uniupo.simnova.domain.lab_exam.ReportSet;
+import it.uniupo.simnova.domain.respons_model.LabExamSet;
+import it.uniupo.simnova.domain.respons_model.ReportSet;
 import it.uniupo.simnova.domain.paziente.EsameReferto;
 import static it.uniupo.simnova.views.constant.ExamConst.ALLINSTREXAMS;
 import it.uniupo.simnova.domain.scenario.Scenario;
+import it.uniupo.simnova.service.ActiveNotifierManager;
 import it.uniupo.simnova.service.NotifierService;
 import it.uniupo.simnova.service.ai_api.ExternalApiService;
 import it.uniupo.simnova.service.ai_api.LabExamService;
@@ -86,7 +87,8 @@ public class ExamSupport {
                                                     LabExamService labExamService,
                                                     ExecutorService executorService,
                                                     NotifierService notifierService,
-                                                    EsameFisicoService esameFisicoService) {
+                                                    EsameFisicoService esameFisicoService,
+                                                    ActiveNotifierManager activeNotifierManager) {
         List<EsameReferto> esami = esameRefertoService.getEsamiRefertiByScenarioId(scenarioId);
         VerticalLayout layout = new VerticalLayout();
         layout.setPadding(false);
@@ -490,42 +492,48 @@ public class ExamSupport {
                 "var(--lumo-base-color)");
 
         createExamButton.addClickListener(event -> {
-            // Feedback immediato e non bloccante
-            Notification.show("Generazione esami di laboratorio avviata...", 3000, Notification.Position.MIDDLE);
+            // 1. MOSTRA LA NOTIFICA FISSA e ottieni il suo ID univoco.
+            final String notificationId = activeNotifierManager.show("Generazione esami di laboratorio in corso...");
 
-            // Cattura la UI corrente
+            // Cattura la UI corrente per poter comunicare con essa dal thread in background.
             final UI ui = UI.getCurrent();
 
-            // Avvia il task in background
+            // 2. AVVIA IL TASK IN BACKGROUND.
             executorService.submit(() -> {
-                String notificationMessage;
+                String finalMessage; // Messaggio di risultato da mostrare all'utente.
+
                 try {
+                    // Prepara e invia la richiesta all'API esterna.
                     LabExamGenerationRequest request = new LabExamGenerationRequest(
                             scenario.getDescrizione(),
                             scenario.getTipologia(),
                             esameFisicoService.getEsameFisicoById(scenarioId).toString()
                     );
-                    // Chiamata API per generare i dati degli esami
                     Optional<LabExamSet> labExamSetOptional = externalApiService.generateLabExamsFromScenario(request);
 
                     if (labExamSetOptional.isPresent()) {
-                        // Se l'API ha risposto, salva i dati e il PDF
+                        // Se l'API risponde, salva i dati e genera il PDF.
                         boolean success = labExamService.saveLabExamsAndGeneratePdf(scenarioId, labExamSetOptional.get());
                         if (success) {
-                            notificationMessage = "Esami di laboratorio creati con successo!";
+                            finalMessage = "Esami di laboratorio creati con successo!";
                         } else {
-                            notificationMessage = "Errore: fallimento durante il salvataggio degli esami di laboratorio.";
+                            finalMessage = "Errore: fallimento durante il salvataggio degli esami di laboratorio.";
                         }
                     } else {
-                        notificationMessage = "Errore: Il servizio AI per gli esami non ha risposto.";
+                        finalMessage = "Errore: Il servizio AI per gli esami non ha risposto.";
                     }
                 } catch (Exception e) {
+                    // Gestisce qualsiasi errore imprevisto.
                     logger.error("Fallimento nel task di generazione esami in background.", e);
-                    notificationMessage = "Errore critico durante la generazione degli esami.";
+                    finalMessage = "Errore critico durante la generazione degli esami.";
                 }
 
-                // Invia la notifica al termine del task
-                notifierService.notify(ui, notificationMessage);
+                // 3. INVIA IL RISULTATO ALLA UI ALLA FINE DEL TASK.
+                // Crea il payload con il messaggio finale e l'ID della notifica da chiudere.
+                NotifierService.NotificationPayload payload = new NotifierService.NotificationPayload(finalMessage, notificationId);
+
+                // Invia in modo sicuro il payload al MainLayout.
+                notifierService.notify(ui, payload);
             });
         });
 
@@ -551,18 +559,22 @@ public class ExamSupport {
 
             examTypeComboBox.addValueChangeListener(e -> generateButton.setEnabled(e.getValue() != null && !e.getValue().isEmpty()));
 
+            // Le modifiche sono all'interno di questo listener
             generateButton.addClickListener(e -> {
                 final String selectedExamType = examTypeComboBox.getValue();
 
-                // Feedback immediato all'utente
-                Notification.show("Generazione referto per '" + selectedExamType + "' avviata...", 3000, Notification.Position.MIDDLE);
+                // Chiudi subito il dialog per una migliore esperienza utente
                 selectExamTypeDialog.close();
 
+                // 1. NUOVO: Mostra la notifica fissa e ottieni il suo ID
+                final String notificationId = activeNotifierManager.show("Generazione referto per '" + selectedExamType + "' in corso...");
+
+                // Cattura la UI corrente per la notifica finale
                 final UI ui = UI.getCurrent();
 
-                // Avvia il task in background
+                // 2. MODIFICATO: Avvia il task in background
                 executorService.submit(() -> {
-                    String notificationMessage;
+                    String finalMessage; // Rinominiamo per coerenza
                     try {
                         ReportGenerationRequest request = new ReportGenerationRequest(
                                 scenario.getDescrizione(),
@@ -575,20 +587,21 @@ public class ExamSupport {
                         if (refertoContent.isPresent()) {
                             boolean success = esameRefertoService.createRefertoByJSON(scenarioId, refertoContent);
                             if (success) {
-                                notificationMessage = "Nuovo referto per '" + selectedExamType + "' creato con successo!";
+                                finalMessage = "Nuovo referto per '" + selectedExamType + "' creato con successo!";
                             } else {
-                                notificationMessage = "Errore: fallimento durante il salvataggio del referto per '" + selectedExamType + "'.";
+                                finalMessage = "Errore: fallimento durante il salvataggio del referto per '" + selectedExamType + "'.";
                             }
                         } else {
-                            notificationMessage = "Errore: Il servizio AI per i referti non ha risposto.";
+                            finalMessage = "Errore: Il servizio AI per i referti non ha risposto.";
                         }
                     } catch (Exception ex) {
                         logger.error("Errore nel task di generazione referto.", ex);
-                        notificationMessage = "Errore critico durante la generazione del referto per '" + selectedExamType + "'.";
+                        finalMessage = "Errore critico durante la generazione del referto per '" + selectedExamType + "'.";
                     }
 
-                    // Invia la notifica al termine del task
-                    notifierService.notify(ui, notificationMessage);
+                    // 3. NUOVO: Invia il payload completo (messaggio + ID) al termine del task
+                    NotifierService.NotificationPayload payload = new NotifierService.NotificationPayload(finalMessage, notificationId);
+                    notifierService.notify(ui, payload);
                 });
             });
 

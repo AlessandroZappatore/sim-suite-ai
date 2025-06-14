@@ -1,21 +1,22 @@
 package it.uniupo.simnova.service.scenario.components;
 
 import it.uniupo.simnova.domain.common.Materiale;
+import it.uniupo.simnova.domain.respons_model.MatSet;
 import it.uniupo.simnova.utils.DBConnect;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import java.sql.*;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * Servizio per la gestione dei materiali necessari all'interno degli scenari.
  * Fornisce metodi per recuperare, salvare, associare ed eliminare i materiali nel database.
  *
  * @author Alessandro Zappatore
- * @version 1.0
+ * @version 1.1
  */
 @Service
 public class MaterialeService {
@@ -285,5 +286,73 @@ public class MaterialeService {
                     .append("\n");
         }
         return sb.toString();
+    }
+
+    /**
+     * Salva una lista di materiali (rappresentati da oggetti MatSet) per un dato scenario.
+     * Questo metodo è stato aggiornato per accettare una lista di oggetti, come restituito
+     * dall'API, eliminando la necessità di parsare manualmente le stringhe.
+     *
+     * @param scenarioId L'ID dello scenario a cui associare i materiali.
+     * @param materiali La lista di oggetti MatSet, dove ognuno rappresenta un materiale.
+     * @return {@code true} se l'operazione ha successo, {@code false} altrimenti.
+     */
+    public boolean saveAImaterials(Integer scenarioId, List<MatSet> materiali) {
+        // 1. Controllo sull'input: ora verifichiamo se la lista è vuota o nulla.
+        if (materiali == null || materiali.isEmpty()) {
+            logger.info("La lista di materiali è vuota o nulla, nessun materiale da salvare per lo scenario ID {}.", scenarioId);
+            return true;
+        }
+        logger.info("Ricevuti {} materiali da salvare per lo scenario ID {}.", materiali.size(), scenarioId);
+
+        // --- LA VECCHIA LOGICA DI PARSING DELLA STRINGA È STATA COMPLETAMENTE RIMOSSA ---
+        // Non è più necessaria perché riceviamo già dati strutturati.
+
+        // 2. La logica di business principale rimane, ma ora è più semplice e robusta.
+        Map<String, Materiale> allMaterialsMap = getAllMaterials().stream()
+                .collect(Collectors.toMap(
+                        m -> m.nome().toLowerCase(),
+                        m -> m,
+                        (existing, duplicate) -> existing
+                ));
+
+        Set<Integer> idsToAssociate = getMaterialiByScenarioId(scenarioId).stream()
+                .map(Materiale::idMateriale) // Assumendo che il tuo record Materiale abbia un metodo idMateriale()
+                .collect(Collectors.toSet());
+
+        // 3. Itera direttamente sulla lista di oggetti MatSet ricevuta.
+        for (MatSet mat : materiali) {
+            String name = mat.getNome();
+            String description = mat.getDescrizione_scenario(); // Otteniamo i dati direttamente dai campi
+
+            if (name == null || name.trim().isEmpty()) {
+                continue; // Salta eventuali materiali senza nome
+            }
+
+            String normalizedName = name.toLowerCase();
+            Materiale material;
+
+            if (allMaterialsMap.containsKey(normalizedName)) {
+                material = allMaterialsMap.get(normalizedName);
+                logger.debug("Materiale esistente '{}' trovato con ID {}.", name, material.idMateriale());
+            } else {
+                logger.info("Creazione nuovo materiale: '{}'", name);
+                // Nota: La tua classe Materiale potrebbe avere un costruttore diverso. Adatta se necessario.
+                Materiale newMaterial = new Materiale(0, name, description);
+                material = saveMateriale(newMaterial);
+
+                if (material != null) {
+                    allMaterialsMap.put(normalizedName, material);
+                } else {
+                    logger.error("Salvataggio del nuovo materiale '{}' fallito. Sarà saltato per l'associazione.", name);
+                    continue;
+                }
+            }
+
+            idsToAssociate.add(material.idMateriale());
+        }
+
+        logger.info("Aggiornamento associazioni per lo scenario ID {}. Totale materiali da associare: {}", scenarioId, idsToAssociate.size());
+        return associaMaterialiToScenario(scenarioId, new ArrayList<>(idsToAssociate));
     }
 }
