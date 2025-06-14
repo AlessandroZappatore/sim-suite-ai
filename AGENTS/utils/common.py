@@ -46,31 +46,81 @@ def extract_json_from_response(response_text: Optional[str]) -> Dict[str, Any]:
         ValueError: If the response is empty or contains invalid JSON
     """
     if not response_text: 
-        raise ValueError("Empty response from AI")
-    
-    # Try to find JSON within ```json``` blocks first
-    match = re.search(r'```json\s*(\{.*?\})\s*```', response_text, re.DOTALL)
+        raise ValueError("Empty response from AI")    # Try to find JSON within ```json``` blocks first
+    match = re.search(r'```json\s*(\[.*?\]|\{.*?\})\s*```', response_text, re.DOTALL)
     
     if match:
         json_str = match.group(1)
     else:
         # As a fallback, try to parse the whole string if it looks like JSON
-        if response_text.strip().startswith('{'):
+        stripped = response_text.strip()
+        if stripped.startswith('{') or stripped.startswith('['):
             json_str = response_text
         else:
             raise ValueError("No JSON block found in the response.")
     
     try:
-        # Sanitize by finding the first '{' and last '}'
-        first_brace = json_str.find('{')
-        last_brace = json_str.rfind('}')
+        # Clean and parse the JSON string
+        json_str = json_str.strip()
         
-        if first_brace == -1 or last_brace == -1:
-            raise json.JSONDecodeError("Braces not found", json_str, 0)
-            
-        parsed_json = json.loads(json_str[first_brace:last_brace + 1])
+        # Try to parse directly first
+        parsed_json = json.loads(json_str)
         return parsed_json
         
     except json.JSONDecodeError as e:
-        logger.error(f"JSON Decode Error: {e}\nResponse text received: {json_str}")
-        raise ValueError(f"Invalid JSON in AI response: {e}\nResponse text: {json_str}")
+        # If direct parsing fails, try to find and extract valid JSON
+        try:
+            # For arrays, find [ and ]
+            if json_str.strip().startswith('['):
+                first_bracket = json_str.find('[')
+                last_bracket = json_str.rfind(']')
+                if first_bracket != -1 and last_bracket != -1:
+                    clean_json = json_str[first_bracket:last_bracket + 1]
+                    parsed_json = json.loads(clean_json)
+                    return parsed_json
+            
+            # For objects, find { and }
+            elif json_str.strip().startswith('{'):
+                first_brace = json_str.find('{')
+                last_brace = json_str.rfind('}')
+                if first_brace != -1 and last_brace != -1:
+                    clean_json = json_str[first_brace:last_brace + 1]
+                    parsed_json = json.loads(clean_json)
+                    return parsed_json
+            
+            # If all else fails, raise the original error
+            raise e
+            
+        except json.JSONDecodeError:
+            logger.error(f"JSON Decode Error: {e}\nResponse text received: {json_str}")
+            raise ValueError(f"Invalid JSON in AI response: {e}\nResponse text: {json_str}")
+        
+    except Exception as e:
+        logger.error(f"Unexpected error parsing JSON: {e}\nResponse text received: {json_str}")
+        raise ValueError(f"Unexpected error parsing JSON: {e}\nResponse text: {json_str}")
+
+
+def sanitize_json_string(json_str: str) -> str:
+    """
+    Sanitize a JSON string by removing or replacing problematic characters.
+    
+    Args:
+        json_str: The JSON string to sanitize
+        
+    Returns:
+        Cleaned JSON string
+    """
+    # Remove non-printable characters except newlines and tabs
+    import re
+    
+    # Replace problematic quotes with standard quotes
+    json_str = json_str.replace('"', '"').replace('"', '"')
+    json_str = json_str.replace(''', "'").replace(''', "'")
+    
+    # Remove any zero-width characters or other invisible characters
+    json_str = re.sub(r'[\u200b-\u200d\ufeff]', '', json_str)
+    
+    # Remove any control characters except necessary whitespace
+    json_str = re.sub(r'[\x00-\x08\x0b\x0c\x0e-\x1f\x7f]', '', json_str)
+    
+    return json_str

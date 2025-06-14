@@ -9,6 +9,7 @@ from fastapi import FastAPI
 from api.exam_api import exam_app
 from api.scenario_api import scenario_app
 from api.medical_report_api import medical_report_app
+from api.mat_api import mat_app
 
 # Configure logging
 logging.basicConfig(level=logging.INFO)
@@ -25,6 +26,7 @@ app = FastAPI(
 app.mount("/scenarios", scenario_app)
 app.mount("/exams", exam_app)
 app.mount("/reports", medical_report_app)
+app.mount("/materials", mat_app)
 
 @app.get("/", summary="Main Health Check")
 def root() -> Dict[str, Any]:

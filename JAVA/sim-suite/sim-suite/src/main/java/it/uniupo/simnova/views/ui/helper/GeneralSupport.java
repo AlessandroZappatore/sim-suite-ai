@@ -564,9 +564,21 @@ public class GeneralSupport extends HorizontalLayout {
         titleLabel.getStyle().set("font-weight", "600");
         titleGroup.add(icon, titleLabel);
 
+        VerticalLayout buttonLayout = new VerticalLayout();
+        buttonLayout.setPadding(false);
+        buttonLayout.setSpacing(false);
+        buttonLayout.setWidthFull();
+        buttonLayout.setAlignItems(FlexComponent.Alignment.END);
+
         Button editButton = StyleApp.getButton("Modifica", VaadinIcon.EDIT, ButtonVariant.LUMO_SUCCESS, "var(--lumo-base-color)");
         editButton.setTooltipText("Modifica Materiale necessario");
-        headerRow.add(titleGroup, editButton);
+        buttonLayout.add(editButton);
+
+        Button aiMaterialButton = StyleApp.getButton("Genera", VaadinIcon.PLUS_CIRCLE, ButtonVariant.LUMO_PRIMARY, "var(--lumo-base-color)");
+        aiMaterialButton.setTooltipText("Genera i materiali necessari tramite AI");
+        buttonLayout.add(aiMaterialButton);
+
+        headerRow.add(titleGroup, buttonLayout);
         itemLayout.add(headerRow);
 
         Div contentDisplay = new Div();
