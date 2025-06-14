@@ -15,8 +15,7 @@
         <div class="nav-container">            <div class="nav-brand">
                 <img src="img/icon.png" alt="SIMSUITEAI Logo" class="nav-logo">
                 <span>SIMSUITEAI</span>
-            </div>
-            <ul class="nav-menu">
+            </div>            <ul class="nav-menu">
                 <li><a href="#home" class="nav-link">Home</a></li>
                 <li><a href="#overview" class="nav-link">Panoramica</a></li>
                 <li><a href="#ai-features" class="nav-link">Intelligenza Artificiale</a></li>
@@ -102,13 +101,28 @@
                     <h3>Generazione Automatica</h3>
                     <p>Utilizzando l'intelligenza artificiale, genera automaticamente scenari clinici complessi basati su tipologia, target e descrizione forniti dall'utente. <strong>Tutte le operazioni avvengono in background</strong> con notifiche automatiche al completamento.</p>
                 </div>
-                
-                <div class="overview-card">
+                  <div class="overview-card">
                     <div class="card-icon">
                         <i class="fas fa-flask"></i>
                     </div>
                     <h3>Esami di Laboratorio</h3>
                     <p>Crea automaticamente esami di laboratorio con relativi referti medici pertinenti allo scenario clinico selezionato.</p>
+                </div>
+                
+                <div class="overview-card">
+                    <div class="card-icon">
+                        <i class="fas fa-toolbox"></i>
+                    </div>
+                    <h3>Generazione Materiali</h3>
+                    <p>Genera automaticamente tutti i materiali necessari per lo scenario: strumenti diagnostici, dispositivi medici, farmaci, attrezzature di monitoraggio e materiali consumabili.</p>
+                </div>
+                
+                <div class="overview-card">
+                    <div class="card-icon">
+                        <i class="fas fa-x-ray"></i>
+                    </div>
+                    <h3>Referti Diagnostici</h3>
+                    <p>Crea referti medici specialistici per esami diagnostici avanzati come Radiografie, TC, Risonanza Magnetica, ECG ed Ecocardiografie, correlati al caso clinico.</p>
                 </div>
             </div>
         </div>
@@ -188,9 +202,8 @@
                     </div>
                     
                     <!-- Video Demo Generazione Scenari -->
-                    <div class="video-demo">
-                        <div class="video-container">
-                            <video controls preload="metadata" poster="img/icon.png">
+                    <div class="video-demo">                        <div class="video-container">
+                            <video controls preload="metadata" poster="img/creation_poster.png" muted loop class="auto-play-video">
                                 <source src="videos/generazione-scenari.mp4" type="video/mp4">
                                 <source src="videos/generazione-scenari.webm" type="video/webm">
                                 Il tuo browser non supporta la riproduzione video.
@@ -212,6 +225,100 @@
                             <span class="step-number">3</span>
                             <span class="step-text">Scenario Completo</span>
                         </div>
+                    </div>                </div>
+                
+                <div class="ai-feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-toolbox"></i>
+                    </div>
+                    <h3>Generazione Automatica di Materiali</h3>
+                    <p>Crea automaticamente tutti i materiali necessari per lo scenario clinico, inclusi strumenti, dispositivi medici, farmaci e attrezzature specialistiche, adattati al contesto e alla complessità dello scenario.</p>
+                    
+                    <!-- Video Demo Generazione Materiali -->
+                    <div class="video-demo">                        <div class="video-container">
+                            <video controls preload="metadata" poster="img/mat_poster.png" muted loop class="auto-play-video">
+                                <source src="videos/generazione-materiali.mp4" type="video/mp4">
+                                <source src="videos/generazione-materiali.webm" type="video/webm">
+                                Il tuo browser non supporta la riproduzione video.
+                            </video>
+                        </div>
+                        <p class="video-caption">Scopri come l'AI genera automaticamente tutti i materiali necessari per lo scenario</p>
+                    </div>
+                    
+                    <div class="materials-types">
+                        <h4>Tipologie di Materiali Supportati</h4>
+                        <div class="materials-grid">
+                            <div class="material-type">
+                                <div class="material-icon">
+                                    <i class="fas fa-stethoscope"></i>
+                                </div>
+                                <span>Strumenti Diagnostici</span>
+                            </div>
+                            <div class="material-type">
+                                <div class="material-icon">
+                                    <i class="fas fa-syringe"></i>
+                                </div>
+                                <span>Dispositivi Medici</span>
+                            </div>
+                            <div class="material-type">
+                                <div class="material-icon">
+                                    <i class="fas fa-pills"></i>
+                                </div>
+                                <span>Farmaci e Terapie</span>
+                            </div>
+                            <div class="material-type">
+                                <div class="material-icon">
+                                    <i class="fas fa-monitor-heart-rate"></i>
+                                </div>
+                                <span>Attrezzature di Monitoraggio</span>
+                            </div>
+                            <div class="material-type">
+                                <div class="material-icon">
+                                    <i class="fas fa-bandage"></i>
+                                </div>
+                                <span>Materiali Consumabili</span>
+                            </div>
+                            <div class="material-type">
+                                <div class="material-icon">
+                                    <i class="fas fa-laptop-medical"></i>
+                                </div>
+                                <span>Tecnologie Mediche</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="feature-highlights">
+                        <div class="highlight">
+                            <i class="fas fa-check-circle"></i>
+                            <span>Lista completa e personalizzata</span>
+                        </div>
+                        <div class="highlight">
+                            <i class="fas fa-check-circle"></i>
+                            <span>Quantità appropriate per scenario</span>
+                        </div>
+                        <div class="highlight">
+                            <i class="fas fa-check-circle"></i>
+                            <span>Adattamento al livello di difficoltà</span>
+                        </div>
+                        <div class="highlight">
+                            <i class="fas fa-check-circle"></i>
+                            <span>Specifiche tecniche dettagliate</span>
+                        </div>
+                    </div>
+                    
+                    <div class="feature-process">
+                        <div class="process-step">
+                            <span class="step-number">1</span>
+                            <span class="step-text">Analisi Scenario</span>
+                        </div>
+                        <div class="process-step">
+                            <span class="step-number">2</span>
+                            <span class="step-text">Identificazione Materiali</span>
+                        </div>
+                        <div class="process-step">
+                            <span class="step-number">3</span>
+                            <span class="step-text">Lista Dettagliata</span>
+                        </div>
                     </div>
                 </div>
                 
@@ -222,9 +329,8 @@
                     <p>Genera automaticamente esami di laboratorio realistici con relativi referti medici, correlati specificamente allo scenario clinico in corso.</p>
                     
                     <!-- Video Demo Esami di Laboratorio -->
-                    <div class="video-demo">
-                        <div class="video-container">
-                            <video controls preload="metadata" poster="img/icon.png">
+                    <div class="video-demo">                        <div class="video-container">
+                            <video controls preload="metadata" poster="img/lab_ref_poster.png" muted loop class="auto-play-video">
                                 <source src="videos/esami-laboratorio.mp4" type="video/mp4">
                                 <source src="videos/esami-laboratorio.webm" type="video/webm">
                                 Il tuo browser non supporta la riproduzione video.
@@ -241,10 +347,6 @@
                             <i class="fas fa-check-circle"></i>
                             <span>Valori di laboratorio realistici</span>
                         </div>
-                        <div class="highlight">
-                            <i class="fas fa-check-circle"></i>
-                            <span>Correlazione con lo scenario</span>
-                        </div>
                     </div>
                 </div>
                 
@@ -253,12 +355,11 @@
                         <i class="fas fa-x-ray"></i>
                     </div>
                     <h3>Generazione Referti Diagnostici</h3>
-                    <p>Crea automaticamente referti medici realistici per esami diagnostici avanzati come Radiografie, TAC, Risonanza Magnetica, ECG, Ecocardiografie e altri esami strumentali, perfettamente correlati allo scenario clinico.</p>
+                    <p>Crea automaticamente referti medici realistici per esami diagnostici avanzati come Radiografie, TC, Risonanza Magnetica, ECG, Ecocardiografie e altri esami strumentali, perfettamente correlati allo scenario clinico.</p>
                     
                     <!-- Video Demo Referti Medici -->
-                    <div class="video-demo">
-                        <div class="video-container">
-                            <video controls preload="metadata" poster="img/icon.png">
+                    <div class="video-demo">                        <div class="video-container">
+                            <video controls preload="metadata" poster="img/lab_ref_poster.png" muted loop class="auto-play-video">
                                 <source src="videos/referti-medici.mp4" type="video/mp4">
                                 <source src="videos/referti-medici.webm" type="video/webm">
                                 Il tuo browser non supporta la riproduzione video.
@@ -280,7 +381,7 @@
                                 <div class="diagnostic-icon">
                                     <i class="fas fa-brain"></i>
                                 </div>
-                                <span>TAC/CT</span>
+                                <span>TC/CT</span>
                             </div>
                             <div class="diagnostic-item">
                                 <div class="diagnostic-icon">
@@ -407,8 +508,7 @@
                         </div>
                     </div>
                 </div>
-            </div>
-        </div>
+            </div>        </div>
     </section>
 
     <!-- Technology Section -->

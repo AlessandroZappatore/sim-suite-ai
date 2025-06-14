@@ -109,14 +109,19 @@ def create_info_prompt(request: ScenarioRequest) -> str:
     3.  The `scenario.target` field in the final JSON MUST match the 'Target Audience' from the user request.
     4.  Strictly follow the JSON schema provided below.
     5.  All descriptive text MUST be in ITALIAN.
-    5.  FORMATTING RULES:
+    6.  FORMATTING RULES:
         - The fields inside 'esameFisico.sections' (like Generale, Cute, etc.) MUST be formatted as HTML paragraphs, e.g., '<p>text in italian</p>'.
         - The fields 'patologia', 'target', 'autori', and 'Monitor' MUST be plain text without any HTML tags.
         - All other descriptive fields like 'descrizione', 'briefing', 'moulage', 'liquidi', 'obiettivo' etc. must be HTML formatted text.
-    6.  For the 'presidi' field, choose ONLY from this list: {PRESIDI_MEDICI}
-    7.  Based on the primary pathology ('patologia') and the user's description, you MUST identify and list some crucial medical actions in the 'azioniChiave' field. These actions must be appropriate for the target audience.
-    8.  **Vascular Access**: If the clinical context suggests it (e.g., trauma, shock), you MUST populate 'pazienteT0.accessiVenosi' and/or 'pazienteT0.accessiArteriosi'.
-    9.  **Parent/Guardian Role**: If 'tipologia' is 'Pediatrico', 'Neonatale', or 'Prematuro', provide context in 'scenario.infoGenitore', describing the parent at the start of the scenario.
+        
+        - **FOR LISTS**: When generating content that represents a list (e.g., in the 'liquidi' or 'moulage' fields), you MUST use proper HTML list tags. Use a `<ul>` tag to enclose the list and `<li>` tags for each item.
+          - GOOD EXAMPLE: `<ul><li>Soluzione fisiologica.</li><li>Glucosata al 5%.</li><li>Midazolam.</li></ul>`
+          - BAD EXAMPLE (DO NOT USE): `Avrete a disposizione:<br><br>Soluzione fisiologica.`
+
+    7.  For the 'presidi' field, choose ONLY from this list: {PRESIDI_MEDICI}
+    8.  Based on the primary pathology ('patologia') and the user's description, you MUST identify and list some crucial medical actions in the 'azioniChiave' field. These actions must be appropriate for the target audience.
+    9.  **Vascular Access**: If the clinical context suggests it (e.g., trauma, shock), you MUST populate 'pazienteT0.accessiVenosi' and/or 'pazienteT0.accessiArteriosi'.
+    10.  **Parent/Guardian Role**: If 'tipologia' is 'Pediatrico', 'Neonatale', or 'Prematuro', provide context in 'scenario.infoGenitore', describing the parent at the start of the scenario.
 
     JSON SCHEMA TO FOLLOW:
     {json.dumps(BaseScenario.model_json_schema(), indent=2)}
