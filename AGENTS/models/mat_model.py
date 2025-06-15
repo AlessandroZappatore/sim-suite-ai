@@ -24,6 +24,6 @@ class MATModelResponse(BaseModel):
     nome : str = Field(
         description="Name of material."
     )
-    descrizione_scenario: str = Field(
+    descrizione: str = Field(
         description="Description of the material."
     )

@@ -1,5 +1,5 @@
 # Agent for Medical Materials Generation
-# Version 1.0 - Medical materials generation agent
+# Version 2.0 - Generates reusable medical materials
 
 import json
 import logging
@@ -20,22 +20,20 @@ logger = logging.getLogger(__name__)
 # Agent Definition
 materials_agent = Agent(
     name="Medical Materials Generator",
-    role="An expert medical educator and simulation specialist who generates comprehensive lists of necessary materials for medical simulation scenarios.",
-    model=get_exam_model(),    instructions=[
-        "Your task is to generate a comprehensive list of necessary materials for medical simulation scenarios.",
-        "All text content must be in **Italian**.",
+    role="An expert medical educator and simulation specialist who generates comprehensive lists of necessary materials for medical simulation scenarios, with general-purpose descriptions.",
+    model=get_exam_model(),
+    instructions=[
+        "Your task is to generate a comprehensive list of necessary materials for a medical simulation scenario.",
+        "The final JSON output's text content (both 'nome' and 'descrizione') must be in **Italian**.",
         "The materials must be realistic and appropriate for the described scenario, patient type, and target audience.",
-        "PRIORITÀ: Se esistono materiali nel database che sono appropriati per lo scenario, usa ESATTAMENTE il nome presente nel database.",
-        "Per i materiali esistenti nel database, puoi adattare la descrizione al contesto specifico dello scenario.",
-        "Se hai bisogno di materiali non presenti nel database, creane di nuovi con nomi chiari e specifici in italiano.",
-        "Pay particular attention to the objective examination findings (esame_obiettivo) to determine what materials would be needed for that specific examination.",
-        "Consider the target audience (students, nurses, specialists) to adjust the complexity and type of materials needed.",
-        "Include both basic and advanced materials as appropriate for the scenario.",
-        "For each material, provide a clear name and detailed description of its purpose in the scenario.",
-        "Consider safety materials, diagnostic tools, therapeutic equipment, monitoring devices, and educational resources.",
-        "Avoid creating duplicate materials - if a material exists in the database, use that exact name.",
+        "PRIORITY: If a material from the database is suitable for the scenario, you MUST use the EXACT name from the database.",
+        "For any NEW material you create, provide a clear, specific Italian name and a GENERAL-PURPOSE description.",
+        "The description should explain the material's main function in a way that is reusable for other scenarios. It must NOT be specific to the current scenario.",
+        "Pay particular attention to the objective examination findings (esame_obiettivo) to determine WHICH materials are needed, but do not make their descriptions specific to the exam.",
+        "Consider the target audience (students, nurses, specialists) to adjust the complexity and type of materials selected.",
+        "Avoid creating duplicate materials - if a material exists in the database, use its exact name.",
         "You MUST respond with a valid JSON array enclosed in ```json code blocks.",
-        "The JSON must follow this exact structure: [{\"nome\": \"Material Name\", \"descrizione_scenario\": \"Description\"}]",
+        "The JSON must follow this exact structure: [{\"nome\": \"Material Name\", \"descrizione\": \"General Description\"}]",
         "ALWAYS wrap your JSON response in ```json and ``` code blocks.",
     ]
 )
@@ -44,13 +42,12 @@ materials_agent = Agent(
 def create_materials_prompt(request: MATModelRequest, existing_materials: List[Dict[str, Any]]) -> str:
     """Creates the detailed prompt for the materials generation agent."""
     
-    # Create a formatted list of existing materials
     existing_materials_text = ""
     if existing_materials:
-        existing_materials_text = "\n    MATERIALI ESISTENTI NEL DATABASE:\n"
+        existing_materials_text = "\n    EXISTING MATERIALS IN THE DATABASE:\n"
         for material in existing_materials:
-            existing_materials_text += f"    - {material['nome']}: {material.get('descrizione', 'Materiale esistente')}\n"
-        existing_materials_text += "\n    IMPORTANTE: Se uno dei materiali esistenti è appropriato per lo scenario, usa ESATTAMENTE il nome presente nel database.\n"
+            existing_materials_text += f"    - {material['nome']}: {material.get('descrizione', 'Existing material')}\n"
+        existing_materials_text += "\n    IMPORTANT: If any of these existing materials are appropriate for the scenario, use the EXACT name from the database.\n"
     
     return f"""
     Generate a comprehensive list of necessary materials in JSON format for a medical simulation scenario.
@@ -60,51 +57,42 @@ def create_materials_prompt(request: MATModelRequest, existing_materials: List[D
     - Scenario Description: {request.descrizione_scenario}
     - Target Audience: {request.target}
     - Objective Examination (Esame obiettivo): {request.esame_obiettivo}
-    {existing_materials_text}
-    INSTRUCTIONS:
-    1. Generate a realistic and comprehensive list of materials needed for this medical simulation.
-    2. All text content MUST be in ITALIAN.
-    3. PRIORITÀ: Se hai bisogno di un materiale che esiste già nel database, usa ESATTAMENTE il nome presente nel database.
-    4. Per i materiali esistenti, puoi adattare la descrizione al contesto specifico dello scenario.
-    5. Se hai bisogno di materiali non presenti nel database, creane di nuovi con nomi chiari e specifici.
-    6. Consider the patient type to determine age-appropriate materials and equipment sizes.
-    7. Use the target audience to adjust the complexity and educational level of materials.
-    8. Based on the objective examination, include specific materials needed for that type of examination.
-    9. Include various categories of materials:
-       - Diagnostic equipment (stethoscope, thermometer, etc.)
-       - Monitoring devices (pulse oximeter, blood pressure cuff, etc.)
-       - Safety equipment (gloves, masks, hand sanitizer, etc.)
-       - Therapeutic materials (medications, IV supplies, etc.)
-       - Educational resources (guidelines, protocols, reference materials)
-       - Simulation-specific equipment (manikins, simulators, etc.)
-    10. For each material, provide:
-        - A clear and specific name in Italian (use existing names when available)
-        - A detailed description explaining its purpose and use in the scenario
-    11. Ensure materials are appropriate for the clinical scenario and realistic for the setting.
-    12. Consider both basic and advanced materials based on the scenario complexity.
-    13. Think about materials needed for different phases: assessment, intervention, monitoring, documentation.
+    - Existing materials: {existing_materials_text}
 
-    MATERIAL CATEGORIES TO CONSIDER:
-    - Dispositivi di protezione individuale (DPI)
-    - Strumenti diagnostici
-    - Dispositivi di monitoraggio
-    - Materiali per procedure
-    - Farmaci e soluzioni
-    - Materiali educativi
-    - Attrezzature di simulazione
-    - Materiali per documentazione    JSON SCHEMA TO FOLLOW:
-    The response should be a JSON array of objects, where each object represents a material with "nome" and "descrizione_scenario" fields.    IMPORTANT: You MUST wrap your response in ```json code blocks like this:
+    INSTRUCTIONS:
+    1.  Generate a realistic and comprehensive list of materials needed for this medical simulation.
+    2.  All text content in the final JSON output (names and descriptions) MUST be in ITALIAN.
+    3.  PRIORITY: If you need a material that already exists in the database, use the EXACT name provided.
+    4.  For new materials, create a clear and specific name in Italian.
+    5.  CRITICAL: The description for EACH material must be GENERAL and REUSABLE. It should describe the material's general purpose, not its specific use in this one scenario. This description will be stored in a database for reuse.
+    6.  DO NOT include details from the scenario context in the description.
+    7.  Based on the objective examination, include the specific materials needed for that type of examination, but keep their descriptions generic.
+    8.  Include various categories of materials: Diagnostic, Monitoring, Safety (PPE), Therapeutic, Educational, etc.
+    9.  For each material, provide:
+        - "nome": A clear and specific name in Italian (use existing names when available).
+        - "descrizione": A general, reusable description in Italian explaining its purpose.
+    10. Ensure materials are appropriate for the clinical scenario and realistic for the setting.
+    11. Think about materials needed for different phases: assessment, intervention, monitoring, documentation.
+
+    JSON SCHEMA TO FOLLOW:
+    The response must be a JSON array of objects. Each object represents a material with "nome" and "descrizione" fields.
+
+    IMPORTANT: You MUST wrap your response in ```json code blocks. The JSON should be the only content in your response.
+
+    EXAMPLE:
     ```json
     [
-        {{"nome": "Stetoscopio", "descrizione_scenario": "Necessario per l'auscultazione cardiaca e polmonare del paziente durante l'esame obiettivo..."}},
-        {{"nome": "Sfigmomanometro", "descrizione_scenario": "Utilizzato per misurare la pressione arteriosa del paziente..."}}
+        {{"nome": "Stetoscopio", "descrizione": "Strumento acustico utilizzato per l'auscultazione dei suoni interni del corpo, come il battito cardiaco e i suoni respiratori."}},
+        {{"nome": "Sfigmomanometro aneroide", "descrizione": "Dispositivo per la misurazione non invasiva della pressione arteriosa, composto da un bracciale gonfiabile e un manometro."}},
+        {{"nome": "Guanti monouso non sterili", "descrizione": "Dispositivi di protezione individuale per le mani, utilizzati per prevenire la contaminazione durante l'esame del paziente o la manipolazione di materiali."}}
     ]
     ```
 
-    Remember: 
+    Remember:
     - Start with ```json
     - End with ```
-    - Include only the JSON array, no additional text outside the code blocks
+    - The content of 'nome' and 'descrizione' must be in Italian.
+    - The 'descrizione' must be generic and reusable.
     """
 
 
@@ -117,7 +105,8 @@ def generate_materials(request: MATModelRequest) -> List[MATModelResponse]:
         
     Returns:
         List[MATModelResponse]: The list of generated materials
-          Raises:
+        
+    Raises:
         HTTPException: If generation fails
     """
     logger.info(f"Received request to generate materials for: {request.tipologia_paziente} - Target: {request.target}")
@@ -143,6 +132,7 @@ def generate_materials(request: MATModelRequest) -> List[MATModelResponse]:
         # Validate each material with the Pydantic model
         validated_materials: List[MATModelResponse] = []
         for material_dict in materials_list:
+            # This now expects `{"nome": "...", "descrizione": "..."}`
             validated_material = MATModelResponse.model_validate(material_dict)
             validated_materials.append(validated_material)
         
@@ -155,7 +145,9 @@ def generate_materials(request: MATModelRequest) -> List[MATModelResponse]:
     except Exception as e:
         logger.error(f"An unexpected error occurred: {e}", exc_info=True)
         raise HTTPException(status_code=500, detail={"error": "Failed to generate materials", "message": str(e)})
-    
+
+
+# --- NESSUNA MODIFICA NECESSARIA NELLE FUNZIONI SEGUENTI ---
 
 def get_database_path() -> str:
     """Get the path to the SQLite database."""
@@ -179,21 +171,16 @@ def get_existing_materials() -> List[Dict[str, Any]]:
             return []
         
         conn = sqlite3.connect(db_path)
+        # Use a dictionary cursor to get column names automatically
+        conn.row_factory = sqlite3.Row
         cursor = conn.cursor()
         
-        # Query the Materiale table with the known structure
         try:
             cursor.execute("SELECT id_materiale, nome, descrizione FROM Materiale")
             rows = cursor.fetchall()
             
-            materials: List[Dict[str, Any]] = []
-            for row in rows:
-                material: Dict[str, Any] = {
-                    "id_materiale": row[0],
-                    "nome": row[1],
-                    "descrizione": row[2] if row[2] else "Materiale esistente"
-                }
-                materials.append(material)
+            # Convert rows to dictionaries
+            materials: List[Dict[str, Any]] = [dict(row) for row in rows]
             
             logger.info(f"Found {len(materials)} materials in Materiale table")
             conn.close()
@@ -201,11 +188,11 @@ def get_existing_materials() -> List[Dict[str, Any]]:
             
         except sqlite3.Error as e:
             logger.error(f"Error querying Materiale table: {e}")
-            # Fallback: try to discover table structure
+            # Fallback to discover table structure
             tables_query = "SELECT name FROM sqlite_master WHERE type='table';"
             cursor.execute(tables_query)
             tables = cursor.fetchall()
-            logger.info(f"Available tables in database: {[table[0] for table in tables]}")
+            logger.info(f"Available tables in database: {[table['name'] for table in tables]}")
             
             conn.close()
             return []

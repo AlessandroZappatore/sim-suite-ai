@@ -323,7 +323,7 @@ public class MaterialeService {
         // 3. Itera direttamente sulla lista di oggetti MatSet ricevuta.
         for (MatSet mat : materiali) {
             String name = mat.getNome();
-            String description = mat.getDescrizione_scenario(); // Otteniamo i dati direttamente dai campi
+            String description = mat.getDescrizione(); // Otteniamo i dati direttamente dai campi
 
             if (name == null || name.trim().isEmpty()) {
                 continue; // Salta eventuali materiali senza nome

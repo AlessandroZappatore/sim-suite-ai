@@ -99,7 +99,7 @@ public class ExternalApiService {
         }
     }
 
-    public Optional<List<MatSet>> generateMaterial(MatGenerationRequest request) { // <-- 1. Cambia il tipo di ritorno a List<MatSet>
+    public Optional<List<MatSet>> generateMaterial(MatGenerationRequest request) {
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
         HttpEntity<MatGenerationRequest> requestEntity = new HttpEntity<>(request, headers);
