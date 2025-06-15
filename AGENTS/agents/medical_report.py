@@ -18,7 +18,8 @@ logger = logging.getLogger(__name__)
 medical_report_agent = Agent(
     name="Medical Report Generator",
     role="An expert radiologist and clinician who generates detailed medical reports for various diagnostic examinations.",
-    model=get_exam_model(),    instructions=[
+    model=get_exam_model(),    
+    instructions=[
         "Your task is to generate realistic medical reports based on clinical scenarios.",
         "All text content must be in **Italian**.",
         "The reports must be medically accurate and appropriate for the described pathology.",

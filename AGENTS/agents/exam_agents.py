@@ -18,7 +18,8 @@ logger = logging.getLogger(__name__)
 exam_agent = Agent(
     name="Lab Exam Generator",
     role="An expert clinical pathologist who generates realistic lab results for medical simulations.",
-    model=get_exam_model(),    instructions=[
+    model=get_exam_model(),    
+    instructions=[
         "Your task is to generate a set of relevant laboratory exams based on a clinical scenario.",
         "All text content, including test names, categories, and interpretations, must be in **Italian**.",
         "The results must be plausible for the described pathology.",

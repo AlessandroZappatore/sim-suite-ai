@@ -147,8 +147,6 @@ def generate_materials(request: MATModelRequest) -> List[MATModelResponse]:
         raise HTTPException(status_code=500, detail={"error": "Failed to generate materials", "message": str(e)})
 
 
-# --- NESSUNA MODIFICA NECESSARIA NELLE FUNZIONI SEGUENTI ---
-
 def get_database_path() -> str:
     """Get the path to the SQLite database."""
     # The database is in the root of the project (one more level up)

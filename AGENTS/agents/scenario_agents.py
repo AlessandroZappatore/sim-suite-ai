@@ -89,7 +89,7 @@ def create_info_prompt(request: ScenarioRequest) -> str:
         }
     }
     
-    difficulty = request.difficulty or "Medio"
+    difficulty = request.difficulty or "Facile"
     guidelines = difficulty_guidelines[difficulty]
     
     return f"""Generate the base part of a medical scenario in JSON format.
@@ -196,7 +196,7 @@ class MedicalScenarioTeam:
             full_scenario_data["sceneggiatura"] = ""            # STEP 2: Run Timeline Agent (if needed)
             if request.scenario_type in ["Advanced Scenario", "Patient Simulated Scenario"]:
                 logger.info("Team Pipeline: Running 'Clinical Timeline Generator'...")
-                context = {
+                context: Dict[str, Any] = {      
                     "pathology": base_scenario_dict["scenario"]["patologia"], 
                     "patient_t0": base_scenario_dict["pazienteT0"], 
                     "patient_typology": base_scenario_dict["scenario"]["tipologia"],
@@ -210,12 +210,10 @@ class MedicalScenarioTeam:
             # STEP 3: Run Script Agent (if needed)
             if request.scenario_type == "Patient Simulated Scenario":
                 logger.info("Team Pipeline: Running 'Patient Script Writer'...")
-                # Usiamo una copia dei dati per evitare di passare la sceneggiatura vuota all'agente
                 script_context = full_scenario_data.copy()
                 script_prompt = create_script_prompt(script_context)
                 script_response = self._get_agent("Patient Script Writer").run(script_prompt) # type: ignore
                 script_dict = extract_json_from_response(script_response.content)
-                  # CORREZIONE FINALE: Assegnazione spostata all'interno del blocco if
                 full_scenario_data["sceneggiatura"] = script_dict["sceneggiatura"]
     
             # STEP 4: Final Validation
