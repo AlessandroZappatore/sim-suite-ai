@@ -209,6 +209,19 @@ body {
     border-radius: var(--radius-sm);
 }
 
+/* Hamburger animation when active */
+.hamburger.active span:nth-child(1) {
+    transform: rotate(45deg) translate(8px, 8px);
+}
+
+.hamburger.active span:nth-child(2) {
+    opacity: 0;
+}
+
+.hamburger.active span:nth-child(3) {
+    transform: rotate(-45deg) translate(8px, -8px);
+}
+
 /* Hero Section */
 .hero {
     min-height: 100vh;
@@ -1483,11 +1496,10 @@ body {
     .nav-brand i {
         font-size: var(--font-size-2xl);
     }
-    
-    .nav-menu {
+      .nav-menu {
         position: fixed;
         top: 70px;
-        left: -100%;
+        right: -100%;
         width: 100%;
         height: calc(100vh - 70px);
         background: var(--white);
@@ -1501,15 +1513,15 @@ body {
     }
     
     .nav-menu.active {
-        left: 0;
+        right: 0;
     }
     
     .hamburger {
         display: flex;
     }
-    
-    .hero {
-        padding-top: 100px;
+      .hero {
+        padding-top: 120px;
+        min-height: calc(100vh - 70px);
     }
     
     .hero-content {
@@ -1587,10 +1599,13 @@ body {
     
     .hero {
         padding: var(--spacing-16) 0;
+        padding-top: 100px;
+        min-height: calc(100vh - 70px);
     }
     
     .hero-title {
         font-size: var(--font-size-2xl);
+        margin-top: var(--spacing-4);
     }
     
     .hero-subtitle {
@@ -2019,6 +2034,7 @@ body {
         display: block;
         overflow-x: auto;
         white-space: nowrap;
+        font-size: var(--font-size-xs);
     }
     
     .difficulty-table thead,
@@ -2038,29 +2054,47 @@ body {
     .difficulty-table tr {
         border: 1px solid #ccc;
         margin-bottom: var(--spacing-4);
-        border-radius: var(--radius-lg);
+        border-radius: var(--radius-md);
         background: var(--white);
         box-shadow: var(--shadow-sm);
+        padding: var(--spacing-3);
+    }
+    
+    .difficulty-table tr:hover {
+        background: #f8fafc;
     }
     
     .difficulty-table td {
         border: none;
+        border-bottom: 1px solid #eee;
         position: relative;
-        padding-left: 30%;
-        padding-top: var(--spacing-3);
-        padding-bottom: var(--spacing-3);
+        padding: var(--spacing-3) 0 var(--spacing-3) 35%;
         white-space: normal;
+        text-align: left;
     }
     
     .difficulty-table td:before {
         content: attr(data-label) ": ";
         position: absolute;
-        left: var(--spacing-3);
-        width: 25%;
+        left: 6px;
+        width: 30%;
         padding-right: var(--spacing-2);
         white-space: nowrap;
+        text-align: left;
         font-weight: 600;
-        color: var(--dark-gray);
+        color: var(--primary-blue);
+    }
+    
+    .difficulty-table td:last-child {
+        border-bottom: 0;
+    }
+    
+    .difficulty-levels {
+        padding: var(--spacing-3);
+        margin: var(--spacing-4) 0;
+    }    
+    .difficulty-levels h4 {
+        font-size: var(--font-size-lg);
     }
 }
 

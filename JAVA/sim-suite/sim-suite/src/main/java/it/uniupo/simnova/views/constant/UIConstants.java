@@ -7,6 +7,7 @@ public final class UIConstants {
     public static final String AMBULANCE_GIF_PATH = ICONS_PATH + "ambulance.gif";
     public static final String LAB_GIF_PATH = ICONS_PATH + "lab.gif";
     public static final String REF_GIF_PATH = ICONS_PATH + "ref.gif";
+    public static final String MAT_GIF_PATH = ICONS_PATH + "mat.gif";
     // Costruttore privato per prevenire l'istanza
     private UIConstants() {
     }
