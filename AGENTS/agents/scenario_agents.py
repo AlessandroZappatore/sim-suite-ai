@@ -1,5 +1,13 @@
-# Agents for Medical Scenario Generation
-# Version 4.2 - Refactored to follow consistent pattern
+"""Defines the AI agents and orchestration logic for medical scenario generation.
+
+This module contains the core components for the AI-driven scenario creation
+process. It defines individual 'specialist' agents for different parts of a
+scenario (initial info, clinical timeline, patient script), functions to
+generate detailed prompts for these agents, and a `MedicalScenarioTeam` class
+that orchestrates the entire multi-step generation pipeline.
+
+Version: 4.2.0
+"""
 
 import json
 import logging
@@ -19,8 +27,10 @@ from models.scenario_models import (
 from models.presidi_medici import PRESIDI_MEDICI
 from utils.common import extract_json_from_response, get_model
 
-# Configure logging
+# --- Module-level Configuration ---
+logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
+
 
 # Define agents
 info_agent = Agent(
@@ -65,9 +75,20 @@ script_agent = Agent(
 # Agent-specific prompt creation functions
 
 def create_info_prompt(request: ScenarioRequest) -> str:
-    """Creates the detailed prompt for the scenario info generation agent."""
+    """Creates the detailed, dynamic prompt for the Scenario Info Generator agent.
+
+    This function constructs a comprehensive prompt string that includes user
+    request details, difficulty-specific guidelines, formatting rules, and the
+    exact JSON schema the agent must follow.
+
+    Args:
+        request (ScenarioRequest): The user's request object containing all the
+            base parameters for the scenario.
+
+    Returns:
+        str: A fully formatted prompt string to be sent to the info_agent.
+    """
     
-    # Definizioni per i livelli di difficoltà
     difficulty_guidelines = {
         "Facile": {
             "complications": "Scenario semplice con poche complicazioni. Concentrarsi sui fondamentali.",
@@ -130,10 +151,22 @@ def create_info_prompt(request: ScenarioRequest) -> str:
 
 
 def create_timeline_prompt(context: Dict[str, Any]) -> str:
-    """Creates the detailed prompt for the timeline generation agent."""
+    """Creates the detailed prompt for the Clinical Timeline Generator agent.
+
+    This function uses the initial scenario context to build a prompt that asks
+    for a realistic clinical evolution, respecting the scenario's difficulty
+    level.
+
+    Args:
+        context (Dict[str, Any]): A dictionary containing the foundational
+            elements of the scenario, such as pathology and initial patient
+            parameters.
+
+    Returns:
+        str: A fully formatted prompt string to be sent to the timeline_agent.
+    """
     
-    # Gestione della difficoltà per la timeline
-    difficulty = context.get('difficulty', 'Medio')
+    difficulty = context.get('difficulty', 'Facile')
     
     difficulty_timeline_rules = {
         "Facile": "Evoluzione graduale e stabile. Massimo 1 complicazione minore. Tempi di reazione lenti (5-10 minuti tra eventi).",
@@ -161,7 +194,16 @@ def create_timeline_prompt(context: Dict[str, Any]) -> str:
 
 
 def create_script_prompt(context: Dict[str, Any]) -> str:
-    """Creates the detailed prompt for the script generation agent."""
+    """Creates the detailed prompt for the Patient Script Writer agent.
+
+    Args:
+        context (Dict[str, Any]): A dictionary containing the complete scenario
+            data, including the timeline, to inform the script.
+
+    Returns:
+        str: A fully formatted prompt string to be sent to the script_agent.
+    """
+
     return f"""Given the following complete medical scenario, write a script for the simulated patient.
     FULL SCENARIO CONTEXT: {json.dumps(context, indent=2)}
     INSTRUCTIONS:
@@ -174,15 +216,59 @@ def create_script_prompt(context: Dict[str, Any]) -> str:
 
 
 class MedicalScenarioTeam:
+    """Manages a team of agents to generate a complete medical scenario.
+
+    This class orchestrates a multi-step pipeline, where each agent contributes
+    its specialty in sequence to build a rich, detailed, and validated
+    medical simulation scenario.
+
+    Attributes:
+        members (Dict[str, Agent]): A dictionary mapping agent names to agent
+            instances.
+    """
     def __init__(self, members: List[Agent]):
+        """Initializes the MedicalScenarioTeam.
+
+        Args:
+            members (List[Agent]): A list of Agent instances that form the team.
+        """
         self.members = {agent.name: agent for agent in members}
 
     def _get_agent(self, name: str) -> Agent:
+        """Retrieves a team member by name.
+
+        Args:
+            name (str): The name of the agent to retrieve.
+
+        Returns:
+            Agent: The requested agent instance.
+
+        Raises:
+            ValueError: If an agent with the specified name is not found.
+        """
         if name not in self.members:
             raise ValueError(f"Agent '{name}' not found in team members.")
         return self.members[name]
 
     def run(self, request: ScenarioRequest) -> FullScenario:
+        """Executes the full scenario generation pipeline.
+
+        The pipeline proceeds in the following order:
+        1.  The `Scenario Info Generator` creates the base scenario.
+        2.  The `Clinical Timeline Generator` adds the evolving timeline (if applicable).
+        3.  The `Patient Script Writer` creates the patient's script (if applicable).
+        4.  The final result is validated against the FullScenario model.
+
+        Args:
+            request (ScenarioRequest): The initial request from the user.
+
+        Returns:
+            FullScenario: The complete and validated medical scenario.
+
+        Raises:
+            HTTPException: If any step of the generation, validation, or parsing
+                fails, an appropriate HTTPException is raised.
+        """
         try:
             # STEP 1: Run Info Agent
             logger.info("Team Pipeline: Running 'Scenario Info Generator'...")
@@ -233,17 +319,22 @@ medical_team = MedicalScenarioTeam(members=[info_agent, timeline_agent, script_a
 
 
 def generate_medical_scenario(request: ScenarioRequest) -> FullScenario:
-    """
-    Generate a complete medical scenario based on the request parameters.
-    
+    """Generates a complete medical scenario based on request parameters.
+
+    This function serves as the main public entry point for the scenario
+    generation service. It takes a user request and delegates the complex
+    generation logic to the `medical_team`.
+
     Args:
-        request: The scenario request containing description, type, and target audience
-        
+        request (ScenarioRequest): The scenario request containing the description,
+            type, target audience, and other parameters.
+
     Returns:
-        FullScenario: The generated medical scenario
-        
+        FullScenario: The complete, generated medical scenario.
+
     Raises:
-        HTTPException: If generation fails
+        HTTPException: Propagated from the `MedicalScenarioTeam.run` method if
+            the generation or validation process fails.
     """
     logger.info(f"Received request to generate medical scenario: {request.scenario_type} for {request.target}")
     return medical_team.run(request)

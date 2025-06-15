@@ -1,49 +1,90 @@
-# Main entry point for Medical Simulation Suite AI
-# Version 4.2 - Refactored and combined APIs
+"""Main entry point for the Medical Simulation Suite AI.
+
+This module initializes the main FastAPI application and mounts all the
+sub-applications (APIs) for different services like scenarios, exams,
+and medical reports. It also defines the main health check endpoints.
+
+Version: 4.2.0
+"""
 
 import logging
-
 from typing import Dict, Any
 from fastapi import FastAPI
+import uvicorn
 
+# Import sub-applications from the api module
 from api.exam_api import exam_app
 from api.scenario_api import scenario_app
 from api.medical_report_api import medical_report_app
 from api.mat_api import mat_app
 
+# --- Basic Configuration ---
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
+
+# --- FastAPI Application Initialization ---
 app = FastAPI(
     title="Medical Simulation Suite AI",
-    description="Complete AI system for generating medical simulation scenarios and laboratory exams.",
+    description="A complete AI system for generating medical simulation scenarios and laboratory exams.",
     version="4.2.0"
 )
 
+# --- Mount Sub-Applications ---
+# Each sub-application handles a specific domain of the suite.
 app.mount("/scenarios", scenario_app)
 app.mount("/exams", exam_app)
 app.mount("/reports", medical_report_app)
 app.mount("/materials", mat_app)
 
-@app.get("/", summary="Main Health Check")
+
+# --- Core Endpoints ---
+@app.get("/", summary="Main Health Check", tags=["Health"])
 def root() -> Dict[str, Any]:
-    """Main health check endpoint."""
+    """Provides a detailed health check of the main application.
+
+    This root endpoint returns a JSON object containing the operational status,
+    service name, version, and a dictionary of available sub-application
+    documentation endpoints.
+
+    Returns:
+        Dict[str, Any]: A dictionary with service status and essential metadata.
+    """
     return {
-        "status": "healthy", 
+        "status": "healthy",
         "service": "Medical Simulation Suite AI",
-        "version": "4.2.0",        "endpoints": {
+        "version": "4.2.0",
+        "endpoints": {
             "scenarios": "/scenarios/docs",
             "exams": "/exams/docs",
-            "reports": "/reports/docs"
+            "reports": "/reports/docs",
+            "materials": "/materials/docs"
         }
     }
 
-@app.get("/health", summary="Health Check")
-def health_check():
-    """Health check endpoint."""
+
+@app.get("/health", summary="Simple Health Check", tags=["Health"])
+def health_check() -> Dict[str, str]:
+    """Provides a simple health check for monitoring services.
+
+    This endpoint is typically used by load balancers, uptime monitors,
+    or other automated services to verify that the application is running
+    and responsive.
+
+    Returns:
+        Dict[str, str]: A dictionary indicating the service is healthy.
+    """
     return {"status": "healthy", "service": "Medical Simulation Suite AI"}
 
+
+# --- Main execution block ---
 if __name__ == "__main__":
-    import uvicorn
+    """Main execution block to run the Uvicorn server.
+
+    This block is executed when the script is run directly (e.g., `python main.py`).
+    It starts the Uvicorn web server, making the API available. The `reload=True`
+    parameter enables auto-reloading for development, where the server restarts
+    after code changes.
+    """
     logger.info("Starting Medical Simulation Suite AI...")
     uvicorn.run("main:app", host="0.0.0.0", port=8001, reload=True)
