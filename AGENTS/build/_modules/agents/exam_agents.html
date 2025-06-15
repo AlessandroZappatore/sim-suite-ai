@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+
+<html lang="en" data-content_root="../../">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>agents.exam_agents &#8212; sim-suite-ai 1.0 documentation</title>
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=5ecbeea2" />
+    <link rel="stylesheet" type="text/css" href="../../_static/basic.css?v=b08954a9" />
+    <link rel="stylesheet" type="text/css" href="../../_static/alabaster.css?v=27fed22d" />
+    <script src="../../_static/documentation_options.js?v=f2a433a1"></script>
+    <script src="../../_static/doctools.js?v=9bcbadda"></script>
+    <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+   
+  <link rel="stylesheet" href="../../_static/custom.css" type="text/css" />
+  
+
+  
+  
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <h1>Source code for agents.exam_agents</h1><div class="highlight"><pre>
+<span></span><span class="c1"># Agents for Medical Exam Generation</span>
+<span class="c1"># Version 1.1 - Refactored from exam_agent.py</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="nn">json</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">logging</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">agno.agent</span><span class="w"> </span><span class="kn">import</span> <span class="n">Agent</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">fastapi</span><span class="w"> </span><span class="kn">import</span> <span class="n">HTTPException</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">models.exam_models</span><span class="w"> </span><span class="kn">import</span> <span class="n">LabExamRequest</span><span class="p">,</span> <span class="n">LabExamResponse</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">utils.common</span><span class="w"> </span><span class="kn">import</span> <span class="n">extract_json_from_response</span><span class="p">,</span> <span class="n">get_exam_model</span>
+
+<span class="c1"># Configure logging</span>
+<span class="n">logger</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="vm">__name__</span><span class="p">)</span>
+
+
+<span class="c1"># Agent Definition</span>
+<span class="n">exam_agent</span> <span class="o">=</span> <span class="n">Agent</span><span class="p">(</span>
+    <span class="n">name</span><span class="o">=</span><span class="s2">&quot;Lab Exam Generator&quot;</span><span class="p">,</span>
+    <span class="n">role</span><span class="o">=</span><span class="s2">&quot;An expert clinical pathologist who generates realistic lab results for medical simulations.&quot;</span><span class="p">,</span>
+    <span class="n">model</span><span class="o">=</span><span class="n">get_exam_model</span><span class="p">(),</span>    
+    <span class="n">instructions</span><span class="o">=</span><span class="p">[</span>
+        <span class="s2">&quot;Your task is to generate a set of relevant laboratory exams based on a clinical scenario.&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;All text content, including test names, categories, and interpretations, must be in **Italian**.&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;The results must be plausible for the described pathology.&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;Pay particular attention to the objective examination findings (esame_obiettivo) to select appropriate lab tests.&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;Use the objective examination information to guide which laboratory tests would be most relevant and clinically indicated.&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;Ensure the lab results are consistent with the clinical examination findings described in esame_obiettivo.&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;For each test, provide a brief textual interpretation in the `referto` field that correlates with the clinical scenario.&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;Consider how the objective examination findings might influence the expected lab values.&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;You must respond ONLY with a valid JSON object that strictly matches the required Pydantic schema.&quot;</span><span class="p">,</span>
+    <span class="p">]</span>
+<span class="p">)</span>
+
+
+<div class="viewcode-block" id="create_exam_prompt">
+<a class="viewcode-back" href="../../agents.html#agents.exam_agents.create_exam_prompt">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">create_exam_prompt</span><span class="p">(</span><span class="n">request</span><span class="p">:</span> <span class="n">LabExamRequest</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Creates the detailed prompt for the lab exam generation agent.&quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="sa">f</span><span class="s2">&quot;&quot;&quot;</span>
+<span class="s2">    Generate a set of relevant laboratory exams in JSON format for a medical simulation.</span>
+
+<span class="s2">    SCENARIO CONTEXT:</span>
+<span class="s2">    - Patient Type: </span><span class="si">{</span><span class="n">request</span><span class="o">.</span><span class="n">tipologia_paziente</span><span class="si">}</span>
+<span class="s2">    - Scenario Description: </span><span class="si">{</span><span class="n">request</span><span class="o">.</span><span class="n">descrizione_scenario</span><span class="si">}</span>
+<span class="s2">    - Objective Examination (Esame obiettivo): </span><span class="si">{</span><span class="n">request</span><span class="o">.</span><span class="n">esame_obiettivo</span><span class="si">}</span>
+
+<span class="s2">    INSTRUCTIONS:</span>
+<span class="s2">    1.  Based on the scenario and objective examination findings, create a list of pertinent lab exams.</span>
+<span class="s2">    2.  Use the objective examination results to guide the selection of appropriate laboratory tests.</span>
+<span class="s2">    3.  Consider which lab tests would be most clinically relevant given the physical examination findings.</span>
+<span class="s2">    4.  Group the exams into logical categories (e.g., &#39;Ematologia&#39;, &#39;Coagulazione&#39;, &#39;Chimica Clinica&#39;, &#39;Emogasanalisi Arteriosa&#39;).</span>
+<span class="s2">    5.  All names, categories, and textual reports MUST be in ITALIAN.</span>
+<span class="s2">    6.  The values should be realistic for the given clinical picture and consistent with the objective examination.</span>
+<span class="s2">    7.  For each test, you MUST include a `referto` field containing a brief clinical interpretation of the result that correlates with the clinical scenario and objective examination (e.g., &quot;Valore nella norma&quot;, &quot;Valore critico indicativo di infiammazione&quot;, &quot;Leggermente diminuito compatibile con il quadro clinico&quot;).</span>
+<span class="s2">    8.  The `unita_misura` field MUST always be a string. If a test has no unit (e.g., a qualitative result like &#39;Positivo/Negativo&#39;), use an empty string &quot;&quot; or &quot;N/A&quot;.</span>
+<span class="s2">    9.  Ensure the lab results are coherent with the physical examination findings described in the esame_obiettivo.</span>
+<span class="s2">    10. Strictly adhere to the JSON schema provided below. Do NOT add any extra text or explanations outside the JSON structure.</span>
+
+<span class="s2">    JSON SCHEMA TO FOLLOW:</span>
+<span class="s2">    </span><span class="si">{</span><span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">LabExamResponse</span><span class="o">.</span><span class="n">model_json_schema</span><span class="p">(),</span><span class="w"> </span><span class="n">indent</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span><span class="si">}</span>
+
+<span class="s2">    Respond ONLY with the valid JSON object.</span>
+<span class="s2">    &quot;&quot;&quot;</span></div>
+
+
+
+<div class="viewcode-block" id="generate_lab_exams">
+<a class="viewcode-back" href="../../agents.html#agents.exam_agents.generate_lab_exams">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">generate_lab_exams</span><span class="p">(</span><span class="n">request</span><span class="p">:</span> <span class="n">LabExamRequest</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">LabExamResponse</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Generate laboratory exams for a medical scenario.</span>
+<span class="sd">    </span>
+<span class="sd">    Args:</span>
+<span class="sd">        request: The lab exam request containing scenario description and patient type</span>
+<span class="sd">        </span>
+<span class="sd">    Returns:</span>
+<span class="sd">        LabExamResponse: The generated lab exams</span>
+<span class="sd">        </span>
+<span class="sd">    Raises:</span>
+<span class="sd">        HTTPException: If generation fails</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Received request to generate lab exams for: </span><span class="si">{</span><span class="n">request</span><span class="o">.</span><span class="n">tipologia_paziente</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+    
+    <span class="k">try</span><span class="p">:</span>
+        <span class="c1"># Create the prompt for the agent</span>
+        <span class="n">prompt</span> <span class="o">=</span> <span class="n">create_exam_prompt</span><span class="p">(</span><span class="n">request</span><span class="p">)</span>
+        
+        <span class="c1"># Run the agent to get the response</span>
+        <span class="n">agent_response</span> <span class="o">=</span> <span class="n">exam_agent</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">prompt</span><span class="p">)</span>  <span class="c1"># type: ignore</span>
+        
+        <span class="c1"># Extract and validate the JSON from the response</span>
+        <span class="n">exam_dict</span> <span class="o">=</span> <span class="n">extract_json_from_response</span><span class="p">(</span><span class="n">agent_response</span><span class="o">.</span><span class="n">content</span><span class="p">)</span>
+        
+        <span class="c1"># Validate the data with the Pydantic model</span>
+        <span class="n">validated_exams</span> <span class="o">=</span> <span class="n">LabExamResponse</span><span class="o">.</span><span class="n">model_validate</span><span class="p">(</span><span class="n">exam_dict</span><span class="p">)</span>
+        
+        <span class="k">return</span> <span class="n">validated_exams</span>
+        
+    <span class="k">except</span> <span class="p">(</span><span class="ne">ValueError</span><span class="p">,</span> <span class="n">json</span><span class="o">.</span><span class="n">JSONDecodeError</span><span class="p">)</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+        <span class="n">logger</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Data validation or extraction error: </span><span class="si">{</span><span class="n">e</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">exc_info</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="k">raise</span> <span class="n">HTTPException</span><span class="p">(</span><span class="n">status_code</span><span class="o">=</span><span class="mi">422</span><span class="p">,</span> <span class="n">detail</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;error&quot;</span><span class="p">:</span> <span class="s2">&quot;Generated content failed validation or parsing.&quot;</span><span class="p">,</span> <span class="s2">&quot;details&quot;</span><span class="p">:</span> <span class="nb">str</span><span class="p">(</span><span class="n">e</span><span class="p">)})</span>
+    <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+        <span class="n">logger</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;An unexpected error occurred: </span><span class="si">{</span><span class="n">e</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">exc_info</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="k">raise</span> <span class="n">HTTPException</span><span class="p">(</span><span class="n">status_code</span><span class="o">=</span><span class="mi">500</span><span class="p">,</span> <span class="n">detail</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;error&quot;</span><span class="p">:</span> <span class="s2">&quot;Failed to generate lab exams&quot;</span><span class="p">,</span> <span class="s2">&quot;message&quot;</span><span class="p">:</span> <span class="nb">str</span><span class="p">(</span><span class="n">e</span><span class="p">)})</span></div>
+
+</pre></div>
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="Main">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="../../index.html">sim-suite-ai</a></h1>
+
+
+
+
+
+
+
+
+
+<search id="searchbox" style="display: none" role="search">
+    <div class="searchformwrapper">
+    <form class="search" action="../../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" placeholder="Search"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</search>
+<script>document.getElementById('searchbox').style.display = "block"</script><h3>Navigation</h3>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../../index.html">Documentation overview</a><ul>
+  <li><a href="../index.html">Module code</a><ul>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &#169;2025, Alessandro Zappatore.
+      
+      |
+      Powered by <a href="https://www.sphinx-doc.org/">Sphinx 8.2.3</a>
+      &amp; <a href="https://alabaster.readthedocs.io">Alabaster 1.0.0</a>
+      
+    </div>
+
+    
+
+    
+  </body>
+</html>

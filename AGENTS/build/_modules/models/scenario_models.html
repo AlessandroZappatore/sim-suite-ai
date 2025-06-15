@@ -1,0 +1,294 @@
+<!DOCTYPE html>
+
+<html lang="en" data-content_root="../../">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>models.scenario_models &#8212; sim-suite-ai 1.0 documentation</title>
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=5ecbeea2" />
+    <link rel="stylesheet" type="text/css" href="../../_static/basic.css?v=b08954a9" />
+    <link rel="stylesheet" type="text/css" href="../../_static/alabaster.css?v=27fed22d" />
+    <script src="../../_static/documentation_options.js?v=f2a433a1"></script>
+    <script src="../../_static/doctools.js?v=9bcbadda"></script>
+    <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+   
+  <link rel="stylesheet" href="../../_static/custom.css" type="text/css" />
+  
+
+  
+  
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <h1>Source code for models.scenario_models</h1><div class="highlight"><pre>
+<span></span><span class="c1"># Pydantic models for Medical Simulation Scenarios</span>
+<span class="c1"># Version 4.2 - Refactored from sim_suite_ai.py</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">__future__</span><span class="w"> </span><span class="kn">import</span> <span class="n">annotations</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="nn">re</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">List</span><span class="p">,</span> <span class="n">Literal</span><span class="p">,</span> <span class="n">Optional</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">pydantic</span><span class="w"> </span><span class="kn">import</span> <span class="n">BaseModel</span><span class="p">,</span> <span class="n">Field</span><span class="p">,</span> <span class="n">field_validator</span>
+
+
+<div class="viewcode-block" id="AccessoVenosso">
+<a class="viewcode-back" href="../../models.html#models.scenario_models.AccessoVenosso">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">AccessoVenosso</span><span class="p">(</span><span class="n">BaseModel</span><span class="p">):</span>
+    <span class="n">tipologia</span><span class="p">:</span> <span class="n">Literal</span><span class="p">[</span><span class="s2">&quot;Periferico&quot;</span><span class="p">,</span> <span class="s2">&quot;Centrale&quot;</span><span class="p">,</span> <span class="s2">&quot;CVC a breve termine&quot;</span><span class="p">,</span> <span class="s2">&quot;CVC tunnellizzato&quot;</span><span class="p">,</span> <span class="s2">&quot;PICC&quot;</span><span class="p">,</span> <span class="s2">&quot;Midline&quot;</span><span class="p">,</span> <span class="s2">&quot;Intraosseo&quot;</span><span class="p">,</span> <span class="s2">&quot;PORT&quot;</span><span class="p">,</span> <span class="s2">&quot;Dialysis catheter&quot;</span><span class="p">,</span> <span class="s2">&quot;Altri&quot;</span><span class="p">]</span>
+    <span class="n">posizione</span><span class="p">:</span> <span class="nb">str</span>
+    <span class="n">lato</span><span class="p">:</span> <span class="n">Literal</span><span class="p">[</span><span class="s2">&quot;DX&quot;</span><span class="p">,</span> <span class="s2">&quot;SX&quot;</span><span class="p">]</span>
+    <span class="n">misura</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span><span class="n">description</span><span class="o">=</span><span class="s2">&quot;Gauge size of the venous access (es. 14, 16, 18, etc.) max 26&quot;</span><span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="AccessoArterioso">
+<a class="viewcode-back" href="../../models.html#models.scenario_models.AccessoArterioso">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">AccessoArterioso</span><span class="p">(</span><span class="n">BaseModel</span><span class="p">):</span>
+    <span class="n">tipologia</span><span class="p">:</span> <span class="n">Literal</span><span class="p">[</span><span class="s2">&quot;Radiale&quot;</span><span class="p">,</span> <span class="s2">&quot;Femorale&quot;</span><span class="p">,</span> <span class="s2">&quot;Omerale&quot;</span><span class="p">,</span> <span class="s2">&quot;Brachiale&quot;</span><span class="p">,</span> <span class="s2">&quot;Ascellare&quot;</span><span class="p">,</span> <span class="s2">&quot;Pedidia&quot;</span><span class="p">,</span> <span class="s2">&quot;Altro&quot;</span><span class="p">]</span>
+    <span class="n">posizione</span><span class="p">:</span> <span class="nb">str</span>
+    <span class="n">lato</span><span class="p">:</span> <span class="n">Literal</span><span class="p">[</span><span class="s2">&quot;DX&quot;</span><span class="p">,</span> <span class="s2">&quot;SX&quot;</span><span class="p">]</span>
+    <span class="n">misura</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span><span class="n">description</span><span class="o">=</span><span class="s2">&quot;Gauge size of the arterial access (es. 14, 16, 18, etc.) max 26&quot;</span><span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="PazienteT0">
+<a class="viewcode-back" href="../../models.html#models.scenario_models.PazienteT0">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">PazienteT0</span><span class="p">(</span><span class="n">BaseModel</span><span class="p">):</span>
+    <span class="n">RR</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span><span class="n">description</span><span class="o">=</span><span class="s2">&quot;Respiratory Rate (atti/min)&quot;</span><span class="p">)</span>
+    <span class="n">SpO2</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span><span class="n">description</span><span class="o">=</span><span class="s2">&quot;Oxygen Saturation (%)&quot;</span><span class="p">)</span>
+    <span class="n">FiO2</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span><span class="n">default</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">description</span><span class="o">=</span><span class="s2">&quot;Fraction of Inspired Oxygen (%)&quot;</span><span class="p">)</span>
+    <span class="n">LitriO2</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span><span class="n">default</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">description</span><span class="o">=</span><span class="s2">&quot;Oxygen flow (L/min)&quot;</span><span class="p">)</span>
+    <span class="n">EtCO2</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span><span class="n">default</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">description</span><span class="o">=</span><span class="s2">&quot;End-tidal CO2 (mmHg)&quot;</span><span class="p">)</span>
+    <span class="n">Monitor</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span><span class="n">description</span><span class="o">=</span><span class="s2">&quot;Descrizione del monitoraggio (plain text, es. ECG, Saturimetria)&quot;</span><span class="p">)</span>
+    <span class="n">accessiVenosi</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">AccessoVenosso</span><span class="p">]</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span><span class="n">default_factory</span><span class="o">=</span><span class="nb">list</span><span class="p">)</span>  <span class="c1"># type: ignore</span>
+    <span class="n">accessiArteriosi</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">AccessoArterioso</span><span class="p">]</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span><span class="n">default_factory</span><span class="o">=</span><span class="nb">list</span><span class="p">)</span>  <span class="c1"># type: ignore</span>
+    <span class="n">PA</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span><span class="n">description</span><span class="o">=</span><span class="s2">&quot;Blood Pressure (es. &#39;120/80&#39;)&quot;</span><span class="p">)</span>
+    <span class="n">FC</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span><span class="n">description</span><span class="o">=</span><span class="s2">&quot;Heart Rate (bpm)&quot;</span><span class="p">)</span>
+    <span class="n">T</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span><span class="n">description</span><span class="o">=</span><span class="s2">&quot;Temperature (Celsius)&quot;</span><span class="p">)</span>
+
+<div class="viewcode-block" id="PazienteT0.validate_blood_pressure">
+<a class="viewcode-back" href="../../models.html#models.scenario_models.PazienteT0.validate_blood_pressure">[docs]</a>
+    <span class="nd">@field_validator</span><span class="p">(</span><span class="s1">&#39;PA&#39;</span><span class="p">)</span>
+    <span class="nd">@classmethod</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">validate_blood_pressure</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">v</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">v</span> <span class="ow">or</span> <span class="ow">not</span> <span class="n">v</span><span class="o">.</span><span class="n">strip</span><span class="p">():</span> 
+            <span class="k">return</span> <span class="s2">&quot;0/0&quot;</span>
+        <span class="k">if</span> <span class="n">re</span><span class="o">.</span><span class="n">match</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;^\d+/\d+$&#39;</span><span class="p">,</span> <span class="n">v</span><span class="o">.</span><span class="n">strip</span><span class="p">()):</span> 
+            <span class="k">return</span> <span class="n">v</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
+        <span class="k">return</span> <span class="s2">&quot;0/0&quot;</span></div>
+</div>
+
+
+
+<div class="viewcode-block" id="EsameFisicoSections">
+<a class="viewcode-back" href="../../models.html#models.scenario_models.EsameFisicoSections">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">EsameFisicoSections</span><span class="p">(</span><span class="n">BaseModel</span><span class="p">):</span>
+    <span class="n">Generale</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span><span class="n">description</span><span class="o">=</span><span class="s2">&quot;General examination findings (html format)&quot;</span><span class="p">)</span>
+    <span class="n">Pupille</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span><span class="n">description</span><span class="o">=</span><span class="s2">&quot;Pupil examination findings (html format)&quot;</span><span class="p">)</span> 
+    <span class="n">Cute</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span><span class="n">description</span><span class="o">=</span><span class="s2">&quot;Skin examination findings (html format)&quot;</span><span class="p">)</span>
+    <span class="n">Collo</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span><span class="n">description</span><span class="o">=</span><span class="s2">&quot;Neck examination findings (html format)&quot;</span><span class="p">)</span>
+    <span class="n">Torace</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span><span class="n">description</span><span class="o">=</span><span class="s2">&quot;Chest examination findings (html format)&quot;</span><span class="p">)</span>
+    <span class="n">Cuore</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span><span class="n">description</span><span class="o">=</span><span class="s2">&quot;Heart examination findings (html format)&quot;</span><span class="p">)</span>
+    <span class="n">Addome</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span><span class="n">description</span><span class="o">=</span><span class="s2">&quot;Abdomen examination findings (html format)&quot;</span><span class="p">)</span>
+    <span class="n">Estremità</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span><span class="n">description</span><span class="o">=</span><span class="s2">&quot;Extremities examination findings (html format)&quot;</span><span class="p">)</span>
+    <span class="n">Neurologico</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span><span class="n">description</span><span class="o">=</span><span class="s2">&quot;Neurological examination findings (html format)&quot;</span><span class="p">)</span>
+    <span class="n">Retto</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span><span class="n">description</span><span class="o">=</span><span class="s2">&quot;Rectal examination findings (html format)&quot;</span><span class="p">)</span>
+    <span class="n">FAST</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span><span class="n">description</span><span class="o">=</span><span class="s2">&quot;Focused Assessment with Sonography for Trauma (FAST) findings (html format)&quot;</span><span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="EsameFisico">
+<a class="viewcode-back" href="../../models.html#models.scenario_models.EsameFisico">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">EsameFisico</span><span class="p">(</span><span class="n">BaseModel</span><span class="p">):</span>
+    <span class="n">sections</span><span class="p">:</span> <span class="n">EsameFisicoSections</span></div>
+
+
+
+<div class="viewcode-block" id="ScenarioInfo">
+<a class="viewcode-back" href="../../models.html#models.scenario_models.ScenarioInfo">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">ScenarioInfo</span><span class="p">(</span><span class="n">BaseModel</span><span class="p">):</span>
+    <span class="n">nome_paziente</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span><span class="n">description</span><span class="o">=</span><span class="s2">&quot;Invented or given patient name (plain text)&quot;</span><span class="p">)</span>
+    <span class="n">patto_aula</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span><span class="n">description</span><span class="o">=</span><span class="s2">&quot;Classroom agreement (html format)&quot;</span><span class="p">)</span> 
+    <span class="n">obiettivo</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span><span class="n">description</span><span class="o">=</span><span class="s2">&quot;Learning objective (html format)&quot;</span><span class="p">)</span> 
+    <span class="n">timer_generale</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span><span class="n">description</span><span class="o">=</span><span class="s2">&quot;General timer for the scenario in minutes&quot;</span><span class="p">)</span>
+    <span class="n">infoGenitore</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span><span class="n">default</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">description</span><span class="o">=</span><span class="s2">&quot;Information given by the parent about the situation (html format)&quot;</span><span class="p">)</span>
+    <span class="n">titolo</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span><span class="n">description</span><span class="o">=</span><span class="s2">&quot;Scenario title (plain text)&quot;</span><span class="p">)</span>
+    <span class="n">patologia</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span><span class="n">description</span><span class="o">=</span><span class="s2">&quot;Patologia principale (plain text)&quot;</span><span class="p">)</span>
+    <span class="n">descrizione</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span><span class="n">description</span><span class="o">=</span><span class="s2">&quot;Scenario description (html format)&quot;</span><span class="p">)</span>
+    <span class="n">briefing</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span><span class="n">description</span><span class="o">=</span><span class="s2">&quot;Briefing for the scenario (html format)&quot;</span><span class="p">)</span>
+    <span class="n">moulage</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span><span class="n">description</span><span class="o">=</span><span class="s2">&quot;Moulage description (html format)&quot;</span><span class="p">)</span>
+    <span class="n">liquidi</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span><span class="n">description</span><span class="o">=</span><span class="s2">&quot;Fluids and drugs description (html format)&quot;</span><span class="p">)</span>
+    <span class="n">autori</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span><span class="n">description</span><span class="o">=</span><span class="s2">&quot;Authors of the scenario (plain text) if not given, use &#39;AI generated&#39;&quot;</span><span class="p">)</span>
+    <span class="n">tipologia</span><span class="p">:</span> <span class="n">Literal</span><span class="p">[</span><span class="s2">&quot;Adulto&quot;</span><span class="p">,</span> <span class="s2">&quot;Pediatrico&quot;</span><span class="p">,</span> <span class="s2">&quot;Neonatale&quot;</span><span class="p">,</span> <span class="s2">&quot;Prematuro&quot;</span><span class="p">]</span>
+    <span class="n">target</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span><span class="n">description</span><span class="o">=</span><span class="s2">&quot;Target given or invented (plain text)&quot;</span><span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="ParametroAggiuntivo">
+<a class="viewcode-back" href="../../models.html#models.scenario_models.ParametroAggiuntivo">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">ParametroAggiuntivo</span><span class="p">(</span><span class="n">BaseModel</span><span class="p">):</span>
+    <span class="n">unitaMisura</span><span class="p">:</span> <span class="nb">str</span>
+    <span class="n">nome</span><span class="p">:</span> <span class="nb">str</span>
+    <span class="n">valore</span><span class="p">:</span> <span class="nb">str</span></div>
+
+
+
+<div class="viewcode-block" id="Tempo">
+<a class="viewcode-back" href="../../models.html#models.scenario_models.Tempo">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">Tempo</span><span class="p">(</span><span class="n">BaseModel</span><span class="p">):</span>
+    <span class="n">idTempo</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span><span class="n">description</span><span class="o">=</span><span class="s2">&quot;Unique identifier for the time event (ex. 0 for T0, 1 for T1, etc.)&quot;</span><span class="p">)</span>
+    <span class="n">RR</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span><span class="n">description</span><span class="o">=</span><span class="s2">&quot;Respiratory Rate (atti/min)&quot;</span><span class="p">)</span>
+    <span class="n">SpO2</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span><span class="n">description</span><span class="o">=</span><span class="s2">&quot;Oxygen Saturation (%)&quot;</span><span class="p">)</span>
+    <span class="n">FiO2</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span><span class="n">default</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">description</span><span class="o">=</span><span class="s2">&quot;Fraction of Inspired Oxygen (%)&quot;</span><span class="p">)</span>
+    <span class="n">LitriO2</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span><span class="n">default</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">description</span><span class="o">=</span><span class="s2">&quot;Oxygen flow (L/min)&quot;</span><span class="p">)</span>
+    <span class="n">EtCO2</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span><span class="n">default</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">description</span><span class="o">=</span><span class="s2">&quot;End-tidal CO2 (mmHg)&quot;</span><span class="p">)</span>
+    <span class="n">TSi</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span><span class="n">default</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">description</span><span class="o">=</span><span class="s2">&quot;Time identifier to go if the action is correct (0 for T0, 1 for T1, etc.)&quot;</span><span class="p">)</span>
+    <span class="n">TNo</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span><span class="n">default</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">description</span><span class="o">=</span><span class="s2">&quot;Time identifier to go if the action is not correct (0 for T0, 1 for T1, etc.)&quot;</span><span class="p">)</span>
+    <span class="n">altriDettagli</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span><span class="n">description</span><span class="o">=</span><span class="s2">&quot;Additional details about the time event (plain text)&quot;</span><span class="p">)</span>
+    <span class="n">timerTempo</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span><span class="n">default</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">description</span><span class="o">=</span><span class="s2">&quot;Timer for the time event in seconds&quot;</span><span class="p">)</span>
+    <span class="n">ruoloGenitore</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span><span class="n">default</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">description</span><span class="o">=</span><span class="s2">&quot;Role of the parent in the time (plain text, if pediatric)&quot;</span><span class="p">)</span>
+    <span class="n">PA</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span><span class="n">description</span><span class="o">=</span><span class="s2">&quot;Blood Pressure (sistolic/diastolic, es. &#39;120/80&#39;)&quot;</span><span class="p">)</span>
+    <span class="n">FC</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span><span class="n">description</span><span class="o">=</span><span class="s2">&quot;Heart Rate (bpm)&quot;</span><span class="p">)</span>
+    <span class="n">T</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span><span class="n">description</span><span class="o">=</span><span class="s2">&quot;Temperature (Celsius)&quot;</span><span class="p">)</span>
+    <span class="n">Azione</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span><span class="n">description</span><span class="o">=</span><span class="s2">&quot;Action to be performed at this time to go to TSi (plain text)&quot;</span><span class="p">)</span>
+    <span class="n">parametriAggiuntivi</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">ParametroAggiuntivo</span><span class="p">]</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span><span class="n">default_factory</span><span class="o">=</span><span class="nb">list</span><span class="p">)</span>  <span class="c1"># type: ignore</span>
+
+<div class="viewcode-block" id="Tempo.validate_blood_pressure">
+<a class="viewcode-back" href="../../models.html#models.scenario_models.Tempo.validate_blood_pressure">[docs]</a>
+    <span class="nd">@field_validator</span><span class="p">(</span><span class="s1">&#39;PA&#39;</span><span class="p">)</span>
+    <span class="nd">@classmethod</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">validate_blood_pressure</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">v</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">v</span> <span class="ow">or</span> <span class="ow">not</span> <span class="n">v</span><span class="o">.</span><span class="n">strip</span><span class="p">():</span> 
+            <span class="k">return</span> <span class="s2">&quot;0/0&quot;</span>
+        <span class="k">if</span> <span class="n">re</span><span class="o">.</span><span class="n">match</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;^\d+/\d+$&#39;</span><span class="p">,</span> <span class="n">v</span><span class="o">.</span><span class="n">strip</span><span class="p">()):</span> 
+            <span class="k">return</span> <span class="n">v</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
+        <span class="k">return</span> <span class="s2">&quot;0/0&quot;</span></div>
+</div>
+
+
+
+<div class="viewcode-block" id="BaseScenario">
+<a class="viewcode-back" href="../../models.html#models.scenario_models.BaseScenario">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">BaseScenario</span><span class="p">(</span><span class="n">BaseModel</span><span class="p">):</span>
+    <span class="n">azioniChiave</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> 
+    <span class="n">tipo</span><span class="p">:</span> <span class="n">Literal</span><span class="p">[</span><span class="s2">&quot;Quick Scenario&quot;</span><span class="p">,</span> <span class="s2">&quot;Advanced Scenario&quot;</span><span class="p">,</span> <span class="s2">&quot;Patient Simulated Scenario&quot;</span><span class="p">]</span>
+    <span class="n">scenario</span><span class="p">:</span> <span class="n">ScenarioInfo</span>
+    <span class="n">presidi</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span>
+    <span class="n">esameFisico</span><span class="p">:</span> <span class="n">EsameFisico</span>
+    <span class="n">pazienteT0</span><span class="p">:</span> <span class="n">PazienteT0</span></div>
+
+
+
+<div class="viewcode-block" id="Timeline">
+<a class="viewcode-back" href="../../models.html#models.scenario_models.Timeline">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">Timeline</span><span class="p">(</span><span class="n">BaseModel</span><span class="p">):</span>
+    <span class="n">tempi</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">Tempo</span><span class="p">]</span></div>
+
+
+
+<div class="viewcode-block" id="Sceneggiatura">
+<a class="viewcode-back" href="../../models.html#models.scenario_models.Sceneggiatura">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">Sceneggiatura</span><span class="p">(</span><span class="n">BaseModel</span><span class="p">):</span>
+    <span class="n">sceneggiatura</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span><span class="n">description</span><span class="o">=</span><span class="s2">&quot;Script for the simulated patient (html format)&quot;</span><span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="FullScenario">
+<a class="viewcode-back" href="../../models.html#models.scenario_models.FullScenario">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">FullScenario</span><span class="p">(</span><span class="n">BaseModel</span><span class="p">):</span>
+    <span class="n">azioniChiave</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span>
+    <span class="n">tipo</span><span class="p">:</span> <span class="n">Literal</span><span class="p">[</span><span class="s2">&quot;Quick Scenario&quot;</span><span class="p">,</span> <span class="s2">&quot;Advanced Scenario&quot;</span><span class="p">,</span> <span class="s2">&quot;Patient Simulated Scenario&quot;</span><span class="p">]</span>
+    <span class="n">scenario</span><span class="p">:</span> <span class="n">ScenarioInfo</span>
+    <span class="n">presidi</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span>
+    <span class="n">esameFisico</span><span class="p">:</span> <span class="n">EsameFisico</span>
+    <span class="n">pazienteT0</span><span class="p">:</span> <span class="n">PazienteT0</span>
+    <span class="n">tempi</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">Tempo</span><span class="p">]</span>
+    <span class="n">sceneggiatura</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span><span class="n">description</span><span class="o">=</span><span class="s2">&quot;Script for the simulated patient (html format)&quot;</span><span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="ScenarioRequest">
+<a class="viewcode-back" href="../../models.html#models.scenario_models.ScenarioRequest">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">ScenarioRequest</span><span class="p">(</span><span class="n">BaseModel</span><span class="p">):</span>
+    <span class="n">description</span><span class="p">:</span> <span class="nb">str</span> 
+    <span class="n">scenario_type</span><span class="p">:</span> <span class="n">Literal</span><span class="p">[</span><span class="s2">&quot;Quick Scenario&quot;</span><span class="p">,</span> <span class="s2">&quot;Advanced Scenario&quot;</span><span class="p">,</span> <span class="s2">&quot;Patient Simulated Scenario&quot;</span><span class="p">]</span>
+    <span class="n">target</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">difficulty</span><span class="p">:</span> <span class="n">Literal</span><span class="p">[</span><span class="s2">&quot;Facile&quot;</span><span class="p">,</span> <span class="s2">&quot;Medio&quot;</span><span class="p">,</span> <span class="s2">&quot;Difficile&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span>
+        <span class="n">default</span><span class="o">=</span><span class="s2">&quot;Facile&quot;</span><span class="p">,</span> 
+        <span class="n">description</span><span class="o">=</span><span class="s2">&quot;Livello di difficoltà dello scenario che influenza la complessità clinica, le complicazioni e i dettagli&quot;</span>
+    <span class="p">)</span></div>
+
+</pre></div>
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="Main">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="../../index.html">sim-suite-ai</a></h1>
+
+
+
+
+
+
+
+
+
+<search id="searchbox" style="display: none" role="search">
+    <div class="searchformwrapper">
+    <form class="search" action="../../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" placeholder="Search"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</search>
+<script>document.getElementById('searchbox').style.display = "block"</script><h3>Navigation</h3>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../../index.html">Documentation overview</a><ul>
+  <li><a href="../index.html">Module code</a><ul>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &#169;2025, Alessandro Zappatore.
+      
+      |
+      Powered by <a href="https://www.sphinx-doc.org/">Sphinx 8.2.3</a>
+      &amp; <a href="https://alabaster.readthedocs.io">Alabaster 1.0.0</a>
+      
+    </div>
+
+    
+
+    
+  </body>
+</html>

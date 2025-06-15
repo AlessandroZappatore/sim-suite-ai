@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+
+<html lang="en" data-content_root="../../">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>models.medical_report_models &#8212; sim-suite-ai 1.0 documentation</title>
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=5ecbeea2" />
+    <link rel="stylesheet" type="text/css" href="../../_static/basic.css?v=b08954a9" />
+    <link rel="stylesheet" type="text/css" href="../../_static/alabaster.css?v=27fed22d" />
+    <script src="../../_static/documentation_options.js?v=f2a433a1"></script>
+    <script src="../../_static/doctools.js?v=9bcbadda"></script>
+    <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+   
+  <link rel="stylesheet" href="../../_static/custom.css" type="text/css" />
+  
+
+  
+  
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <h1>Source code for models.medical_report_models</h1><div class="highlight"><pre>
+<span></span><span class="c1"># Pydantic models for Medical Report Generation</span>
+<span class="c1"># Version 1.0 - Medical report models</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">__future__</span><span class="w"> </span><span class="kn">import</span> <span class="n">annotations</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Literal</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">pydantic</span><span class="w"> </span><span class="kn">import</span> <span class="n">BaseModel</span><span class="p">,</span> <span class="n">Field</span>
+
+
+<div class="viewcode-block" id="MedicalReportRequest">
+<a class="viewcode-back" href="../../models.html#models.medical_report_models.MedicalReportRequest">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">MedicalReportRequest</span><span class="p">(</span><span class="n">BaseModel</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;The request model for generating medical reports.&quot;&quot;&quot;</span>
+    <span class="n">descrizione_scenario</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span><span class="n">description</span><span class="o">=</span><span class="s2">&quot;A detailed description of the clinical scenario, including patient status and pathology.&quot;</span><span class="p">)</span>
+    <span class="n">tipologia_paziente</span><span class="p">:</span> <span class="n">Literal</span><span class="p">[</span><span class="s2">&quot;Adulto&quot;</span><span class="p">,</span> <span class="s2">&quot;Pediatrico&quot;</span><span class="p">,</span> <span class="s2">&quot;Neonatale&quot;</span><span class="p">,</span> <span class="s2">&quot;Prematuro&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span><span class="n">description</span><span class="o">=</span><span class="s2">&quot;Type of patient (Adult, Pediatric, Neonatal, Premature).&quot;</span><span class="p">)</span>
+    <span class="n">tipologia_esame</span><span class="p">:</span> <span class="n">Literal</span><span class="p">[</span>
+        <span class="s2">&quot;ECG (Elettrocardiogramma)&quot;</span><span class="p">,</span> <span class="s2">&quot;RX Torace&quot;</span><span class="p">,</span> <span class="s2">&quot;TC Torace (con mdc)&quot;</span><span class="p">,</span> <span class="s2">&quot;TC Torace (senza mdc)&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;TC Addome (con mdc)&quot;</span><span class="p">,</span> <span class="s2">&quot;TC Addome (senza mdc)&quot;</span><span class="p">,</span> <span class="s2">&quot;Ecografia addominale&quot;</span><span class="p">,</span> <span class="s2">&quot;Ecografia polmonare&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;Ecocardio (Transtoracico)&quot;</span><span class="p">,</span> <span class="s2">&quot;Ecocardio (Transesofageo)&quot;</span><span class="p">,</span> <span class="s2">&quot;Spirometria&quot;</span><span class="p">,</span> <span class="s2">&quot;EEG (Elettroencefalogramma)&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;RM Encefalo&quot;</span><span class="p">,</span> <span class="s2">&quot;TC Cranio (con mdc)&quot;</span><span class="p">,</span> <span class="s2">&quot;TC Cranio (senza mdc)&quot;</span><span class="p">,</span> <span class="s2">&quot;Doppler TSA (Tronchi Sovraortici)&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;Angio-TC Polmonare&quot;</span><span class="p">,</span> <span class="s2">&quot;Fundus oculi&quot;</span>
+    <span class="p">]</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span><span class="n">description</span><span class="o">=</span><span class="s2">&quot;Type of medical examination to generate report for.&quot;</span><span class="p">)</span>
+    <span class="n">esame_obiettivo</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span><span class="n">description</span><span class="o">=</span><span class="s2">&quot;Objective exam like eyes, neck, chest, abdomen, etc.&quot;</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="MedicalReportResponse">
+<a class="viewcode-back" href="../../models.html#models.medical_report_models.MedicalReportResponse">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">MedicalReportResponse</span><span class="p">(</span><span class="n">BaseModel</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;The response model containing the generated medical report.&quot;&quot;&quot;</span>
+    <span class="n">tipologia_esame</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span><span class="n">description</span><span class="o">=</span><span class="s2">&quot;The type of examination performed.&quot;</span><span class="p">)</span>
+    <span class="n">referto</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span><span class="n">description</span><span class="o">=</span><span class="s2">&quot;The complete medical report in Italian, formatted as plain text.&quot;</span><span class="p">)</span></div>
+
+</pre></div>
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="Main">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="../../index.html">sim-suite-ai</a></h1>
+
+
+
+
+
+
+
+
+
+<search id="searchbox" style="display: none" role="search">
+    <div class="searchformwrapper">
+    <form class="search" action="../../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" placeholder="Search"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</search>
+<script>document.getElementById('searchbox').style.display = "block"</script><h3>Navigation</h3>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../../index.html">Documentation overview</a><ul>
+  <li><a href="../index.html">Module code</a><ul>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &#169;2025, Alessandro Zappatore.
+      
+      |
+      Powered by <a href="https://www.sphinx-doc.org/">Sphinx 8.2.3</a>
+      &amp; <a href="https://alabaster.readthedocs.io">Alabaster 1.0.0</a>
+      
+    </div>
+
+    
+
+    
+  </body>
+</html>
