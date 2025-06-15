@@ -1,25 +1,21 @@
 # FastAPI endpoints for Medical Report Generation
-# Version 1.0 - Medical report API
+# Version 1.1 - Refactored to use APIRouter
 
 import logging
 
-from fastapi import FastAPI
-
+from fastapi import APIRouter
 from agents.medical_report import generate_medical_report
 from models.medical_report_models import MedicalReportRequest, MedicalReportResponse
 
 # Configure logging
 logger = logging.getLogger(__name__)
 
-# Create FastAPI application
-medical_report_app = FastAPI(
-    title="Medical Report Generation Agent",
-    description="An AI agent that generates detailed medical reports for diagnostic examinations.",
-    version="1.0.0"
+router = APIRouter(
+    prefix="/reports",
+    tags=["Reports"]
 )
 
-
-@medical_report_app.post("/generate-medical-report", response_model=MedicalReportResponse, summary="Generate Medical Report for an Examination")
+@router.post("/generate-medical-report", response_model=MedicalReportResponse, summary="Generate Medical Report for an Examination")
 def generate_medical_report_endpoint(request: MedicalReportRequest):
     """
     Receives a scenario description and examination type, then generates a corresponding medical report.
@@ -33,7 +29,7 @@ def generate_medical_report_endpoint(request: MedicalReportRequest):
     return generate_medical_report(request)
 
 
-@medical_report_app.get("/exam-types", summary="Get Available Examination Types")
+@router.get("/exam-types", summary="Get Available Examination Types")
 def get_exam_types():
     """Get list of available examination types for medical reports."""
     return {
@@ -46,9 +42,3 @@ def get_exam_types():
         ],
         "patient_types": ["Adulto", "Pediatrico", "Neonatale", "Prematuro"]
     }
-
-
-@medical_report_app.get("/health", summary="Health Check")
-def health_check():
-    """Health check endpoint for the medical report API."""
-    return {"status": "healthy", "service": "Medical Report Generator"}

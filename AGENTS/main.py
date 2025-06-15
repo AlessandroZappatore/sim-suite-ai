@@ -13,11 +13,10 @@ from fastapi import FastAPI
 import uvicorn
 
 # Import sub-applications from the api module
-from api.exam_api import exam_app
-from api.scenario_api import scenario_app
-from api.medical_report_api import medical_report_app
-from api.mat_api import mat_app
-
+from api.exam_api import router as exam_router
+from api.scenario_api import router as scenario_router
+from api.medical_report_api import router as report_router
+from api.mat_api import router as material_router
 # --- Basic Configuration ---
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
@@ -32,10 +31,10 @@ app = FastAPI(
 
 # --- Mount Sub-Applications ---
 # Each sub-application handles a specific domain of the suite.
-app.mount("/scenarios", scenario_app)
-app.mount("/exams", exam_app)
-app.mount("/reports", medical_report_app)
-app.mount("/materials", mat_app)
+app.include_router(scenario_router)
+app.include_router(exam_router)
+app.include_router(report_router)
+app.include_router(material_router)
 
 
 # --- Core Endpoints ---

@@ -1,9 +1,13 @@
 # API package for Medical Simulation Suite AI
 
-from .exam_api import exam_app
-from .medical_report_api import medical_report_app
-from .scenario_api import scenario_app
+from .exam_api import router as exam_router
+from .medical_report_api import router as medical_report_router
+from .scenario_api import router as scenario_router
+from .mat_api import router as material_router
 
 __all__ = [
-    "exam_app", "medical_report_app", "scenario_app"
+    "exam_router",
+    "medical_report_router",
+    "scenario_router",
+    "material_router"
 ]

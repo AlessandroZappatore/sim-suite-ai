@@ -1,26 +1,23 @@
 # FastAPI endpoints for Medical Scenario Generation
-# Version 4.2 - Refactored from sim_suite_ai.py
+# Version 4.3 - Refactored to use APIRouter
 
 import logging
-
 from typing import Dict, Any
-from fastapi import FastAPI
 
+from fastapi import APIRouter
 from agents.scenario_agents import generate_medical_scenario
 from models.scenario_models import FullScenario, ScenarioRequest
 
 # Configure logging
 logger = logging.getLogger(__name__)
 
-# Create FastAPI application
-scenario_app = FastAPI(
-    title="Medical Simulation AI Team", 
-    description="An AI system using a pipeline team of agents to generate medical simulation scenarios.", 
-    version="4.2.0"
+router = APIRouter(
+    prefix="/scenarios",
+    tags=["Scenarios"]
 )
 
 
-@scenario_app.post("/generate-scenario", response_model=FullScenario, summary="Generate a Full Medical Scenario")
+@router.post("/generate-scenario", response_model=FullScenario, summary="Generate a Full Medical Scenario")
 def generate_scenario_endpoint(request: ScenarioRequest):
     """
     Generate a complete medical scenario based on the request parameters.
@@ -31,7 +28,7 @@ def generate_scenario_endpoint(request: ScenarioRequest):
             - scenario_type: Type of scenario (Quick/Advanced/Patient Simulated)
             - target: Target audience (optional)
             - difficulty: Difficulty level (Facile/Medio/Difficile) - affects complexity, complications, and clinical evolution
-        
+            
     Returns:
         FullScenario: The generated medical scenario with appropriate complexity for the specified difficulty level
         
@@ -44,12 +41,7 @@ def generate_scenario_endpoint(request: ScenarioRequest):
     return generate_medical_scenario(request)
 
 
-@scenario_app.get("/health", summary="Health Check")
-def health_check():
-    """Health check endpoint for the scenario API."""
-    return {"status": "healthy", "service": "Medical Scenario Generator"}
-
-@scenario_app.get("/difficulty-levels", summary="Get Available Difficulty Levels")
+@router.get("/difficulty-levels", summary="Get Available Difficulty Levels")
 def get_difficulty_levels() -> Dict[str, Any]:
     """Get list of available difficulty levels for medical scenarios."""
     return {
