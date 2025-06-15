@@ -256,139 +256,151 @@
 </section>
 <section id="module-api.exam_api">
 <span id="api-exam-api-module"></span><h2>api.exam_api module<a class="headerlink" href="#module-api.exam_api" title="Link to this heading">¶</a></h2>
+<p>FastAPI router for medical exam generation endpoints.</p>
+<p>This module defines the API routes for generating laboratory exam results
+based on a given clinical scenario. It provides an endpoint to create a
+structured set of lab results.</p>
+<p>Version: 1.2</p>
 <dl class="py function">
 <dt class="sig sig-object py" id="api.exam_api.generate_exams_endpoint">
-<span class="sig-prename descclassname"><span class="pre">api.exam_api.</span></span><span class="sig-name descname"><span class="pre">generate_exams_endpoint</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">request</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="models.html#models.exam_models.LabExamRequest" title="models.exam_models.LabExamRequest"><span class="pre">LabExamRequest</span></a></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/api/exam_api.html#generate_exams_endpoint"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#api.exam_api.generate_exams_endpoint" title="Link to this definition">¶</a></dt>
-<dd><p>Receives a scenario description and generates a corresponding set of lab results,
-including a textual report for each test.</p>
+<span class="sig-prename descclassname"><span class="pre">api.exam_api.</span></span><span class="sig-name descname"><span class="pre">generate_exams_endpoint</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">request</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="models.html#models.exam_models.LabExamRequest" title="models.exam_models.LabExamRequest"><span class="pre">LabExamRequest</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="models.html#models.exam_models.LabExamResponse" title="models.exam_models.LabExamResponse"><span class="pre">LabExamResponse</span></a></span></span><a class="reference internal" href="_modules/api/exam_api.html#generate_exams_endpoint"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#api.exam_api.generate_exams_endpoint" title="Link to this definition">¶</a></dt>
+<dd><p>Generates a set of lab results based on a clinical scenario.</p>
+<p>This endpoint receives a scenario description and generates a corresponding
+set of lab results, including a textual interpretation for each test.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>request</strong> – The lab exam request containing scenario description and patient type</p>
+<dd class="field-odd"><p><strong>request</strong> – A request object containing the clinical scenario description
+and patient type.</p>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>The generated laboratory exams</p>
-</dd>
-<dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p><a class="reference internal" href="models.html#models.exam_models.LabExamResponse" title="models.exam_models.LabExamResponse">LabExamResponse</a></p>
+<dd class="field-even"><p>A response object containing the generated laboratory exams.</p>
 </dd>
 </dl>
-</dd></dl>
-
-<dl class="py function">
-<dt class="sig sig-object py" id="api.exam_api.health_check">
-<span class="sig-prename descclassname"><span class="pre">api.exam_api.</span></span><span class="sig-name descname"><span class="pre">health_check</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/api/exam_api.html#health_check"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#api.exam_api.health_check" title="Link to this definition">¶</a></dt>
-<dd><p>Health check endpoint for the exam API.</p>
 </dd></dl>
 
 </section>
 <section id="module-api.mat_api">
 <span id="api-mat-api-module"></span><h2>api.mat_api module<a class="headerlink" href="#module-api.mat_api" title="Link to this heading">¶</a></h2>
+<p>FastAPI router for medical material generation endpoints.</p>
+<p>This module defines the API routes for generating necessary materials
+for a given medical simulation scenario. It includes an endpoint for
+generating a list of materials and another for retrieving available
+patient and target audience types.</p>
 <dl class="py function">
 <dt class="sig sig-object py" id="api.mat_api.generate_materials_endpoint">
 <span class="sig-prename descclassname"><span class="pre">api.mat_api.</span></span><span class="sig-name descname"><span class="pre">generate_materials_endpoint</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">request</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="models.html#models.mat_model.MATModelRequest" title="models.mat_model.MATModelRequest"><span class="pre">MATModelRequest</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="models.html#models.mat_model.MATModelResponse" title="models.mat_model.MATModelResponse"><span class="pre">MATModelResponse</span></a><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="_modules/api/mat_api.html#generate_materials_endpoint"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#api.mat_api.generate_materials_endpoint" title="Link to this definition">¶</a></dt>
-<dd><p>Receives a scenario description and generates a list of necessary materials for the medical simulation.</p>
+<dd><p>Generates a list of necessary materials for a medical simulation.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>request</strong> – The materials request containing scenario description, patient type, target audience, and objective exam</p>
+<dd class="field-odd"><p><strong>request</strong> – A request object containing the scenario description,
+patient type, target audience, and objective exam findings.</p>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>The list of generated materials with names and descriptions</p>
-</dd>
-<dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p>List[<a class="reference internal" href="models.html#models.mat_model.MATModelResponse" title="models.mat_model.MATModelResponse">MATModelResponse</a>]</p>
+<dd class="field-even"><p>A list of generated materials, each with a name and description.</p>
 </dd>
 </dl>
 </dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="api.mat_api.get_patient_types">
-<span class="sig-prename descclassname"><span class="pre">api.mat_api.</span></span><span class="sig-name descname"><span class="pre">get_patient_types</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/api/mat_api.html#get_patient_types"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#api.mat_api.get_patient_types" title="Link to this definition">¶</a></dt>
-<dd><p>Get list of available patient types for material generation.</p>
-</dd></dl>
-
-<dl class="py function">
-<dt class="sig sig-object py" id="api.mat_api.health_check">
-<span class="sig-prename descclassname"><span class="pre">api.mat_api.</span></span><span class="sig-name descname"><span class="pre">health_check</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/api/mat_api.html#health_check"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#api.mat_api.health_check" title="Link to this definition">¶</a></dt>
-<dd><p>Health check endpoint for the materials API.</p>
+<span class="sig-prename descclassname"><span class="pre">api.mat_api.</span></span><span class="sig-name descname"><span class="pre">get_patient_types</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="_modules/api/mat_api.html#get_patient_types"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#api.mat_api.get_patient_types" title="Link to this definition">¶</a></dt>
+<dd><p>Retrieves the lists of available patient types and target audiences.</p>
+<p>This endpoint provides supported values for creating material generation
+requests, which can be used to populate frontend selection inputs.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>A dictionary containing lists of supported ‘patient_types’ and
+‘target_audiences’.</p>
+</dd>
+</dl>
 </dd></dl>
 
 </section>
 <section id="module-api.medical_report_api">
 <span id="api-medical-report-api-module"></span><h2>api.medical_report_api module<a class="headerlink" href="#module-api.medical_report_api" title="Link to this heading">¶</a></h2>
+<p>FastAPI router for medical report generation endpoints.</p>
+<p>This module defines the API routes for generating and managing medical reports.
+It provides endpoints for creating a report based on a clinical scenario and
+for retrieving the list of supported examination and patient types.</p>
+<p>Version: 1.1</p>
 <dl class="py function">
 <dt class="sig sig-object py" id="api.medical_report_api.generate_medical_report_endpoint">
-<span class="sig-prename descclassname"><span class="pre">api.medical_report_api.</span></span><span class="sig-name descname"><span class="pre">generate_medical_report_endpoint</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">request</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="models.html#models.medical_report_models.MedicalReportRequest" title="models.medical_report_models.MedicalReportRequest"><span class="pre">MedicalReportRequest</span></a></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/api/medical_report_api.html#generate_medical_report_endpoint"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#api.medical_report_api.generate_medical_report_endpoint" title="Link to this definition">¶</a></dt>
-<dd><p>Receives a scenario description and examination type, then generates a corresponding medical report.</p>
+<span class="sig-prename descclassname"><span class="pre">api.medical_report_api.</span></span><span class="sig-name descname"><span class="pre">generate_medical_report_endpoint</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">request</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="models.html#models.medical_report_models.MedicalReportRequest" title="models.medical_report_models.MedicalReportRequest"><span class="pre">MedicalReportRequest</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="models.html#models.medical_report_models.MedicalReportResponse" title="models.medical_report_models.MedicalReportResponse"><span class="pre">MedicalReportResponse</span></a></span></span><a class="reference internal" href="_modules/api/medical_report_api.html#generate_medical_report_endpoint"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#api.medical_report_api.generate_medical_report_endpoint" title="Link to this definition">¶</a></dt>
+<dd><p>Generates a medical report for a specific examination.</p>
+<p>This endpoint takes a detailed clinical scenario and generates a formal
+medical report for the specified examination type.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>request</strong> – The medical report request containing scenario description, patient type, and exam type</p>
+<dd class="field-odd"><p><strong>request</strong> – A request object containing the scenario description, patient
+type, and the type of examination to report on.</p>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>The generated medical report with conclusions and recommendations</p>
-</dd>
-<dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p><a class="reference internal" href="models.html#models.medical_report_models.MedicalReportResponse" title="models.medical_report_models.MedicalReportResponse">MedicalReportResponse</a></p>
+<dd class="field-even"><p>A response object containing the generated medical report.</p>
 </dd>
 </dl>
 </dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="api.medical_report_api.get_exam_types">
-<span class="sig-prename descclassname"><span class="pre">api.medical_report_api.</span></span><span class="sig-name descname"><span class="pre">get_exam_types</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/api/medical_report_api.html#get_exam_types"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#api.medical_report_api.get_exam_types" title="Link to this definition">¶</a></dt>
-<dd><p>Get list of available examination types for medical reports.</p>
-</dd></dl>
-
-<dl class="py function">
-<dt class="sig sig-object py" id="api.medical_report_api.health_check">
-<span class="sig-prename descclassname"><span class="pre">api.medical_report_api.</span></span><span class="sig-name descname"><span class="pre">health_check</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/api/medical_report_api.html#health_check"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#api.medical_report_api.health_check" title="Link to this definition">¶</a></dt>
-<dd><p>Health check endpoint for the medical report API.</p>
+<span class="sig-prename descclassname"><span class="pre">api.medical_report_api.</span></span><span class="sig-name descname"><span class="pre">get_exam_types</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="_modules/api/medical_report_api.html#get_exam_types"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#api.medical_report_api.get_exam_types" title="Link to this definition">¶</a></dt>
+<dd><p>Retrieves the lists of available examination and patient types.</p>
+<p>This endpoint provides the supported values for creating medical report
+requests, which can be used to populate frontend selection inputs.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>A dictionary containing a list of supported ‘exam_types’ and
+‘patient_types’.</p>
+</dd>
+</dl>
 </dd></dl>
 
 </section>
 <section id="module-api.scenario_api">
 <span id="api-scenario-api-module"></span><h2>api.scenario_api module<a class="headerlink" href="#module-api.scenario_api" title="Link to this heading">¶</a></h2>
+<p>FastAPI router for medical scenario generation endpoints.</p>
+<p>This module defines the API routes related to creating and managing medical
+simulation scenarios. It includes endpoints for generating full scenarios
+based on user-defined parameters and for retrieving available difficulty levels.</p>
+<p>Version: 4.3</p>
 <dl class="py function">
 <dt class="sig sig-object py" id="api.scenario_api.generate_scenario_endpoint">
-<span class="sig-prename descclassname"><span class="pre">api.scenario_api.</span></span><span class="sig-name descname"><span class="pre">generate_scenario_endpoint</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">request</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="models.html#models.scenario_models.ScenarioRequest" title="models.scenario_models.ScenarioRequest"><span class="pre">ScenarioRequest</span></a></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/api/scenario_api.html#generate_scenario_endpoint"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#api.scenario_api.generate_scenario_endpoint" title="Link to this definition">¶</a></dt>
-<dd><p>Generate a complete medical scenario based on the request parameters.</p>
+<span class="sig-prename descclassname"><span class="pre">api.scenario_api.</span></span><span class="sig-name descname"><span class="pre">generate_scenario_endpoint</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">request</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="models.html#models.scenario_models.ScenarioRequest" title="models.scenario_models.ScenarioRequest"><span class="pre">ScenarioRequest</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="models.html#models.scenario_models.FullScenario" title="models.scenario_models.FullScenario"><span class="pre">FullScenario</span></a></span></span><a class="reference internal" href="_modules/api/scenario_api.html#generate_scenario_endpoint"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#api.scenario_api.generate_scenario_endpoint" title="Link to this definition">¶</a></dt>
+<dd><p>Generates a complete medical scenario based on user specifications.</p>
+<p>This endpoint receives a request detailing the desired scenario and passes
+it to the scenario generation agent, which returns a fully structured
+scenario object.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>request</strong> – The scenario request containing:
-- description: Detailed description of the clinical scenario
-- scenario_type: Type of scenario (Quick/Advanced/Patient Simulated)
-- target: Target audience (optional)
-- difficulty: Difficulty level (Facile/Medio/Difficile) - affects complexity, complications, and clinical evolution</p>
+<dd class="field-odd"><p><strong>request</strong> – An object containing the description, type, target audience,
+and difficulty level for the scenario.</p>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>The generated medical scenario with appropriate complexity for the specified difficulty level</p>
-</dd>
-<dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p><a class="reference internal" href="models.html#models.scenario_models.FullScenario" title="models.scenario_models.FullScenario">FullScenario</a></p>
+<dd class="field-even"><p>A complete, structured medical scenario object.</p>
 </dd>
 </dl>
-<p class="rubric">Examples</p>
-<ul class="simple">
-<li><p>Facile: Simple scenarios with stable parameters and basic interventions</p></li>
-<li><p>Medio: Moderate complexity with 1-2 manageable complications</p></li>
-<li><p>Difficile: Complex scenarios with multiple complications, critical parameters, and rapid evolution</p></li>
-</ul>
 </dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="api.scenario_api.get_difficulty_levels">
 <span class="sig-prename descclassname"><span class="pre">api.scenario_api.</span></span><span class="sig-name descname"><span class="pre">get_difficulty_levels</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Any</span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="_modules/api/scenario_api.html#get_difficulty_levels"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#api.scenario_api.get_difficulty_levels" title="Link to this definition">¶</a></dt>
-<dd><p>Get list of available difficulty levels for medical scenarios.</p>
-</dd></dl>
-
-<dl class="py function">
-<dt class="sig sig-object py" id="api.scenario_api.health_check">
-<span class="sig-prename descclassname"><span class="pre">api.scenario_api.</span></span><span class="sig-name descname"><span class="pre">health_check</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/api/scenario_api.html#health_check"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#api.scenario_api.health_check" title="Link to this definition">¶</a></dt>
-<dd><p>Health check endpoint for the scenario API.</p>
+<dd><p>Retrieves the available difficulty levels for scenario generation.</p>
+<p>Provides a list of supported difficulty levels, each with a value, label,
+and description in Italian, along with the default level.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>A dictionary containing a list of difficulty level objects and the
+default value.</p>
+</dd>
+</dl>
 </dd></dl>
 
 </section>
 <section id="module-api">
 <span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-api" title="Link to this heading">¶</a></h2>
+<p>API package for the Medical Simulation Suite AI.</p>
+<p>This package aggregates all the FastAPI routers from the various sub-modules,
+making them available for inclusion in the main application. The <cite>__all__</cite>
+variable explicitly defines the public API of this package.</p>
 </section>
 </section>
 
@@ -451,25 +463,21 @@ including a textual report for each test.</p>
 <li><a class="reference internal" href="#submodules">Submodules</a></li>
 <li><a class="reference internal" href="#module-api.exam_api">api.exam_api module</a><ul>
 <li><a class="reference internal" href="#api.exam_api.generate_exams_endpoint"><code class="docutils literal notranslate"><span class="pre">generate_exams_endpoint()</span></code></a></li>
-<li><a class="reference internal" href="#api.exam_api.health_check"><code class="docutils literal notranslate"><span class="pre">health_check()</span></code></a></li>
 </ul>
 </li>
 <li><a class="reference internal" href="#module-api.mat_api">api.mat_api module</a><ul>
 <li><a class="reference internal" href="#api.mat_api.generate_materials_endpoint"><code class="docutils literal notranslate"><span class="pre">generate_materials_endpoint()</span></code></a></li>
 <li><a class="reference internal" href="#api.mat_api.get_patient_types"><code class="docutils literal notranslate"><span class="pre">get_patient_types()</span></code></a></li>
-<li><a class="reference internal" href="#api.mat_api.health_check"><code class="docutils literal notranslate"><span class="pre">health_check()</span></code></a></li>
 </ul>
 </li>
 <li><a class="reference internal" href="#module-api.medical_report_api">api.medical_report_api module</a><ul>
 <li><a class="reference internal" href="#api.medical_report_api.generate_medical_report_endpoint"><code class="docutils literal notranslate"><span class="pre">generate_medical_report_endpoint()</span></code></a></li>
 <li><a class="reference internal" href="#api.medical_report_api.get_exam_types"><code class="docutils literal notranslate"><span class="pre">get_exam_types()</span></code></a></li>
-<li><a class="reference internal" href="#api.medical_report_api.health_check"><code class="docutils literal notranslate"><span class="pre">health_check()</span></code></a></li>
 </ul>
 </li>
 <li><a class="reference internal" href="#module-api.scenario_api">api.scenario_api module</a><ul>
 <li><a class="reference internal" href="#api.scenario_api.generate_scenario_endpoint"><code class="docutils literal notranslate"><span class="pre">generate_scenario_endpoint()</span></code></a></li>
 <li><a class="reference internal" href="#api.scenario_api.get_difficulty_levels"><code class="docutils literal notranslate"><span class="pre">get_difficulty_levels()</span></code></a></li>
-<li><a class="reference internal" href="#api.scenario_api.health_check"><code class="docutils literal notranslate"><span class="pre">health_check()</span></code></a></li>
 </ul>
 </li>
 <li><a class="reference internal" href="#module-api">Module contents</a></li>

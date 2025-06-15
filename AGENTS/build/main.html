@@ -252,23 +252,19 @@
           <section id="module-main">
 <span id="main-module"></span><h1>main module<a class="headerlink" href="#module-main" title="Link to this heading">¶</a></h1>
 <p>Main entry point for the Medical Simulation Suite AI.</p>
-<p>This module initializes the main FastAPI application and mounts all the
-sub-applications (APIs) for different services like scenarios, exams,
-and medical reports. It also defines the main health check endpoints.</p>
+<p>Initializes and configures the main FastAPI application. This module serves as
+the primary entry point, mounting all service-specific sub-applications
+(e.g., scenarios, exams) and defining core health check endpoints.</p>
 <p>Version: 4.2.0</p>
 <dl class="py function">
 <dt class="sig sig-object py" id="main.health_check">
 <span class="sig-prename descclassname"><span class="pre">main.</span></span><span class="sig-name descname"><span class="pre">health_check</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="_modules/main.html#health_check"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#main.health_check" title="Link to this definition">¶</a></dt>
 <dd><p>Provides a simple health check for monitoring services.</p>
-<p>This endpoint is typically used by load balancers, uptime monitors,
-or other automated services to verify that the application is running
-and responsive.</p>
+<p>This endpoint is ideal for use by automated services like load balancers
+or uptime monitors to confirm that the application is responsive.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns<span class="colon">:</span></dt>
-<dd class="field-odd"><p>A dictionary indicating the service is healthy.</p>
-</dd>
-<dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p>Dict[str, str]</p>
+<dd class="field-odd"><p>A dictionary indicating the service status is healthy.</p>
 </dd>
 </dl>
 </dd></dl>
@@ -277,15 +273,10 @@ and responsive.</p>
 <dt class="sig sig-object py" id="main.root">
 <span class="sig-prename descclassname"><span class="pre">main.</span></span><span class="sig-name descname"><span class="pre">root</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Any</span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="_modules/main.html#root"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#main.root" title="Link to this definition">¶</a></dt>
 <dd><p>Provides a detailed health check of the main application.</p>
-<p>This root endpoint returns a JSON object containing the operational status,
-service name, version, and a dictionary of available sub-application
-documentation endpoints.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns<span class="colon">:</span></dt>
-<dd class="field-odd"><p>A dictionary with service status and essential metadata.</p>
-</dd>
-<dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p>Dict[str, Any]</p>
+<dd class="field-odd"><p>A dictionary containing the service status, name, version, and a
+map of available sub-application documentation endpoints.</p>
 </dd>
 </dl>
 </dd></dl>

@@ -1,4 +1,9 @@
-# API package for Medical Simulation Suite AI
+"""API package for the Medical Simulation Suite AI.
+
+This package aggregates all the FastAPI routers from the various sub-modules,
+making them available for inclusion in the main application. The `__all__`
+variable explicitly defines the public API of this package.
+"""
 
 from .exam_api import router as exam_router
 from .medical_report_api import router as medical_report_router

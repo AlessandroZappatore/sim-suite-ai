@@ -1,5 +1,13 @@
-# Agent for Medical Materials Generation
-# Version 2.0 - Generates reusable medical materials
+"""Defines the AI agent and logic for medical materials generation.
+
+This module contains the core components for generating lists of necessary
+materials for medical simulations. It defines a specialist agent, functions
+for creating detailed prompts that incorporate existing database materials,
+and the main orchestration logic that interacts with a SQLite database to
+ensure data consistency and avoid duplication.
+
+Version: 2.0
+"""
 
 import json
 import logging
@@ -9,6 +17,7 @@ from typing import List, Dict, Any
 
 from agno.agent import Agent
 from fastapi import HTTPException
+from pydantic import ValidationError
 
 from models.mat_model import MATModelRequest, MATModelResponse
 from utils.common import extract_json_from_response, get_exam_model
@@ -17,7 +26,7 @@ from utils.common import extract_json_from_response, get_exam_model
 logger = logging.getLogger(__name__)
 
 
-# Agent Definition
+# --- Agent Definition ---
 materials_agent = Agent(
     name="Medical Materials Generator",
     role="An expert medical educator and simulation specialist who generates comprehensive lists of necessary materials for medical simulation scenarios, with general-purpose descriptions.",
@@ -40,15 +49,26 @@ materials_agent = Agent(
 
 
 def create_materials_prompt(request: MATModelRequest, existing_materials: List[Dict[str, Any]]) -> str:
-    """Creates the detailed prompt for the materials generation agent."""
-    
+    """Creates the detailed prompt for the materials generation agent.
+
+    This function constructs a comprehensive prompt that includes the scenario
+    context and a list of existing materials from the database to guide the
+    agent in its generation task.
+
+    Args:
+        request: The user's request containing the scenario details.
+        existing_materials: A list of materials already present in the database.
+
+    Returns:
+        A fully formatted prompt string for the materials_agent.
+    """
     existing_materials_text = ""
     if existing_materials:
         existing_materials_text = "\n    EXISTING MATERIALS IN THE DATABASE:\n"
         for material in existing_materials:
             existing_materials_text += f"    - {material['nome']}: {material.get('descrizione', 'Existing material')}\n"
         existing_materials_text += "\n    IMPORTANT: If any of these existing materials are appropriate for the scenario, use the EXACT name from the database.\n"
-    
+
     return f"""
     Generate a comprehensive list of necessary materials in JSON format for a medical simulation scenario.
 
@@ -97,162 +117,89 @@ def create_materials_prompt(request: MATModelRequest, existing_materials: List[D
 
 
 def generate_materials(request: MATModelRequest) -> List[MATModelResponse]:
-    """
-    Generate a list of necessary materials for a medical simulation scenario.
-    
+    """Generates a list of materials for a medical simulation scenario.
+
+    This function orchestrates the generation process by retrieving existing
+    materials from a database, creating a detailed prompt, running an AI agent,
+    and validating the final output.
+
     Args:
-        request: The materials request containing scenario, patient type, target audience, and objective exam
-        
+        request: The request containing the scenario, patient type, target
+            audience, and objective exam findings.
+
     Returns:
-        List[MATModelResponse]: The list of generated materials
-        
+        A list of generated and validated materials.
+
     Raises:
-        HTTPException: If generation fails
+        HTTPException: If the generation, parsing, or validation process fails.
     """
     logger.info(f"Received request to generate materials for: {request.tipologia_paziente} - Target: {request.target}")
-    
+
     try:
-        # Get existing materials from the database
         existing_materials = get_existing_materials()
         logger.info(f"Retrieved {len(existing_materials)} existing materials from database")
-        
-        # Create the prompt for the agent with existing materials
+
         prompt = create_materials_prompt(request, existing_materials)
-        
-        # Run the agent to get the response
-        agent_response = materials_agent.run(prompt)  # type: ignore
-        
-        # Extract and validate the JSON from the response
+        agent_response = materials_agent.run(prompt) # type: ignore
         materials_list = extract_json_from_response(agent_response.content)
-        
-        # Validate that we have a list
+
         if not isinstance(materials_list, list):
-            raise ValueError("Expected a list of materials")
-        
-        # Validate each material with the Pydantic model
-        validated_materials: List[MATModelResponse] = []
-        for material_dict in materials_list:
-            # This now expects `{"nome": "...", "descrizione": "..."}`
-            validated_material = MATModelResponse.model_validate(material_dict)
-            validated_materials.append(validated_material)
-        
+            raise ValueError("Expected a list of materials from the agent.")
+
+        validated_materials: List[MATModelResponse] = [
+            MATModelResponse.model_validate(material) for material in materials_list
+        ]
+
         logger.info(f"Successfully generated {len(validated_materials)} materials")
         return validated_materials
-        
-    except (ValueError, json.JSONDecodeError) as e:
+
+    except (ValidationError, ValueError, json.JSONDecodeError) as e:
         logger.error(f"Data validation or extraction error: {e}", exc_info=True)
         raise HTTPException(status_code=422, detail={"error": "Generated content failed validation or parsing.", "details": str(e)})
     except Exception as e:
-        logger.error(f"An unexpected error occurred: {e}", exc_info=True)
+        logger.error(f"An unexpected error occurred during material generation: {e}", exc_info=True)
         raise HTTPException(status_code=500, detail={"error": "Failed to generate materials", "message": str(e)})
 
 
 def get_database_path() -> str:
-    """Get the path to the SQLite database."""
-    # The database is in the root of the project (one more level up)
+    """Constructs and returns the absolute path to the SQLite database file.
+
+    Returns:
+        The absolute path to the 'database.db' file.
+    """
     current_dir = os.path.dirname(os.path.abspath(__file__))
-    root_dir = os.path.dirname(os.path.dirname(os.path.dirname(current_dir)))  
+    # Assumes the database is in the project root, three levels up from agents/
+    root_dir = os.path.dirname(os.path.dirname(os.path.dirname(current_dir)))
     return os.path.join(root_dir, "database.db")
 
 
 def get_existing_materials() -> List[Dict[str, Any]]:
-    """
-    Retrieve existing materials from the SQLite database.
-    
+    """Retrieves all existing materials from the SQLite database.
+
+    Connects to the database, queries the 'Materiale' table, and returns a
+    list of all materials.
+
     Returns:
-        List[Dict[str, Any]]: List of existing materials with their names and descriptions
+        A list of dictionaries, where each dictionary represents a material
+        with its ID, name, and description. Returns an empty list on failure.
     """
-    try:
-        db_path = get_database_path()
-        if not os.path.exists(db_path):
-            logger.warning(f"Database not found at {db_path}")
-            return []
-        
-        conn = sqlite3.connect(db_path)
-        # Use a dictionary cursor to get column names automatically
-        conn.row_factory = sqlite3.Row
-        cursor = conn.cursor()
-        
-        try:
-            cursor.execute("SELECT id_materiale, nome, descrizione FROM Materiale")
-            rows = cursor.fetchall()
-            
-            # Convert rows to dictionaries
-            materials: List[Dict[str, Any]] = [dict(row) for row in rows]
-            
-            logger.info(f"Found {len(materials)} materials in Materiale table")
-            conn.close()
-            return materials
-            
-        except sqlite3.Error as e:
-            logger.error(f"Error querying Materiale table: {e}")
-            # Fallback to discover table structure
-            tables_query = "SELECT name FROM sqlite_master WHERE type='table';"
-            cursor.execute(tables_query)
-            tables = cursor.fetchall()
-            logger.info(f"Available tables in database: {[table['name'] for table in tables]}")
-            
-            conn.close()
-            return []
-        
-    except Exception as e:
-        logger.error(f"Error retrieving materials from database: {e}")
+    db_path = get_database_path()
+    if not os.path.exists(db_path):
+        logger.warning(f"Database not found at {db_path}, returning no existing materials.")
         return []
 
-
-def test_database_connection() -> bool:
-    """
-    Test the database connection and verify the Materiale table structure.
-    
-    Returns:
-        bool: True if connection successful and table exists, False otherwise
-    """
     try:
-        db_path = get_database_path()
-        logger.info(f"Testing database connection at: {db_path}")
-        
-        if not os.path.exists(db_path):
-            logger.error(f"Database file not found at {db_path}")
-            return False
-        
         conn = sqlite3.connect(db_path)
+        conn.row_factory = sqlite3.Row
         cursor = conn.cursor()
-        
-        # Check if Materiale table exists
-        cursor.execute("SELECT name FROM sqlite_master WHERE type='table' AND name='Materiale'")
-        table_exists = cursor.fetchone()
-        
-        if not table_exists:
-            logger.error("Materiale table not found in database")
-            # List available tables for debugging
-            cursor.execute("SELECT name FROM sqlite_master WHERE type='table'")
-            tables = cursor.fetchall()
-            logger.info(f"Available tables: {[table[0] for table in tables]}")
-            conn.close()
-            return False
-        
-        # Check table structure
-        cursor.execute("PRAGMA table_info(Materiale)")
-        columns = cursor.fetchall()
-        column_names = [col[1] for col in columns]
-        
-        expected_columns = ['id_materiale', 'nome', 'descrizione']
-        missing_columns = [col for col in expected_columns if col not in column_names]
-        
-        if missing_columns:
-            logger.error(f"Missing columns in Materiale table: {missing_columns}")
-            logger.info(f"Available columns: {column_names}")
-            conn.close()
-            return False
-        
-        # Test a simple query
-        cursor.execute("SELECT COUNT(*) FROM Materiale")
-        count = cursor.fetchone()[0]
-        logger.info(f"Database connection successful. Found {count} materials in Materiale table")
-        
+        cursor.execute("SELECT id_materiale, nome, descrizione FROM Materiale")
+        materials = [dict(row) for row in cursor.fetchall()]
         conn.close()
-        return True
-        
+        logger.info(f"Found {len(materials)} materials in the database.")
+        return materials
+    except sqlite3.Error as e:
+        logger.error(f"Database error while querying materials: {e}", exc_info=True)
+        return []
     except Exception as e:
-        logger.error(f"Database connection test failed: {e}")
-        return False
+        logger.error(f"An unexpected error occurred while getting materials from DB: {e}", exc_info=True)
+        return []

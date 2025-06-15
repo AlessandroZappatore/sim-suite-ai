@@ -265,7 +265,6 @@
 <li class="toctree-l3"><a class="reference internal" href="agents.html#agents.mat_agents.generate_materials"><code class="docutils literal notranslate"><span class="pre">generate_materials()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="agents.html#agents.mat_agents.get_database_path"><code class="docutils literal notranslate"><span class="pre">get_database_path()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="agents.html#agents.mat_agents.get_existing_materials"><code class="docutils literal notranslate"><span class="pre">get_existing_materials()</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="agents.html#agents.mat_agents.test_database_connection"><code class="docutils literal notranslate"><span class="pre">test_database_connection()</span></code></a></li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="agents.html#module-agents.medical_report">agents.medical_report module</a><ul>
@@ -296,25 +295,21 @@
 <li class="toctree-l2"><a class="reference internal" href="api.html#submodules">Submodules</a></li>
 <li class="toctree-l2"><a class="reference internal" href="api.html#module-api.exam_api">api.exam_api module</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="api.html#api.exam_api.generate_exams_endpoint"><code class="docutils literal notranslate"><span class="pre">generate_exams_endpoint()</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="api.html#api.exam_api.health_check"><code class="docutils literal notranslate"><span class="pre">health_check()</span></code></a></li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="api.html#module-api.mat_api">api.mat_api module</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="api.html#api.mat_api.generate_materials_endpoint"><code class="docutils literal notranslate"><span class="pre">generate_materials_endpoint()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="api.html#api.mat_api.get_patient_types"><code class="docutils literal notranslate"><span class="pre">get_patient_types()</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="api.html#api.mat_api.health_check"><code class="docutils literal notranslate"><span class="pre">health_check()</span></code></a></li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="api.html#module-api.medical_report_api">api.medical_report_api module</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="api.html#api.medical_report_api.generate_medical_report_endpoint"><code class="docutils literal notranslate"><span class="pre">generate_medical_report_endpoint()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="api.html#api.medical_report_api.get_exam_types"><code class="docutils literal notranslate"><span class="pre">get_exam_types()</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="api.html#api.medical_report_api.health_check"><code class="docutils literal notranslate"><span class="pre">health_check()</span></code></a></li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="api.html#module-api.scenario_api">api.scenario_api module</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="api.html#api.scenario_api.generate_scenario_endpoint"><code class="docutils literal notranslate"><span class="pre">generate_scenario_endpoint()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="api.html#api.scenario_api.get_difficulty_levels"><code class="docutils literal notranslate"><span class="pre">get_difficulty_levels()</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="api.html#api.scenario_api.health_check"><code class="docutils literal notranslate"><span class="pre">health_check()</span></code></a></li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="api.html#module-api">Module contents</a></li>
@@ -331,29 +326,40 @@
 <li class="toctree-l2"><a class="reference internal" href="models.html#module-models.exam_models">models.exam_models module</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="models.html#models.exam_models.LabCategory"><code class="docutils literal notranslate"><span class="pre">LabCategory</span></code></a><ul>
 <li class="toctree-l4"><a class="reference internal" href="models.html#models.exam_models.LabCategory.categoria"><code class="docutils literal notranslate"><span class="pre">LabCategory.categoria</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="models.html#models.exam_models.LabCategory.model_config"><code class="docutils literal notranslate"><span class="pre">LabCategory.model_config</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="models.html#models.exam_models.LabCategory.test"><code class="docutils literal notranslate"><span class="pre">LabCategory.test</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="models.html#id0"><code class="docutils literal notranslate"><span class="pre">LabCategory.categoria</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="models.html#models.exam_models.LabCategory.model_config"><code class="docutils literal notranslate"><span class="pre">LabCategory.model_config</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="models.html#id1"><code class="docutils literal notranslate"><span class="pre">LabCategory.test</span></code></a></li>
 </ul>
 </li>
 <li class="toctree-l3"><a class="reference internal" href="models.html#models.exam_models.LabExamRequest"><code class="docutils literal notranslate"><span class="pre">LabExamRequest</span></code></a><ul>
 <li class="toctree-l4"><a class="reference internal" href="models.html#models.exam_models.LabExamRequest.descrizione_scenario"><code class="docutils literal notranslate"><span class="pre">LabExamRequest.descrizione_scenario</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="models.html#models.exam_models.LabExamRequest.esame_obiettivo"><code class="docutils literal notranslate"><span class="pre">LabExamRequest.esame_obiettivo</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="models.html#models.exam_models.LabExamRequest.model_config"><code class="docutils literal notranslate"><span class="pre">LabExamRequest.model_config</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="models.html#models.exam_models.LabExamRequest.tipologia_paziente"><code class="docutils literal notranslate"><span class="pre">LabExamRequest.tipologia_paziente</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="models.html#models.exam_models.LabExamRequest.esame_obiettivo"><code class="docutils literal notranslate"><span class="pre">LabExamRequest.esame_obiettivo</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="models.html#id2"><code class="docutils literal notranslate"><span class="pre">LabExamRequest.descrizione_scenario</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="models.html#id3"><code class="docutils literal notranslate"><span class="pre">LabExamRequest.esame_obiettivo</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="models.html#models.exam_models.LabExamRequest.model_config"><code class="docutils literal notranslate"><span class="pre">LabExamRequest.model_config</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="models.html#id4"><code class="docutils literal notranslate"><span class="pre">LabExamRequest.tipologia_paziente</span></code></a></li>
 </ul>
 </li>
 <li class="toctree-l3"><a class="reference internal" href="models.html#models.exam_models.LabExamResponse"><code class="docutils literal notranslate"><span class="pre">LabExamResponse</span></code></a><ul>
 <li class="toctree-l4"><a class="reference internal" href="models.html#models.exam_models.LabExamResponse.esami_laboratorio"><code class="docutils literal notranslate"><span class="pre">LabExamResponse.esami_laboratorio</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="models.html#id5"><code class="docutils literal notranslate"><span class="pre">LabExamResponse.esami_laboratorio</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="models.html#models.exam_models.LabExamResponse.model_config"><code class="docutils literal notranslate"><span class="pre">LabExamResponse.model_config</span></code></a></li>
 </ul>
 </li>
 <li class="toctree-l3"><a class="reference internal" href="models.html#models.exam_models.LabTest"><code class="docutils literal notranslate"><span class="pre">LabTest</span></code></a><ul>
-<li class="toctree-l4"><a class="reference internal" href="models.html#models.exam_models.LabTest.model_config"><code class="docutils literal notranslate"><span class="pre">LabTest.model_config</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="models.html#models.exam_models.LabTest.nome"><code class="docutils literal notranslate"><span class="pre">LabTest.nome</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="models.html#models.exam_models.LabTest.valore"><code class="docutils literal notranslate"><span class="pre">LabTest.valore</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="models.html#models.exam_models.LabTest.unita_misura"><code class="docutils literal notranslate"><span class="pre">LabTest.unita_misura</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="models.html#models.exam_models.LabTest.range_riferimento"><code class="docutils literal notranslate"><span class="pre">LabTest.range_riferimento</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="models.html#models.exam_models.LabTest.referto"><code class="docutils literal notranslate"><span class="pre">LabTest.referto</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="models.html#models.exam_models.LabTest.unita_misura"><code class="docutils literal notranslate"><span class="pre">LabTest.unita_misura</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="models.html#models.exam_models.LabTest.valore"><code class="docutils literal notranslate"><span class="pre">LabTest.valore</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="models.html#models.exam_models.LabTest.model_config"><code class="docutils literal notranslate"><span class="pre">LabTest.model_config</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="models.html#id6"><code class="docutils literal notranslate"><span class="pre">LabTest.nome</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="models.html#id7"><code class="docutils literal notranslate"><span class="pre">LabTest.range_riferimento</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="models.html#id8"><code class="docutils literal notranslate"><span class="pre">LabTest.referto</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="models.html#id9"><code class="docutils literal notranslate"><span class="pre">LabTest.unita_misura</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="models.html#id10"><code class="docutils literal notranslate"><span class="pre">LabTest.valore</span></code></a></li>
 </ul>
 </li>
 </ul>
@@ -361,16 +367,22 @@
 <li class="toctree-l2"><a class="reference internal" href="models.html#module-models.mat_model">models.mat_model module</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="models.html#models.mat_model.MATModelRequest"><code class="docutils literal notranslate"><span class="pre">MATModelRequest</span></code></a><ul>
 <li class="toctree-l4"><a class="reference internal" href="models.html#models.mat_model.MATModelRequest.descrizione_scenario"><code class="docutils literal notranslate"><span class="pre">MATModelRequest.descrizione_scenario</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="models.html#models.mat_model.MATModelRequest.esame_obiettivo"><code class="docutils literal notranslate"><span class="pre">MATModelRequest.esame_obiettivo</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="models.html#models.mat_model.MATModelRequest.model_config"><code class="docutils literal notranslate"><span class="pre">MATModelRequest.model_config</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="models.html#models.mat_model.MATModelRequest.target"><code class="docutils literal notranslate"><span class="pre">MATModelRequest.target</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="models.html#models.mat_model.MATModelRequest.tipologia_paziente"><code class="docutils literal notranslate"><span class="pre">MATModelRequest.tipologia_paziente</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="models.html#models.mat_model.MATModelRequest.target"><code class="docutils literal notranslate"><span class="pre">MATModelRequest.target</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="models.html#models.mat_model.MATModelRequest.esame_obiettivo"><code class="docutils literal notranslate"><span class="pre">MATModelRequest.esame_obiettivo</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="models.html#id11"><code class="docutils literal notranslate"><span class="pre">MATModelRequest.descrizione_scenario</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="models.html#id12"><code class="docutils literal notranslate"><span class="pre">MATModelRequest.esame_obiettivo</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="models.html#models.mat_model.MATModelRequest.model_config"><code class="docutils literal notranslate"><span class="pre">MATModelRequest.model_config</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="models.html#id13"><code class="docutils literal notranslate"><span class="pre">MATModelRequest.target</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="models.html#id14"><code class="docutils literal notranslate"><span class="pre">MATModelRequest.tipologia_paziente</span></code></a></li>
 </ul>
 </li>
 <li class="toctree-l3"><a class="reference internal" href="models.html#models.mat_model.MATModelResponse"><code class="docutils literal notranslate"><span class="pre">MATModelResponse</span></code></a><ul>
-<li class="toctree-l4"><a class="reference internal" href="models.html#models.mat_model.MATModelResponse.descrizione"><code class="docutils literal notranslate"><span class="pre">MATModelResponse.descrizione</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="models.html#models.mat_model.MATModelResponse.model_config"><code class="docutils literal notranslate"><span class="pre">MATModelResponse.model_config</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="models.html#models.mat_model.MATModelResponse.nome"><code class="docutils literal notranslate"><span class="pre">MATModelResponse.nome</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="models.html#models.mat_model.MATModelResponse.descrizione"><code class="docutils literal notranslate"><span class="pre">MATModelResponse.descrizione</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="models.html#id15"><code class="docutils literal notranslate"><span class="pre">MATModelResponse.descrizione</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="models.html#models.mat_model.MATModelResponse.model_config"><code class="docutils literal notranslate"><span class="pre">MATModelResponse.model_config</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="models.html#id16"><code class="docutils literal notranslate"><span class="pre">MATModelResponse.nome</span></code></a></li>
 </ul>
 </li>
 </ul>
@@ -378,16 +390,22 @@
 <li class="toctree-l2"><a class="reference internal" href="models.html#module-models.medical_report_models">models.medical_report_models module</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="models.html#models.medical_report_models.MedicalReportRequest"><code class="docutils literal notranslate"><span class="pre">MedicalReportRequest</span></code></a><ul>
 <li class="toctree-l4"><a class="reference internal" href="models.html#models.medical_report_models.MedicalReportRequest.descrizione_scenario"><code class="docutils literal notranslate"><span class="pre">MedicalReportRequest.descrizione_scenario</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="models.html#models.medical_report_models.MedicalReportRequest.esame_obiettivo"><code class="docutils literal notranslate"><span class="pre">MedicalReportRequest.esame_obiettivo</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="models.html#models.medical_report_models.MedicalReportRequest.model_config"><code class="docutils literal notranslate"><span class="pre">MedicalReportRequest.model_config</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="models.html#models.medical_report_models.MedicalReportRequest.tipologia_esame"><code class="docutils literal notranslate"><span class="pre">MedicalReportRequest.tipologia_esame</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="models.html#models.medical_report_models.MedicalReportRequest.tipologia_paziente"><code class="docutils literal notranslate"><span class="pre">MedicalReportRequest.tipologia_paziente</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="models.html#models.medical_report_models.MedicalReportRequest.tipologia_esame"><code class="docutils literal notranslate"><span class="pre">MedicalReportRequest.tipologia_esame</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="models.html#models.medical_report_models.MedicalReportRequest.esame_obiettivo"><code class="docutils literal notranslate"><span class="pre">MedicalReportRequest.esame_obiettivo</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="models.html#id17"><code class="docutils literal notranslate"><span class="pre">MedicalReportRequest.descrizione_scenario</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="models.html#id18"><code class="docutils literal notranslate"><span class="pre">MedicalReportRequest.esame_obiettivo</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="models.html#models.medical_report_models.MedicalReportRequest.model_config"><code class="docutils literal notranslate"><span class="pre">MedicalReportRequest.model_config</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="models.html#id19"><code class="docutils literal notranslate"><span class="pre">MedicalReportRequest.tipologia_esame</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="models.html#id20"><code class="docutils literal notranslate"><span class="pre">MedicalReportRequest.tipologia_paziente</span></code></a></li>
 </ul>
 </li>
 <li class="toctree-l3"><a class="reference internal" href="models.html#models.medical_report_models.MedicalReportResponse"><code class="docutils literal notranslate"><span class="pre">MedicalReportResponse</span></code></a><ul>
-<li class="toctree-l4"><a class="reference internal" href="models.html#models.medical_report_models.MedicalReportResponse.model_config"><code class="docutils literal notranslate"><span class="pre">MedicalReportResponse.model_config</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="models.html#models.medical_report_models.MedicalReportResponse.referto"><code class="docutils literal notranslate"><span class="pre">MedicalReportResponse.referto</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="models.html#models.medical_report_models.MedicalReportResponse.tipologia_esame"><code class="docutils literal notranslate"><span class="pre">MedicalReportResponse.tipologia_esame</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="models.html#models.medical_report_models.MedicalReportResponse.referto"><code class="docutils literal notranslate"><span class="pre">MedicalReportResponse.referto</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="models.html#models.medical_report_models.MedicalReportResponse.model_config"><code class="docutils literal notranslate"><span class="pre">MedicalReportResponse.model_config</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="models.html#id21"><code class="docutils literal notranslate"><span class="pre">MedicalReportResponse.referto</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="models.html#id22"><code class="docutils literal notranslate"><span class="pre">MedicalReportResponse.tipologia_esame</span></code></a></li>
 </ul>
 </li>
 </ul>
@@ -395,34 +413,49 @@
 <li class="toctree-l2"><a class="reference internal" href="models.html#module-models.presidi_medici">models.presidi_medici module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="models.html#module-models.scenario_models">models.scenario_models module</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="models.html#models.scenario_models.AccessoArterioso"><code class="docutils literal notranslate"><span class="pre">AccessoArterioso</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="models.html#models.scenario_models.AccessoArterioso.tipologia"><code class="docutils literal notranslate"><span class="pre">AccessoArterioso.tipologia</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="models.html#models.scenario_models.AccessoArterioso.posizione"><code class="docutils literal notranslate"><span class="pre">AccessoArterioso.posizione</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="models.html#models.scenario_models.AccessoArterioso.lato"><code class="docutils literal notranslate"><span class="pre">AccessoArterioso.lato</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="models.html#models.scenario_models.AccessoArterioso.misura"><code class="docutils literal notranslate"><span class="pre">AccessoArterioso.misura</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="models.html#id23"><code class="docutils literal notranslate"><span class="pre">AccessoArterioso.lato</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="models.html#id24"><code class="docutils literal notranslate"><span class="pre">AccessoArterioso.misura</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="models.html#models.scenario_models.AccessoArterioso.model_config"><code class="docutils literal notranslate"><span class="pre">AccessoArterioso.model_config</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="models.html#models.scenario_models.AccessoArterioso.posizione"><code class="docutils literal notranslate"><span class="pre">AccessoArterioso.posizione</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="models.html#models.scenario_models.AccessoArterioso.tipologia"><code class="docutils literal notranslate"><span class="pre">AccessoArterioso.tipologia</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="models.html#id25"><code class="docutils literal notranslate"><span class="pre">AccessoArterioso.posizione</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="models.html#id26"><code class="docutils literal notranslate"><span class="pre">AccessoArterioso.tipologia</span></code></a></li>
 </ul>
 </li>
 <li class="toctree-l3"><a class="reference internal" href="models.html#models.scenario_models.AccessoVenosso"><code class="docutils literal notranslate"><span class="pre">AccessoVenosso</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="models.html#models.scenario_models.AccessoVenosso.tipologia"><code class="docutils literal notranslate"><span class="pre">AccessoVenosso.tipologia</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="models.html#models.scenario_models.AccessoVenosso.posizione"><code class="docutils literal notranslate"><span class="pre">AccessoVenosso.posizione</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="models.html#models.scenario_models.AccessoVenosso.lato"><code class="docutils literal notranslate"><span class="pre">AccessoVenosso.lato</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="models.html#models.scenario_models.AccessoVenosso.misura"><code class="docutils literal notranslate"><span class="pre">AccessoVenosso.misura</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="models.html#id27"><code class="docutils literal notranslate"><span class="pre">AccessoVenosso.lato</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="models.html#id28"><code class="docutils literal notranslate"><span class="pre">AccessoVenosso.misura</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="models.html#models.scenario_models.AccessoVenosso.model_config"><code class="docutils literal notranslate"><span class="pre">AccessoVenosso.model_config</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="models.html#models.scenario_models.AccessoVenosso.posizione"><code class="docutils literal notranslate"><span class="pre">AccessoVenosso.posizione</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="models.html#models.scenario_models.AccessoVenosso.tipologia"><code class="docutils literal notranslate"><span class="pre">AccessoVenosso.tipologia</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="models.html#id29"><code class="docutils literal notranslate"><span class="pre">AccessoVenosso.posizione</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="models.html#id30"><code class="docutils literal notranslate"><span class="pre">AccessoVenosso.tipologia</span></code></a></li>
 </ul>
 </li>
 <li class="toctree-l3"><a class="reference internal" href="models.html#models.scenario_models.BaseScenario"><code class="docutils literal notranslate"><span class="pre">BaseScenario</span></code></a><ul>
 <li class="toctree-l4"><a class="reference internal" href="models.html#models.scenario_models.BaseScenario.azioniChiave"><code class="docutils literal notranslate"><span class="pre">BaseScenario.azioniChiave</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="models.html#models.scenario_models.BaseScenario.esameFisico"><code class="docutils literal notranslate"><span class="pre">BaseScenario.esameFisico</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="models.html#models.scenario_models.BaseScenario.model_config"><code class="docutils literal notranslate"><span class="pre">BaseScenario.model_config</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="models.html#models.scenario_models.BaseScenario.pazienteT0"><code class="docutils literal notranslate"><span class="pre">BaseScenario.pazienteT0</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="models.html#models.scenario_models.BaseScenario.presidi"><code class="docutils literal notranslate"><span class="pre">BaseScenario.presidi</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="models.html#models.scenario_models.BaseScenario.scenario"><code class="docutils literal notranslate"><span class="pre">BaseScenario.scenario</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="models.html#models.scenario_models.BaseScenario.tipo"><code class="docutils literal notranslate"><span class="pre">BaseScenario.tipo</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="models.html#models.scenario_models.BaseScenario.scenario"><code class="docutils literal notranslate"><span class="pre">BaseScenario.scenario</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="models.html#models.scenario_models.BaseScenario.presidi"><code class="docutils literal notranslate"><span class="pre">BaseScenario.presidi</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="models.html#models.scenario_models.BaseScenario.esameFisico"><code class="docutils literal notranslate"><span class="pre">BaseScenario.esameFisico</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="models.html#models.scenario_models.BaseScenario.pazienteT0"><code class="docutils literal notranslate"><span class="pre">BaseScenario.pazienteT0</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="models.html#id31"><code class="docutils literal notranslate"><span class="pre">BaseScenario.azioniChiave</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="models.html#id32"><code class="docutils literal notranslate"><span class="pre">BaseScenario.esameFisico</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="models.html#models.scenario_models.BaseScenario.model_config"><code class="docutils literal notranslate"><span class="pre">BaseScenario.model_config</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="models.html#id33"><code class="docutils literal notranslate"><span class="pre">BaseScenario.pazienteT0</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="models.html#id34"><code class="docutils literal notranslate"><span class="pre">BaseScenario.presidi</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="models.html#id35"><code class="docutils literal notranslate"><span class="pre">BaseScenario.scenario</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="models.html#id36"><code class="docutils literal notranslate"><span class="pre">BaseScenario.tipo</span></code></a></li>
 </ul>
 </li>
 <li class="toctree-l3"><a class="reference internal" href="models.html#models.scenario_models.EsameFisico"><code class="docutils literal notranslate"><span class="pre">EsameFisico</span></code></a><ul>
-<li class="toctree-l4"><a class="reference internal" href="models.html#models.scenario_models.EsameFisico.model_config"><code class="docutils literal notranslate"><span class="pre">EsameFisico.model_config</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="models.html#models.scenario_models.EsameFisico.sections"><code class="docutils literal notranslate"><span class="pre">EsameFisico.sections</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="models.html#models.scenario_models.EsameFisico.model_config"><code class="docutils literal notranslate"><span class="pre">EsameFisico.model_config</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="models.html#id37"><code class="docutils literal notranslate"><span class="pre">EsameFisico.sections</span></code></a></li>
 </ul>
 </li>
 <li class="toctree-l3"><a class="reference internal" href="models.html#models.scenario_models.EsameFisicoSections"><code class="docutils literal notranslate"><span class="pre">EsameFisicoSections</span></code></a><ul>
@@ -453,61 +486,102 @@
 </ul>
 </li>
 <li class="toctree-l3"><a class="reference internal" href="models.html#models.scenario_models.ParametroAggiuntivo"><code class="docutils literal notranslate"><span class="pre">ParametroAggiuntivo</span></code></a><ul>
-<li class="toctree-l4"><a class="reference internal" href="models.html#models.scenario_models.ParametroAggiuntivo.model_config"><code class="docutils literal notranslate"><span class="pre">ParametroAggiuntivo.model_config</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="models.html#models.scenario_models.ParametroAggiuntivo.nome"><code class="docutils literal notranslate"><span class="pre">ParametroAggiuntivo.nome</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="models.html#models.scenario_models.ParametroAggiuntivo.unitaMisura"><code class="docutils literal notranslate"><span class="pre">ParametroAggiuntivo.unitaMisura</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="models.html#models.scenario_models.ParametroAggiuntivo.nome"><code class="docutils literal notranslate"><span class="pre">ParametroAggiuntivo.nome</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="models.html#models.scenario_models.ParametroAggiuntivo.valore"><code class="docutils literal notranslate"><span class="pre">ParametroAggiuntivo.valore</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="models.html#models.scenario_models.ParametroAggiuntivo.model_config"><code class="docutils literal notranslate"><span class="pre">ParametroAggiuntivo.model_config</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="models.html#id38"><code class="docutils literal notranslate"><span class="pre">ParametroAggiuntivo.nome</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="models.html#id39"><code class="docutils literal notranslate"><span class="pre">ParametroAggiuntivo.unitaMisura</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="models.html#id40"><code class="docutils literal notranslate"><span class="pre">ParametroAggiuntivo.valore</span></code></a></li>
 </ul>
 </li>
 <li class="toctree-l3"><a class="reference internal" href="models.html#models.scenario_models.PazienteT0"><code class="docutils literal notranslate"><span class="pre">PazienteT0</span></code></a><ul>
-<li class="toctree-l4"><a class="reference internal" href="models.html#models.scenario_models.PazienteT0.EtCO2"><code class="docutils literal notranslate"><span class="pre">PazienteT0.EtCO2</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="models.html#models.scenario_models.PazienteT0.FC"><code class="docutils literal notranslate"><span class="pre">PazienteT0.FC</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="models.html#models.scenario_models.PazienteT0.FiO2"><code class="docutils literal notranslate"><span class="pre">PazienteT0.FiO2</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="models.html#models.scenario_models.PazienteT0.LitriO2"><code class="docutils literal notranslate"><span class="pre">PazienteT0.LitriO2</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="models.html#models.scenario_models.PazienteT0.Monitor"><code class="docutils literal notranslate"><span class="pre">PazienteT0.Monitor</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="models.html#models.scenario_models.PazienteT0.PA"><code class="docutils literal notranslate"><span class="pre">PazienteT0.PA</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="models.html#models.scenario_models.PazienteT0.RR"><code class="docutils literal notranslate"><span class="pre">PazienteT0.RR</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="models.html#models.scenario_models.PazienteT0.SpO2"><code class="docutils literal notranslate"><span class="pre">PazienteT0.SpO2</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="models.html#models.scenario_models.PazienteT0.T"><code class="docutils literal notranslate"><span class="pre">PazienteT0.T</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="models.html#models.scenario_models.PazienteT0.accessiArteriosi"><code class="docutils literal notranslate"><span class="pre">PazienteT0.accessiArteriosi</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="models.html#models.scenario_models.PazienteT0.FiO2"><code class="docutils literal notranslate"><span class="pre">PazienteT0.FiO2</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="models.html#models.scenario_models.PazienteT0.LitriO2"><code class="docutils literal notranslate"><span class="pre">PazienteT0.LitriO2</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="models.html#models.scenario_models.PazienteT0.EtCO2"><code class="docutils literal notranslate"><span class="pre">PazienteT0.EtCO2</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="models.html#models.scenario_models.PazienteT0.Monitor"><code class="docutils literal notranslate"><span class="pre">PazienteT0.Monitor</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="models.html#models.scenario_models.PazienteT0.accessiVenosi"><code class="docutils literal notranslate"><span class="pre">PazienteT0.accessiVenosi</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="models.html#models.scenario_models.PazienteT0.accessiArteriosi"><code class="docutils literal notranslate"><span class="pre">PazienteT0.accessiArteriosi</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="models.html#models.scenario_models.PazienteT0.PA"><code class="docutils literal notranslate"><span class="pre">PazienteT0.PA</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="models.html#models.scenario_models.PazienteT0.FC"><code class="docutils literal notranslate"><span class="pre">PazienteT0.FC</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="models.html#models.scenario_models.PazienteT0.T"><code class="docutils literal notranslate"><span class="pre">PazienteT0.T</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="models.html#id41"><code class="docutils literal notranslate"><span class="pre">PazienteT0.EtCO2</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="models.html#id42"><code class="docutils literal notranslate"><span class="pre">PazienteT0.FC</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="models.html#id43"><code class="docutils literal notranslate"><span class="pre">PazienteT0.FiO2</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="models.html#id44"><code class="docutils literal notranslate"><span class="pre">PazienteT0.LitriO2</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="models.html#id45"><code class="docutils literal notranslate"><span class="pre">PazienteT0.Monitor</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="models.html#id46"><code class="docutils literal notranslate"><span class="pre">PazienteT0.PA</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="models.html#id47"><code class="docutils literal notranslate"><span class="pre">PazienteT0.RR</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="models.html#id48"><code class="docutils literal notranslate"><span class="pre">PazienteT0.SpO2</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="models.html#id49"><code class="docutils literal notranslate"><span class="pre">PazienteT0.T</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="models.html#id50"><code class="docutils literal notranslate"><span class="pre">PazienteT0.accessiArteriosi</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="models.html#id51"><code class="docutils literal notranslate"><span class="pre">PazienteT0.accessiVenosi</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="models.html#models.scenario_models.PazienteT0.model_config"><code class="docutils literal notranslate"><span class="pre">PazienteT0.model_config</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="models.html#models.scenario_models.PazienteT0.validate_blood_pressure"><code class="docutils literal notranslate"><span class="pre">PazienteT0.validate_blood_pressure()</span></code></a></li>
 </ul>
 </li>
 <li class="toctree-l3"><a class="reference internal" href="models.html#models.scenario_models.ScenarioInfo"><code class="docutils literal notranslate"><span class="pre">ScenarioInfo</span></code></a><ul>
-<li class="toctree-l4"><a class="reference internal" href="models.html#models.scenario_models.ScenarioInfo.autori"><code class="docutils literal notranslate"><span class="pre">ScenarioInfo.autori</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="models.html#models.scenario_models.ScenarioInfo.briefing"><code class="docutils literal notranslate"><span class="pre">ScenarioInfo.briefing</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="models.html#models.scenario_models.ScenarioInfo.descrizione"><code class="docutils literal notranslate"><span class="pre">ScenarioInfo.descrizione</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="models.html#models.scenario_models.ScenarioInfo.infoGenitore"><code class="docutils literal notranslate"><span class="pre">ScenarioInfo.infoGenitore</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="models.html#models.scenario_models.ScenarioInfo.liquidi"><code class="docutils literal notranslate"><span class="pre">ScenarioInfo.liquidi</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="models.html#models.scenario_models.ScenarioInfo.model_config"><code class="docutils literal notranslate"><span class="pre">ScenarioInfo.model_config</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="models.html#models.scenario_models.ScenarioInfo.moulage"><code class="docutils literal notranslate"><span class="pre">ScenarioInfo.moulage</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="models.html#models.scenario_models.ScenarioInfo.nome_paziente"><code class="docutils literal notranslate"><span class="pre">ScenarioInfo.nome_paziente</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="models.html#models.scenario_models.ScenarioInfo.obiettivo"><code class="docutils literal notranslate"><span class="pre">ScenarioInfo.obiettivo</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="models.html#models.scenario_models.ScenarioInfo.patologia"><code class="docutils literal notranslate"><span class="pre">ScenarioInfo.patologia</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="models.html#models.scenario_models.ScenarioInfo.patto_aula"><code class="docutils literal notranslate"><span class="pre">ScenarioInfo.patto_aula</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="models.html#models.scenario_models.ScenarioInfo.target"><code class="docutils literal notranslate"><span class="pre">ScenarioInfo.target</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="models.html#models.scenario_models.ScenarioInfo.obiettivo"><code class="docutils literal notranslate"><span class="pre">ScenarioInfo.obiettivo</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="models.html#models.scenario_models.ScenarioInfo.timer_generale"><code class="docutils literal notranslate"><span class="pre">ScenarioInfo.timer_generale</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="models.html#models.scenario_models.ScenarioInfo.tipologia"><code class="docutils literal notranslate"><span class="pre">ScenarioInfo.tipologia</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="models.html#models.scenario_models.ScenarioInfo.infoGenitore"><code class="docutils literal notranslate"><span class="pre">ScenarioInfo.infoGenitore</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="models.html#models.scenario_models.ScenarioInfo.titolo"><code class="docutils literal notranslate"><span class="pre">ScenarioInfo.titolo</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="models.html#models.scenario_models.ScenarioInfo.patologia"><code class="docutils literal notranslate"><span class="pre">ScenarioInfo.patologia</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="models.html#models.scenario_models.ScenarioInfo.descrizione"><code class="docutils literal notranslate"><span class="pre">ScenarioInfo.descrizione</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="models.html#models.scenario_models.ScenarioInfo.briefing"><code class="docutils literal notranslate"><span class="pre">ScenarioInfo.briefing</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="models.html#models.scenario_models.ScenarioInfo.moulage"><code class="docutils literal notranslate"><span class="pre">ScenarioInfo.moulage</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="models.html#models.scenario_models.ScenarioInfo.liquidi"><code class="docutils literal notranslate"><span class="pre">ScenarioInfo.liquidi</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="models.html#models.scenario_models.ScenarioInfo.autori"><code class="docutils literal notranslate"><span class="pre">ScenarioInfo.autori</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="models.html#models.scenario_models.ScenarioInfo.tipologia"><code class="docutils literal notranslate"><span class="pre">ScenarioInfo.tipologia</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="models.html#models.scenario_models.ScenarioInfo.target"><code class="docutils literal notranslate"><span class="pre">ScenarioInfo.target</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="models.html#id52"><code class="docutils literal notranslate"><span class="pre">ScenarioInfo.autori</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="models.html#id53"><code class="docutils literal notranslate"><span class="pre">ScenarioInfo.briefing</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="models.html#id54"><code class="docutils literal notranslate"><span class="pre">ScenarioInfo.descrizione</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="models.html#id55"><code class="docutils literal notranslate"><span class="pre">ScenarioInfo.infoGenitore</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="models.html#id56"><code class="docutils literal notranslate"><span class="pre">ScenarioInfo.liquidi</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="models.html#models.scenario_models.ScenarioInfo.model_config"><code class="docutils literal notranslate"><span class="pre">ScenarioInfo.model_config</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="models.html#id57"><code class="docutils literal notranslate"><span class="pre">ScenarioInfo.moulage</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="models.html#id58"><code class="docutils literal notranslate"><span class="pre">ScenarioInfo.nome_paziente</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="models.html#id59"><code class="docutils literal notranslate"><span class="pre">ScenarioInfo.obiettivo</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="models.html#id60"><code class="docutils literal notranslate"><span class="pre">ScenarioInfo.patologia</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="models.html#id61"><code class="docutils literal notranslate"><span class="pre">ScenarioInfo.patto_aula</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="models.html#id62"><code class="docutils literal notranslate"><span class="pre">ScenarioInfo.target</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="models.html#id63"><code class="docutils literal notranslate"><span class="pre">ScenarioInfo.timer_generale</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="models.html#id64"><code class="docutils literal notranslate"><span class="pre">ScenarioInfo.tipologia</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="models.html#id65"><code class="docutils literal notranslate"><span class="pre">ScenarioInfo.titolo</span></code></a></li>
 </ul>
 </li>
 <li class="toctree-l3"><a class="reference internal" href="models.html#models.scenario_models.ScenarioRequest"><code class="docutils literal notranslate"><span class="pre">ScenarioRequest</span></code></a><ul>
 <li class="toctree-l4"><a class="reference internal" href="models.html#models.scenario_models.ScenarioRequest.description"><code class="docutils literal notranslate"><span class="pre">ScenarioRequest.description</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="models.html#models.scenario_models.ScenarioRequest.difficulty"><code class="docutils literal notranslate"><span class="pre">ScenarioRequest.difficulty</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="models.html#models.scenario_models.ScenarioRequest.model_config"><code class="docutils literal notranslate"><span class="pre">ScenarioRequest.model_config</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="models.html#models.scenario_models.ScenarioRequest.scenario_type"><code class="docutils literal notranslate"><span class="pre">ScenarioRequest.scenario_type</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="models.html#models.scenario_models.ScenarioRequest.target"><code class="docutils literal notranslate"><span class="pre">ScenarioRequest.target</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="models.html#models.scenario_models.ScenarioRequest.difficulty"><code class="docutils literal notranslate"><span class="pre">ScenarioRequest.difficulty</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="models.html#id66"><code class="docutils literal notranslate"><span class="pre">ScenarioRequest.description</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="models.html#id67"><code class="docutils literal notranslate"><span class="pre">ScenarioRequest.difficulty</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="models.html#models.scenario_models.ScenarioRequest.model_config"><code class="docutils literal notranslate"><span class="pre">ScenarioRequest.model_config</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="models.html#id68"><code class="docutils literal notranslate"><span class="pre">ScenarioRequest.scenario_type</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="models.html#id69"><code class="docutils literal notranslate"><span class="pre">ScenarioRequest.target</span></code></a></li>
 </ul>
 </li>
 <li class="toctree-l3"><a class="reference internal" href="models.html#models.scenario_models.Sceneggiatura"><code class="docutils literal notranslate"><span class="pre">Sceneggiatura</span></code></a><ul>
-<li class="toctree-l4"><a class="reference internal" href="models.html#models.scenario_models.Sceneggiatura.model_config"><code class="docutils literal notranslate"><span class="pre">Sceneggiatura.model_config</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="models.html#models.scenario_models.Sceneggiatura.sceneggiatura"><code class="docutils literal notranslate"><span class="pre">Sceneggiatura.sceneggiatura</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="models.html#models.scenario_models.Sceneggiatura.model_config"><code class="docutils literal notranslate"><span class="pre">Sceneggiatura.model_config</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="models.html#id70"><code class="docutils literal notranslate"><span class="pre">Sceneggiatura.sceneggiatura</span></code></a></li>
 </ul>
 </li>
 <li class="toctree-l3"><a class="reference internal" href="models.html#models.scenario_models.Tempo"><code class="docutils literal notranslate"><span class="pre">Tempo</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="models.html#models.scenario_models.Tempo.idTempo"><code class="docutils literal notranslate"><span class="pre">Tempo.idTempo</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="models.html#models.scenario_models.Tempo.TSi"><code class="docutils literal notranslate"><span class="pre">Tempo.TSi</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="models.html#models.scenario_models.Tempo.TNo"><code class="docutils literal notranslate"><span class="pre">Tempo.TNo</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="models.html#models.scenario_models.Tempo.altriDettagli"><code class="docutils literal notranslate"><span class="pre">Tempo.altriDettagli</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="models.html#models.scenario_models.Tempo.timerTempo"><code class="docutils literal notranslate"><span class="pre">Tempo.timerTempo</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="models.html#models.scenario_models.Tempo.ruoloGenitore"><code class="docutils literal notranslate"><span class="pre">Tempo.ruoloGenitore</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="models.html#models.scenario_models.Tempo.Azione"><code class="docutils literal notranslate"><span class="pre">Tempo.Azione</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="models.html#models.scenario_models.Tempo.parametriAggiuntivi"><code class="docutils literal notranslate"><span class="pre">Tempo.parametriAggiuntivi</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="models.html#id71"><code class="docutils literal notranslate"><span class="pre">Tempo.Azione</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="models.html#models.scenario_models.Tempo.EtCO2"><code class="docutils literal notranslate"><span class="pre">Tempo.EtCO2</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="models.html#models.scenario_models.Tempo.FC"><code class="docutils literal notranslate"><span class="pre">Tempo.FC</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="models.html#models.scenario_models.Tempo.FiO2"><code class="docutils literal notranslate"><span class="pre">Tempo.FiO2</span></code></a></li>
@@ -516,54 +590,70 @@
 <li class="toctree-l4"><a class="reference internal" href="models.html#models.scenario_models.Tempo.RR"><code class="docutils literal notranslate"><span class="pre">Tempo.RR</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="models.html#models.scenario_models.Tempo.SpO2"><code class="docutils literal notranslate"><span class="pre">Tempo.SpO2</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="models.html#models.scenario_models.Tempo.T"><code class="docutils literal notranslate"><span class="pre">Tempo.T</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="models.html#models.scenario_models.Tempo.TNo"><code class="docutils literal notranslate"><span class="pre">Tempo.TNo</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="models.html#models.scenario_models.Tempo.TSi"><code class="docutils literal notranslate"><span class="pre">Tempo.TSi</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="models.html#models.scenario_models.Tempo.altriDettagli"><code class="docutils literal notranslate"><span class="pre">Tempo.altriDettagli</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="models.html#models.scenario_models.Tempo.idTempo"><code class="docutils literal notranslate"><span class="pre">Tempo.idTempo</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="models.html#id72"><code class="docutils literal notranslate"><span class="pre">Tempo.TNo</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="models.html#id73"><code class="docutils literal notranslate"><span class="pre">Tempo.TSi</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="models.html#id74"><code class="docutils literal notranslate"><span class="pre">Tempo.altriDettagli</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="models.html#id75"><code class="docutils literal notranslate"><span class="pre">Tempo.idTempo</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="models.html#models.scenario_models.Tempo.model_config"><code class="docutils literal notranslate"><span class="pre">Tempo.model_config</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="models.html#models.scenario_models.Tempo.parametriAggiuntivi"><code class="docutils literal notranslate"><span class="pre">Tempo.parametriAggiuntivi</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="models.html#models.scenario_models.Tempo.ruoloGenitore"><code class="docutils literal notranslate"><span class="pre">Tempo.ruoloGenitore</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="models.html#models.scenario_models.Tempo.timerTempo"><code class="docutils literal notranslate"><span class="pre">Tempo.timerTempo</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="models.html#id76"><code class="docutils literal notranslate"><span class="pre">Tempo.parametriAggiuntivi</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="models.html#id77"><code class="docutils literal notranslate"><span class="pre">Tempo.ruoloGenitore</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="models.html#id78"><code class="docutils literal notranslate"><span class="pre">Tempo.timerTempo</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="models.html#models.scenario_models.Tempo.validate_blood_pressure"><code class="docutils literal notranslate"><span class="pre">Tempo.validate_blood_pressure()</span></code></a></li>
 </ul>
 </li>
 <li class="toctree-l3"><a class="reference internal" href="models.html#models.scenario_models.Timeline"><code class="docutils literal notranslate"><span class="pre">Timeline</span></code></a><ul>
-<li class="toctree-l4"><a class="reference internal" href="models.html#models.scenario_models.Timeline.model_config"><code class="docutils literal notranslate"><span class="pre">Timeline.model_config</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="models.html#models.scenario_models.Timeline.tempi"><code class="docutils literal notranslate"><span class="pre">Timeline.tempi</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="models.html#models.scenario_models.Timeline.model_config"><code class="docutils literal notranslate"><span class="pre">Timeline.model_config</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="models.html#id79"><code class="docutils literal notranslate"><span class="pre">Timeline.tempi</span></code></a></li>
 </ul>
 </li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="models.html#module-models">Module contents</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="models.html#models.AccessoArterioso"><code class="docutils literal notranslate"><span class="pre">AccessoArterioso</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="models.html#models.AccessoArterioso.tipologia"><code class="docutils literal notranslate"><span class="pre">AccessoArterioso.tipologia</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="models.html#models.AccessoArterioso.posizione"><code class="docutils literal notranslate"><span class="pre">AccessoArterioso.posizione</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="models.html#models.AccessoArterioso.lato"><code class="docutils literal notranslate"><span class="pre">AccessoArterioso.lato</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="models.html#models.AccessoArterioso.misura"><code class="docutils literal notranslate"><span class="pre">AccessoArterioso.misura</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="models.html#id80"><code class="docutils literal notranslate"><span class="pre">AccessoArterioso.lato</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="models.html#id81"><code class="docutils literal notranslate"><span class="pre">AccessoArterioso.misura</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="models.html#models.AccessoArterioso.model_config"><code class="docutils literal notranslate"><span class="pre">AccessoArterioso.model_config</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="models.html#models.AccessoArterioso.posizione"><code class="docutils literal notranslate"><span class="pre">AccessoArterioso.posizione</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="models.html#models.AccessoArterioso.tipologia"><code class="docutils literal notranslate"><span class="pre">AccessoArterioso.tipologia</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="models.html#id82"><code class="docutils literal notranslate"><span class="pre">AccessoArterioso.posizione</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="models.html#id83"><code class="docutils literal notranslate"><span class="pre">AccessoArterioso.tipologia</span></code></a></li>
 </ul>
 </li>
 <li class="toctree-l3"><a class="reference internal" href="models.html#models.AccessoVenosso"><code class="docutils literal notranslate"><span class="pre">AccessoVenosso</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="models.html#models.AccessoVenosso.tipologia"><code class="docutils literal notranslate"><span class="pre">AccessoVenosso.tipologia</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="models.html#models.AccessoVenosso.posizione"><code class="docutils literal notranslate"><span class="pre">AccessoVenosso.posizione</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="models.html#models.AccessoVenosso.lato"><code class="docutils literal notranslate"><span class="pre">AccessoVenosso.lato</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="models.html#models.AccessoVenosso.misura"><code class="docutils literal notranslate"><span class="pre">AccessoVenosso.misura</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="models.html#id84"><code class="docutils literal notranslate"><span class="pre">AccessoVenosso.lato</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="models.html#id85"><code class="docutils literal notranslate"><span class="pre">AccessoVenosso.misura</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="models.html#models.AccessoVenosso.model_config"><code class="docutils literal notranslate"><span class="pre">AccessoVenosso.model_config</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="models.html#models.AccessoVenosso.posizione"><code class="docutils literal notranslate"><span class="pre">AccessoVenosso.posizione</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="models.html#models.AccessoVenosso.tipologia"><code class="docutils literal notranslate"><span class="pre">AccessoVenosso.tipologia</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="models.html#id86"><code class="docutils literal notranslate"><span class="pre">AccessoVenosso.posizione</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="models.html#id87"><code class="docutils literal notranslate"><span class="pre">AccessoVenosso.tipologia</span></code></a></li>
 </ul>
 </li>
 <li class="toctree-l3"><a class="reference internal" href="models.html#models.BaseScenario"><code class="docutils literal notranslate"><span class="pre">BaseScenario</span></code></a><ul>
 <li class="toctree-l4"><a class="reference internal" href="models.html#models.BaseScenario.azioniChiave"><code class="docutils literal notranslate"><span class="pre">BaseScenario.azioniChiave</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="models.html#models.BaseScenario.esameFisico"><code class="docutils literal notranslate"><span class="pre">BaseScenario.esameFisico</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="models.html#models.BaseScenario.model_config"><code class="docutils literal notranslate"><span class="pre">BaseScenario.model_config</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="models.html#models.BaseScenario.pazienteT0"><code class="docutils literal notranslate"><span class="pre">BaseScenario.pazienteT0</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="models.html#models.BaseScenario.presidi"><code class="docutils literal notranslate"><span class="pre">BaseScenario.presidi</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="models.html#models.BaseScenario.scenario"><code class="docutils literal notranslate"><span class="pre">BaseScenario.scenario</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="models.html#models.BaseScenario.tipo"><code class="docutils literal notranslate"><span class="pre">BaseScenario.tipo</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="models.html#models.BaseScenario.scenario"><code class="docutils literal notranslate"><span class="pre">BaseScenario.scenario</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="models.html#models.BaseScenario.presidi"><code class="docutils literal notranslate"><span class="pre">BaseScenario.presidi</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="models.html#models.BaseScenario.esameFisico"><code class="docutils literal notranslate"><span class="pre">BaseScenario.esameFisico</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="models.html#models.BaseScenario.pazienteT0"><code class="docutils literal notranslate"><span class="pre">BaseScenario.pazienteT0</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="models.html#id88"><code class="docutils literal notranslate"><span class="pre">BaseScenario.azioniChiave</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="models.html#id89"><code class="docutils literal notranslate"><span class="pre">BaseScenario.esameFisico</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="models.html#models.BaseScenario.model_config"><code class="docutils literal notranslate"><span class="pre">BaseScenario.model_config</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="models.html#id90"><code class="docutils literal notranslate"><span class="pre">BaseScenario.pazienteT0</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="models.html#id91"><code class="docutils literal notranslate"><span class="pre">BaseScenario.presidi</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="models.html#id92"><code class="docutils literal notranslate"><span class="pre">BaseScenario.scenario</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="models.html#id93"><code class="docutils literal notranslate"><span class="pre">BaseScenario.tipo</span></code></a></li>
 </ul>
 </li>
 <li class="toctree-l3"><a class="reference internal" href="models.html#models.EsameFisico"><code class="docutils literal notranslate"><span class="pre">EsameFisico</span></code></a><ul>
-<li class="toctree-l4"><a class="reference internal" href="models.html#models.EsameFisico.model_config"><code class="docutils literal notranslate"><span class="pre">EsameFisico.model_config</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="models.html#models.EsameFisico.sections"><code class="docutils literal notranslate"><span class="pre">EsameFisico.sections</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="models.html#models.EsameFisico.model_config"><code class="docutils literal notranslate"><span class="pre">EsameFisico.model_config</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="models.html#id94"><code class="docutils literal notranslate"><span class="pre">EsameFisico.sections</span></code></a></li>
 </ul>
 </li>
 <li class="toctree-l3"><a class="reference internal" href="models.html#models.EsameFisicoSections"><code class="docutils literal notranslate"><span class="pre">EsameFisicoSections</span></code></a><ul>
@@ -595,101 +685,159 @@
 </li>
 <li class="toctree-l3"><a class="reference internal" href="models.html#models.LabCategory"><code class="docutils literal notranslate"><span class="pre">LabCategory</span></code></a><ul>
 <li class="toctree-l4"><a class="reference internal" href="models.html#models.LabCategory.categoria"><code class="docutils literal notranslate"><span class="pre">LabCategory.categoria</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="models.html#models.LabCategory.model_config"><code class="docutils literal notranslate"><span class="pre">LabCategory.model_config</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="models.html#models.LabCategory.test"><code class="docutils literal notranslate"><span class="pre">LabCategory.test</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="models.html#id95"><code class="docutils literal notranslate"><span class="pre">LabCategory.categoria</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="models.html#models.LabCategory.model_config"><code class="docutils literal notranslate"><span class="pre">LabCategory.model_config</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="models.html#id96"><code class="docutils literal notranslate"><span class="pre">LabCategory.test</span></code></a></li>
 </ul>
 </li>
 <li class="toctree-l3"><a class="reference internal" href="models.html#models.LabExamRequest"><code class="docutils literal notranslate"><span class="pre">LabExamRequest</span></code></a><ul>
 <li class="toctree-l4"><a class="reference internal" href="models.html#models.LabExamRequest.descrizione_scenario"><code class="docutils literal notranslate"><span class="pre">LabExamRequest.descrizione_scenario</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="models.html#models.LabExamRequest.esame_obiettivo"><code class="docutils literal notranslate"><span class="pre">LabExamRequest.esame_obiettivo</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="models.html#models.LabExamRequest.model_config"><code class="docutils literal notranslate"><span class="pre">LabExamRequest.model_config</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="models.html#models.LabExamRequest.tipologia_paziente"><code class="docutils literal notranslate"><span class="pre">LabExamRequest.tipologia_paziente</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="models.html#models.LabExamRequest.esame_obiettivo"><code class="docutils literal notranslate"><span class="pre">LabExamRequest.esame_obiettivo</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="models.html#id97"><code class="docutils literal notranslate"><span class="pre">LabExamRequest.descrizione_scenario</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="models.html#id98"><code class="docutils literal notranslate"><span class="pre">LabExamRequest.esame_obiettivo</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="models.html#models.LabExamRequest.model_config"><code class="docutils literal notranslate"><span class="pre">LabExamRequest.model_config</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="models.html#id99"><code class="docutils literal notranslate"><span class="pre">LabExamRequest.tipologia_paziente</span></code></a></li>
 </ul>
 </li>
 <li class="toctree-l3"><a class="reference internal" href="models.html#models.LabExamResponse"><code class="docutils literal notranslate"><span class="pre">LabExamResponse</span></code></a><ul>
 <li class="toctree-l4"><a class="reference internal" href="models.html#models.LabExamResponse.esami_laboratorio"><code class="docutils literal notranslate"><span class="pre">LabExamResponse.esami_laboratorio</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="models.html#id100"><code class="docutils literal notranslate"><span class="pre">LabExamResponse.esami_laboratorio</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="models.html#models.LabExamResponse.model_config"><code class="docutils literal notranslate"><span class="pre">LabExamResponse.model_config</span></code></a></li>
 </ul>
 </li>
 <li class="toctree-l3"><a class="reference internal" href="models.html#models.LabTest"><code class="docutils literal notranslate"><span class="pre">LabTest</span></code></a><ul>
-<li class="toctree-l4"><a class="reference internal" href="models.html#models.LabTest.model_config"><code class="docutils literal notranslate"><span class="pre">LabTest.model_config</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="models.html#models.LabTest.nome"><code class="docutils literal notranslate"><span class="pre">LabTest.nome</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="models.html#models.LabTest.valore"><code class="docutils literal notranslate"><span class="pre">LabTest.valore</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="models.html#models.LabTest.unita_misura"><code class="docutils literal notranslate"><span class="pre">LabTest.unita_misura</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="models.html#models.LabTest.range_riferimento"><code class="docutils literal notranslate"><span class="pre">LabTest.range_riferimento</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="models.html#models.LabTest.referto"><code class="docutils literal notranslate"><span class="pre">LabTest.referto</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="models.html#models.LabTest.unita_misura"><code class="docutils literal notranslate"><span class="pre">LabTest.unita_misura</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="models.html#models.LabTest.valore"><code class="docutils literal notranslate"><span class="pre">LabTest.valore</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="models.html#models.LabTest.model_config"><code class="docutils literal notranslate"><span class="pre">LabTest.model_config</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="models.html#id101"><code class="docutils literal notranslate"><span class="pre">LabTest.nome</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="models.html#id102"><code class="docutils literal notranslate"><span class="pre">LabTest.range_riferimento</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="models.html#id103"><code class="docutils literal notranslate"><span class="pre">LabTest.referto</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="models.html#id104"><code class="docutils literal notranslate"><span class="pre">LabTest.unita_misura</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="models.html#id105"><code class="docutils literal notranslate"><span class="pre">LabTest.valore</span></code></a></li>
 </ul>
 </li>
 <li class="toctree-l3"><a class="reference internal" href="models.html#models.MedicalReportRequest"><code class="docutils literal notranslate"><span class="pre">MedicalReportRequest</span></code></a><ul>
 <li class="toctree-l4"><a class="reference internal" href="models.html#models.MedicalReportRequest.descrizione_scenario"><code class="docutils literal notranslate"><span class="pre">MedicalReportRequest.descrizione_scenario</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="models.html#models.MedicalReportRequest.esame_obiettivo"><code class="docutils literal notranslate"><span class="pre">MedicalReportRequest.esame_obiettivo</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="models.html#models.MedicalReportRequest.model_config"><code class="docutils literal notranslate"><span class="pre">MedicalReportRequest.model_config</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="models.html#models.MedicalReportRequest.tipologia_esame"><code class="docutils literal notranslate"><span class="pre">MedicalReportRequest.tipologia_esame</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="models.html#models.MedicalReportRequest.tipologia_paziente"><code class="docutils literal notranslate"><span class="pre">MedicalReportRequest.tipologia_paziente</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="models.html#models.MedicalReportRequest.tipologia_esame"><code class="docutils literal notranslate"><span class="pre">MedicalReportRequest.tipologia_esame</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="models.html#models.MedicalReportRequest.esame_obiettivo"><code class="docutils literal notranslate"><span class="pre">MedicalReportRequest.esame_obiettivo</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="models.html#id106"><code class="docutils literal notranslate"><span class="pre">MedicalReportRequest.descrizione_scenario</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="models.html#id107"><code class="docutils literal notranslate"><span class="pre">MedicalReportRequest.esame_obiettivo</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="models.html#models.MedicalReportRequest.model_config"><code class="docutils literal notranslate"><span class="pre">MedicalReportRequest.model_config</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="models.html#id108"><code class="docutils literal notranslate"><span class="pre">MedicalReportRequest.tipologia_esame</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="models.html#id109"><code class="docutils literal notranslate"><span class="pre">MedicalReportRequest.tipologia_paziente</span></code></a></li>
 </ul>
 </li>
 <li class="toctree-l3"><a class="reference internal" href="models.html#models.MedicalReportResponse"><code class="docutils literal notranslate"><span class="pre">MedicalReportResponse</span></code></a><ul>
-<li class="toctree-l4"><a class="reference internal" href="models.html#models.MedicalReportResponse.model_config"><code class="docutils literal notranslate"><span class="pre">MedicalReportResponse.model_config</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="models.html#models.MedicalReportResponse.referto"><code class="docutils literal notranslate"><span class="pre">MedicalReportResponse.referto</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="models.html#models.MedicalReportResponse.tipologia_esame"><code class="docutils literal notranslate"><span class="pre">MedicalReportResponse.tipologia_esame</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="models.html#models.MedicalReportResponse.referto"><code class="docutils literal notranslate"><span class="pre">MedicalReportResponse.referto</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="models.html#models.MedicalReportResponse.model_config"><code class="docutils literal notranslate"><span class="pre">MedicalReportResponse.model_config</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="models.html#id110"><code class="docutils literal notranslate"><span class="pre">MedicalReportResponse.referto</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="models.html#id111"><code class="docutils literal notranslate"><span class="pre">MedicalReportResponse.tipologia_esame</span></code></a></li>
 </ul>
 </li>
 <li class="toctree-l3"><a class="reference internal" href="models.html#models.ParametroAggiuntivo"><code class="docutils literal notranslate"><span class="pre">ParametroAggiuntivo</span></code></a><ul>
-<li class="toctree-l4"><a class="reference internal" href="models.html#models.ParametroAggiuntivo.model_config"><code class="docutils literal notranslate"><span class="pre">ParametroAggiuntivo.model_config</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="models.html#models.ParametroAggiuntivo.nome"><code class="docutils literal notranslate"><span class="pre">ParametroAggiuntivo.nome</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="models.html#models.ParametroAggiuntivo.unitaMisura"><code class="docutils literal notranslate"><span class="pre">ParametroAggiuntivo.unitaMisura</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="models.html#models.ParametroAggiuntivo.nome"><code class="docutils literal notranslate"><span class="pre">ParametroAggiuntivo.nome</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="models.html#models.ParametroAggiuntivo.valore"><code class="docutils literal notranslate"><span class="pre">ParametroAggiuntivo.valore</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="models.html#models.ParametroAggiuntivo.model_config"><code class="docutils literal notranslate"><span class="pre">ParametroAggiuntivo.model_config</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="models.html#id112"><code class="docutils literal notranslate"><span class="pre">ParametroAggiuntivo.nome</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="models.html#id113"><code class="docutils literal notranslate"><span class="pre">ParametroAggiuntivo.unitaMisura</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="models.html#id114"><code class="docutils literal notranslate"><span class="pre">ParametroAggiuntivo.valore</span></code></a></li>
 </ul>
 </li>
 <li class="toctree-l3"><a class="reference internal" href="models.html#models.PazienteT0"><code class="docutils literal notranslate"><span class="pre">PazienteT0</span></code></a><ul>
-<li class="toctree-l4"><a class="reference internal" href="models.html#models.PazienteT0.EtCO2"><code class="docutils literal notranslate"><span class="pre">PazienteT0.EtCO2</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="models.html#models.PazienteT0.FC"><code class="docutils literal notranslate"><span class="pre">PazienteT0.FC</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="models.html#models.PazienteT0.FiO2"><code class="docutils literal notranslate"><span class="pre">PazienteT0.FiO2</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="models.html#models.PazienteT0.LitriO2"><code class="docutils literal notranslate"><span class="pre">PazienteT0.LitriO2</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="models.html#models.PazienteT0.Monitor"><code class="docutils literal notranslate"><span class="pre">PazienteT0.Monitor</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="models.html#models.PazienteT0.PA"><code class="docutils literal notranslate"><span class="pre">PazienteT0.PA</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="models.html#models.PazienteT0.RR"><code class="docutils literal notranslate"><span class="pre">PazienteT0.RR</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="models.html#models.PazienteT0.SpO2"><code class="docutils literal notranslate"><span class="pre">PazienteT0.SpO2</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="models.html#models.PazienteT0.T"><code class="docutils literal notranslate"><span class="pre">PazienteT0.T</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="models.html#models.PazienteT0.accessiArteriosi"><code class="docutils literal notranslate"><span class="pre">PazienteT0.accessiArteriosi</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="models.html#models.PazienteT0.FiO2"><code class="docutils literal notranslate"><span class="pre">PazienteT0.FiO2</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="models.html#models.PazienteT0.LitriO2"><code class="docutils literal notranslate"><span class="pre">PazienteT0.LitriO2</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="models.html#models.PazienteT0.EtCO2"><code class="docutils literal notranslate"><span class="pre">PazienteT0.EtCO2</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="models.html#models.PazienteT0.Monitor"><code class="docutils literal notranslate"><span class="pre">PazienteT0.Monitor</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="models.html#models.PazienteT0.accessiVenosi"><code class="docutils literal notranslate"><span class="pre">PazienteT0.accessiVenosi</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="models.html#models.PazienteT0.accessiArteriosi"><code class="docutils literal notranslate"><span class="pre">PazienteT0.accessiArteriosi</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="models.html#models.PazienteT0.PA"><code class="docutils literal notranslate"><span class="pre">PazienteT0.PA</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="models.html#models.PazienteT0.FC"><code class="docutils literal notranslate"><span class="pre">PazienteT0.FC</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="models.html#models.PazienteT0.T"><code class="docutils literal notranslate"><span class="pre">PazienteT0.T</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="models.html#id115"><code class="docutils literal notranslate"><span class="pre">PazienteT0.EtCO2</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="models.html#id116"><code class="docutils literal notranslate"><span class="pre">PazienteT0.FC</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="models.html#id117"><code class="docutils literal notranslate"><span class="pre">PazienteT0.FiO2</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="models.html#id118"><code class="docutils literal notranslate"><span class="pre">PazienteT0.LitriO2</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="models.html#id119"><code class="docutils literal notranslate"><span class="pre">PazienteT0.Monitor</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="models.html#id120"><code class="docutils literal notranslate"><span class="pre">PazienteT0.PA</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="models.html#id121"><code class="docutils literal notranslate"><span class="pre">PazienteT0.RR</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="models.html#id122"><code class="docutils literal notranslate"><span class="pre">PazienteT0.SpO2</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="models.html#id123"><code class="docutils literal notranslate"><span class="pre">PazienteT0.T</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="models.html#id124"><code class="docutils literal notranslate"><span class="pre">PazienteT0.accessiArteriosi</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="models.html#id125"><code class="docutils literal notranslate"><span class="pre">PazienteT0.accessiVenosi</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="models.html#models.PazienteT0.model_config"><code class="docutils literal notranslate"><span class="pre">PazienteT0.model_config</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="models.html#models.PazienteT0.validate_blood_pressure"><code class="docutils literal notranslate"><span class="pre">PazienteT0.validate_blood_pressure()</span></code></a></li>
 </ul>
 </li>
 <li class="toctree-l3"><a class="reference internal" href="models.html#models.ScenarioInfo"><code class="docutils literal notranslate"><span class="pre">ScenarioInfo</span></code></a><ul>
-<li class="toctree-l4"><a class="reference internal" href="models.html#models.ScenarioInfo.autori"><code class="docutils literal notranslate"><span class="pre">ScenarioInfo.autori</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="models.html#models.ScenarioInfo.briefing"><code class="docutils literal notranslate"><span class="pre">ScenarioInfo.briefing</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="models.html#models.ScenarioInfo.descrizione"><code class="docutils literal notranslate"><span class="pre">ScenarioInfo.descrizione</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="models.html#models.ScenarioInfo.infoGenitore"><code class="docutils literal notranslate"><span class="pre">ScenarioInfo.infoGenitore</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="models.html#models.ScenarioInfo.liquidi"><code class="docutils literal notranslate"><span class="pre">ScenarioInfo.liquidi</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="models.html#models.ScenarioInfo.model_config"><code class="docutils literal notranslate"><span class="pre">ScenarioInfo.model_config</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="models.html#models.ScenarioInfo.moulage"><code class="docutils literal notranslate"><span class="pre">ScenarioInfo.moulage</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="models.html#models.ScenarioInfo.nome_paziente"><code class="docutils literal notranslate"><span class="pre">ScenarioInfo.nome_paziente</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="models.html#models.ScenarioInfo.obiettivo"><code class="docutils literal notranslate"><span class="pre">ScenarioInfo.obiettivo</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="models.html#models.ScenarioInfo.patologia"><code class="docutils literal notranslate"><span class="pre">ScenarioInfo.patologia</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="models.html#models.ScenarioInfo.patto_aula"><code class="docutils literal notranslate"><span class="pre">ScenarioInfo.patto_aula</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="models.html#models.ScenarioInfo.target"><code class="docutils literal notranslate"><span class="pre">ScenarioInfo.target</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="models.html#models.ScenarioInfo.obiettivo"><code class="docutils literal notranslate"><span class="pre">ScenarioInfo.obiettivo</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="models.html#models.ScenarioInfo.timer_generale"><code class="docutils literal notranslate"><span class="pre">ScenarioInfo.timer_generale</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="models.html#models.ScenarioInfo.tipologia"><code class="docutils literal notranslate"><span class="pre">ScenarioInfo.tipologia</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="models.html#models.ScenarioInfo.infoGenitore"><code class="docutils literal notranslate"><span class="pre">ScenarioInfo.infoGenitore</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="models.html#models.ScenarioInfo.titolo"><code class="docutils literal notranslate"><span class="pre">ScenarioInfo.titolo</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="models.html#models.ScenarioInfo.patologia"><code class="docutils literal notranslate"><span class="pre">ScenarioInfo.patologia</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="models.html#models.ScenarioInfo.descrizione"><code class="docutils literal notranslate"><span class="pre">ScenarioInfo.descrizione</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="models.html#models.ScenarioInfo.briefing"><code class="docutils literal notranslate"><span class="pre">ScenarioInfo.briefing</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="models.html#models.ScenarioInfo.moulage"><code class="docutils literal notranslate"><span class="pre">ScenarioInfo.moulage</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="models.html#models.ScenarioInfo.liquidi"><code class="docutils literal notranslate"><span class="pre">ScenarioInfo.liquidi</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="models.html#models.ScenarioInfo.autori"><code class="docutils literal notranslate"><span class="pre">ScenarioInfo.autori</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="models.html#models.ScenarioInfo.tipologia"><code class="docutils literal notranslate"><span class="pre">ScenarioInfo.tipologia</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="models.html#models.ScenarioInfo.target"><code class="docutils literal notranslate"><span class="pre">ScenarioInfo.target</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="models.html#id126"><code class="docutils literal notranslate"><span class="pre">ScenarioInfo.autori</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="models.html#id127"><code class="docutils literal notranslate"><span class="pre">ScenarioInfo.briefing</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="models.html#id128"><code class="docutils literal notranslate"><span class="pre">ScenarioInfo.descrizione</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="models.html#id129"><code class="docutils literal notranslate"><span class="pre">ScenarioInfo.infoGenitore</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="models.html#id130"><code class="docutils literal notranslate"><span class="pre">ScenarioInfo.liquidi</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="models.html#models.ScenarioInfo.model_config"><code class="docutils literal notranslate"><span class="pre">ScenarioInfo.model_config</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="models.html#id131"><code class="docutils literal notranslate"><span class="pre">ScenarioInfo.moulage</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="models.html#id132"><code class="docutils literal notranslate"><span class="pre">ScenarioInfo.nome_paziente</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="models.html#id133"><code class="docutils literal notranslate"><span class="pre">ScenarioInfo.obiettivo</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="models.html#id134"><code class="docutils literal notranslate"><span class="pre">ScenarioInfo.patologia</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="models.html#id135"><code class="docutils literal notranslate"><span class="pre">ScenarioInfo.patto_aula</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="models.html#id136"><code class="docutils literal notranslate"><span class="pre">ScenarioInfo.target</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="models.html#id137"><code class="docutils literal notranslate"><span class="pre">ScenarioInfo.timer_generale</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="models.html#id138"><code class="docutils literal notranslate"><span class="pre">ScenarioInfo.tipologia</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="models.html#id139"><code class="docutils literal notranslate"><span class="pre">ScenarioInfo.titolo</span></code></a></li>
 </ul>
 </li>
 <li class="toctree-l3"><a class="reference internal" href="models.html#models.ScenarioRequest"><code class="docutils literal notranslate"><span class="pre">ScenarioRequest</span></code></a><ul>
 <li class="toctree-l4"><a class="reference internal" href="models.html#models.ScenarioRequest.description"><code class="docutils literal notranslate"><span class="pre">ScenarioRequest.description</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="models.html#models.ScenarioRequest.difficulty"><code class="docutils literal notranslate"><span class="pre">ScenarioRequest.difficulty</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="models.html#models.ScenarioRequest.model_config"><code class="docutils literal notranslate"><span class="pre">ScenarioRequest.model_config</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="models.html#models.ScenarioRequest.scenario_type"><code class="docutils literal notranslate"><span class="pre">ScenarioRequest.scenario_type</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="models.html#models.ScenarioRequest.target"><code class="docutils literal notranslate"><span class="pre">ScenarioRequest.target</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="models.html#models.ScenarioRequest.difficulty"><code class="docutils literal notranslate"><span class="pre">ScenarioRequest.difficulty</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="models.html#id140"><code class="docutils literal notranslate"><span class="pre">ScenarioRequest.description</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="models.html#id141"><code class="docutils literal notranslate"><span class="pre">ScenarioRequest.difficulty</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="models.html#models.ScenarioRequest.model_config"><code class="docutils literal notranslate"><span class="pre">ScenarioRequest.model_config</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="models.html#id142"><code class="docutils literal notranslate"><span class="pre">ScenarioRequest.scenario_type</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="models.html#id143"><code class="docutils literal notranslate"><span class="pre">ScenarioRequest.target</span></code></a></li>
 </ul>
 </li>
 <li class="toctree-l3"><a class="reference internal" href="models.html#models.Sceneggiatura"><code class="docutils literal notranslate"><span class="pre">Sceneggiatura</span></code></a><ul>
-<li class="toctree-l4"><a class="reference internal" href="models.html#models.Sceneggiatura.model_config"><code class="docutils literal notranslate"><span class="pre">Sceneggiatura.model_config</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="models.html#models.Sceneggiatura.sceneggiatura"><code class="docutils literal notranslate"><span class="pre">Sceneggiatura.sceneggiatura</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="models.html#models.Sceneggiatura.model_config"><code class="docutils literal notranslate"><span class="pre">Sceneggiatura.model_config</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="models.html#id144"><code class="docutils literal notranslate"><span class="pre">Sceneggiatura.sceneggiatura</span></code></a></li>
 </ul>
 </li>
 <li class="toctree-l3"><a class="reference internal" href="models.html#models.Tempo"><code class="docutils literal notranslate"><span class="pre">Tempo</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="models.html#models.Tempo.idTempo"><code class="docutils literal notranslate"><span class="pre">Tempo.idTempo</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="models.html#models.Tempo.TSi"><code class="docutils literal notranslate"><span class="pre">Tempo.TSi</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="models.html#models.Tempo.TNo"><code class="docutils literal notranslate"><span class="pre">Tempo.TNo</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="models.html#models.Tempo.altriDettagli"><code class="docutils literal notranslate"><span class="pre">Tempo.altriDettagli</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="models.html#models.Tempo.timerTempo"><code class="docutils literal notranslate"><span class="pre">Tempo.timerTempo</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="models.html#models.Tempo.ruoloGenitore"><code class="docutils literal notranslate"><span class="pre">Tempo.ruoloGenitore</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="models.html#models.Tempo.Azione"><code class="docutils literal notranslate"><span class="pre">Tempo.Azione</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="models.html#models.Tempo.parametriAggiuntivi"><code class="docutils literal notranslate"><span class="pre">Tempo.parametriAggiuntivi</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="models.html#id145"><code class="docutils literal notranslate"><span class="pre">Tempo.Azione</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="models.html#models.Tempo.EtCO2"><code class="docutils literal notranslate"><span class="pre">Tempo.EtCO2</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="models.html#models.Tempo.FC"><code class="docutils literal notranslate"><span class="pre">Tempo.FC</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="models.html#models.Tempo.FiO2"><code class="docutils literal notranslate"><span class="pre">Tempo.FiO2</span></code></a></li>
@@ -698,20 +846,21 @@
 <li class="toctree-l4"><a class="reference internal" href="models.html#models.Tempo.RR"><code class="docutils literal notranslate"><span class="pre">Tempo.RR</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="models.html#models.Tempo.SpO2"><code class="docutils literal notranslate"><span class="pre">Tempo.SpO2</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="models.html#models.Tempo.T"><code class="docutils literal notranslate"><span class="pre">Tempo.T</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="models.html#models.Tempo.TNo"><code class="docutils literal notranslate"><span class="pre">Tempo.TNo</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="models.html#models.Tempo.TSi"><code class="docutils literal notranslate"><span class="pre">Tempo.TSi</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="models.html#models.Tempo.altriDettagli"><code class="docutils literal notranslate"><span class="pre">Tempo.altriDettagli</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="models.html#models.Tempo.idTempo"><code class="docutils literal notranslate"><span class="pre">Tempo.idTempo</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="models.html#id146"><code class="docutils literal notranslate"><span class="pre">Tempo.TNo</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="models.html#id147"><code class="docutils literal notranslate"><span class="pre">Tempo.TSi</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="models.html#id148"><code class="docutils literal notranslate"><span class="pre">Tempo.altriDettagli</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="models.html#id149"><code class="docutils literal notranslate"><span class="pre">Tempo.idTempo</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="models.html#models.Tempo.model_config"><code class="docutils literal notranslate"><span class="pre">Tempo.model_config</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="models.html#models.Tempo.parametriAggiuntivi"><code class="docutils literal notranslate"><span class="pre">Tempo.parametriAggiuntivi</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="models.html#models.Tempo.ruoloGenitore"><code class="docutils literal notranslate"><span class="pre">Tempo.ruoloGenitore</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="models.html#models.Tempo.timerTempo"><code class="docutils literal notranslate"><span class="pre">Tempo.timerTempo</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="models.html#id150"><code class="docutils literal notranslate"><span class="pre">Tempo.parametriAggiuntivi</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="models.html#id151"><code class="docutils literal notranslate"><span class="pre">Tempo.ruoloGenitore</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="models.html#id152"><code class="docutils literal notranslate"><span class="pre">Tempo.timerTempo</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="models.html#models.Tempo.validate_blood_pressure"><code class="docutils literal notranslate"><span class="pre">Tempo.validate_blood_pressure()</span></code></a></li>
 </ul>
 </li>
 <li class="toctree-l3"><a class="reference internal" href="models.html#models.Timeline"><code class="docutils literal notranslate"><span class="pre">Timeline</span></code></a><ul>
-<li class="toctree-l4"><a class="reference internal" href="models.html#models.Timeline.model_config"><code class="docutils literal notranslate"><span class="pre">Timeline.model_config</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="models.html#models.Timeline.tempi"><code class="docutils literal notranslate"><span class="pre">Timeline.tempi</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="models.html#models.Timeline.model_config"><code class="docutils literal notranslate"><span class="pre">Timeline.model_config</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="models.html#id153"><code class="docutils literal notranslate"><span class="pre">Timeline.tempi</span></code></a></li>
 </ul>
 </li>
 </ul>

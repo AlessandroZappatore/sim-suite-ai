@@ -1,5 +1,10 @@
-# Medical Equipment (Presidi Medici) for Medical Simulation Suite AI
-# List of available medical equipment for simulation scenarios
+"""Medical equipment definitions for the Medical Simulation Suite AI.
+
+This module provides a comprehensive list of medical equipment and supplies
+(`PRESIDI_MEDICI`) available for use in clinical simulation scenarios.
+This list can be used to dynamically select or validate the equipment
+required for a given simulation.
+"""
 
 # Complete list of available medical equipment
 PRESIDI_MEDICI = [

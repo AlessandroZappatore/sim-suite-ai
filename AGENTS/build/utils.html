@@ -256,19 +256,28 @@
 </section>
 <section id="module-utils.common">
 <span id="utils-common-module"></span><h2>utils.common module<a class="headerlink" href="#module-utils.common" title="Link to this heading">¶</a></h2>
+<p>Common utility functions for the Medical Simulation Suite AI.</p>
+<p>This module provides a collection of helper functions designed to support various
+tasks within the application. These utilities include model initialization for
+different generation tasks and robust JSON parsing from model responses.</p>
+<p>Version: 4.2</p>
 <dl class="py function">
 <dt class="sig sig-object py" id="utils.common.extract_json_from_response">
 <span class="sig-prename descclassname"><span class="pre">utils.common.</span></span><span class="sig-name descname"><span class="pre">extract_json_from_response</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">response_text</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Any</span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="_modules/utils/common.html#extract_json_from_response"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#utils.common.extract_json_from_response" title="Link to this definition">¶</a></dt>
-<dd><p>Extracts a JSON object from the AI’s response text.</p>
+<dd><p>Extracts a JSON object from a model’s text response.</p>
+<p>This function searches for a JSON object within a string, which may be
+plain or enclosed in a markdown code block (<code class="docutils literal notranslate"><span class="pre">`json</span> <span class="pre">...</span> <span class="pre">`</span></code>). It attempts
+to parse the found JSON string into a Python dictionary.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>response_text</strong> – The response text from the AI model</p>
+<dd class="field-odd"><p><strong>response_text</strong> – The text string returned from the AI model.</p>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>Dict containing the parsed JSON</p>
+<dd class="field-even"><p>A dictionary containing the parsed JSON data.</p>
 </dd>
 <dt class="field-odd">Raises<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>ValueError</strong> – If the response is empty or contains invalid JSON</p>
+<dd class="field-odd"><p><strong>ValueError</strong> – If the response text is empty, no JSON is found, or the
+    extracted string is not valid JSON.</p>
 </dd>
 </dl>
 </dd></dl>
@@ -277,24 +286,36 @@
 <dt class="sig sig-object py" id="utils.common.get_exam_model">
 <span class="sig-prename descclassname"><span class="pre">utils.common.</span></span><span class="sig-name descname"><span class="pre">get_exam_model</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Gemini</span></span></span><a class="reference internal" href="_modules/utils/common.html#get_exam_model"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#utils.common.get_exam_model" title="Link to this definition">¶</a></dt>
 <dd><p>Initializes and returns the Gemini model for exam generation.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>An instance of the Gemini model configured for ‘gemini-1.5-flash-latest’.</p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="utils.common.get_model">
 <span class="sig-prename descclassname"><span class="pre">utils.common.</span></span><span class="sig-name descname"><span class="pre">get_model</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Gemini</span></span></span><a class="reference internal" href="_modules/utils/common.html#get_model"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#utils.common.get_model" title="Link to this definition">¶</a></dt>
 <dd><p>Initializes and returns the Gemini model for scenario generation.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>An instance of the Gemini model configured for ‘gemini-2.0-flash’.</p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="utils.common.sanitize_json_string">
 <span class="sig-prename descclassname"><span class="pre">utils.common.</span></span><span class="sig-name descname"><span class="pre">sanitize_json_string</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">json_str</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">str</span></span></span><a class="reference internal" href="_modules/utils/common.html#sanitize_json_string"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#utils.common.sanitize_json_string" title="Link to this definition">¶</a></dt>
-<dd><p>Sanitize a JSON string by removing or replacing problematic characters.</p>
+<dd><p>Sanitizes a string to improve its compatibility with JSON parsers.</p>
+<p>This function removes or replaces characters that are known to cause issues
+during JSON decoding, such as zero-width spaces and control characters.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>json_str</strong> – The JSON string to sanitize</p>
+<dd class="field-odd"><p><strong>json_str</strong> – The JSON string to be sanitized.</p>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>Cleaned JSON string</p>
+<dd class="field-even"><p>A cleaned JSON string.</p>
 </dd>
 </dl>
 </dd></dl>
@@ -302,19 +323,27 @@
 </section>
 <section id="module-utils">
 <span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-utils" title="Link to this heading">¶</a></h2>
+<p>Utility package for the Medical Simulation Suite AI.</p>
+<p>This package provides common helper functions used across the application,
+such as data extraction and model retrieval. The <cite>__all__</cite> variable explicitly
+defines the public API of this package.</p>
 <dl class="py function">
 <dt class="sig sig-object py" id="utils.extract_json_from_response">
 <span class="sig-prename descclassname"><span class="pre">utils.</span></span><span class="sig-name descname"><span class="pre">extract_json_from_response</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">response_text</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Any</span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="_modules/utils/common.html#extract_json_from_response"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#utils.extract_json_from_response" title="Link to this definition">¶</a></dt>
-<dd><p>Extracts a JSON object from the AI’s response text.</p>
+<dd><p>Extracts a JSON object from a model’s text response.</p>
+<p>This function searches for a JSON object within a string, which may be
+plain or enclosed in a markdown code block (<code class="docutils literal notranslate"><span class="pre">`json</span> <span class="pre">...</span> <span class="pre">`</span></code>). It attempts
+to parse the found JSON string into a Python dictionary.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>response_text</strong> – The response text from the AI model</p>
+<dd class="field-odd"><p><strong>response_text</strong> – The text string returned from the AI model.</p>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>Dict containing the parsed JSON</p>
+<dd class="field-even"><p>A dictionary containing the parsed JSON data.</p>
 </dd>
 <dt class="field-odd">Raises<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>ValueError</strong> – If the response is empty or contains invalid JSON</p>
+<dd class="field-odd"><p><strong>ValueError</strong> – If the response text is empty, no JSON is found, or the
+    extracted string is not valid JSON.</p>
 </dd>
 </dl>
 </dd></dl>
@@ -323,12 +352,22 @@
 <dt class="sig sig-object py" id="utils.get_exam_model">
 <span class="sig-prename descclassname"><span class="pre">utils.</span></span><span class="sig-name descname"><span class="pre">get_exam_model</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Gemini</span></span></span><a class="reference internal" href="_modules/utils/common.html#get_exam_model"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#utils.get_exam_model" title="Link to this definition">¶</a></dt>
 <dd><p>Initializes and returns the Gemini model for exam generation.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>An instance of the Gemini model configured for ‘gemini-1.5-flash-latest’.</p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="utils.get_model">
 <span class="sig-prename descclassname"><span class="pre">utils.</span></span><span class="sig-name descname"><span class="pre">get_model</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Gemini</span></span></span><a class="reference internal" href="_modules/utils/common.html#get_model"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#utils.get_model" title="Link to this definition">¶</a></dt>
 <dd><p>Initializes and returns the Gemini model for scenario generation.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>An instance of the Gemini model configured for ‘gemini-2.0-flash’.</p>
+</dd>
+</dl>
 </dd></dl>
 
 </section>

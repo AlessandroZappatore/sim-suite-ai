@@ -1,5 +1,11 @@
-# FastAPI endpoints for Medical Scenario Generation
-# Version 4.3 - Refactored to use APIRouter
+"""FastAPI router for medical scenario generation endpoints.
+
+This module defines the API routes related to creating and managing medical
+simulation scenarios. It includes endpoints for generating full scenarios
+based on user-defined parameters and for retrieving available difficulty levels.
+
+Version: 4.3
+"""
 
 import logging
 from typing import Dict, Any
@@ -18,24 +24,19 @@ router = APIRouter(
 
 
 @router.post("/generate-scenario", response_model=FullScenario, summary="Generate a Full Medical Scenario")
-def generate_scenario_endpoint(request: ScenarioRequest):
-    """
-    Generate a complete medical scenario based on the request parameters.
-    
+def generate_scenario_endpoint(request: ScenarioRequest) -> FullScenario:
+    """Generates a complete medical scenario based on user specifications.
+
+    This endpoint receives a request detailing the desired scenario and passes
+    it to the scenario generation agent, which returns a fully structured
+    scenario object.
+
     Args:
-        request: The scenario request containing:
-            - description: Detailed description of the clinical scenario
-            - scenario_type: Type of scenario (Quick/Advanced/Patient Simulated)
-            - target: Target audience (optional)
-            - difficulty: Difficulty level (Facile/Medio/Difficile) - affects complexity, complications, and clinical evolution
-            
+        request: An object containing the description, type, target audience,
+            and difficulty level for the scenario.
+
     Returns:
-        FullScenario: The generated medical scenario with appropriate complexity for the specified difficulty level
-        
-    Examples:
-        - Facile: Simple scenarios with stable parameters and basic interventions
-        - Medio: Moderate complexity with 1-2 manageable complications  
-        - Difficile: Complex scenarios with multiple complications, critical parameters, and rapid evolution
+        A complete, structured medical scenario object.
     """
     logger.info(f"Received request for the Medical Scenario Team: {request.model_dump()}")
     return generate_medical_scenario(request)
@@ -43,7 +44,15 @@ def generate_scenario_endpoint(request: ScenarioRequest):
 
 @router.get("/difficulty-levels", summary="Get Available Difficulty Levels")
 def get_difficulty_levels() -> Dict[str, Any]:
-    """Get list of available difficulty levels for medical scenarios."""
+    """Retrieves the available difficulty levels for scenario generation.
+
+    Provides a list of supported difficulty levels, each with a value, label,
+    and description in Italian, along with the default level.
+
+    Returns:
+        A dictionary containing a list of difficulty level objects and the
+        default value.
+    """
     return {
         "difficulty_levels": [
             {
@@ -52,15 +61,15 @@ def get_difficulty_levels() -> Dict[str, Any]:
                 "description": "Scenario semplice con poche complicazioni, parametri stabili, evoluzione prevedibile"
             },
             {
-                "value": "Medio", 
+                "value": "Medio",
                 "label": "Medio",
                 "description": "Scenario con complessità moderata, 1-2 complicazioni gestibili, richiede pensiero critico"
             },
             {
                 "value": "Difficile",
-                "label": "Difficile", 
+                "label": "Difficile",
                 "description": "Scenario complesso con multiple complicazioni, parametri critici, evoluzione rapida"
             }
         ],
-        "default": "Medio"
+        "default": "Facile"
     }

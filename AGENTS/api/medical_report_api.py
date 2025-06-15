@@ -1,7 +1,14 @@
-# FastAPI endpoints for Medical Report Generation
-# Version 1.1 - Refactored to use APIRouter
+"""FastAPI router for medical report generation endpoints.
+
+This module defines the API routes for generating and managing medical reports.
+It provides endpoints for creating a report based on a clinical scenario and
+for retrieving the list of supported examination and patient types.
+
+Version: 1.1
+"""
 
 import logging
+from typing import Dict, List
 
 from fastapi import APIRouter
 from agents.medical_report import generate_medical_report
@@ -15,23 +22,36 @@ router = APIRouter(
     tags=["Reports"]
 )
 
+
 @router.post("/generate-medical-report", response_model=MedicalReportResponse, summary="Generate Medical Report for an Examination")
-def generate_medical_report_endpoint(request: MedicalReportRequest):
-    """
-    Receives a scenario description and examination type, then generates a corresponding medical report.
-    
+def generate_medical_report_endpoint(request: MedicalReportRequest) -> MedicalReportResponse:
+    """Generates a medical report for a specific examination.
+
+    This endpoint takes a detailed clinical scenario and generates a formal
+    medical report for the specified examination type.
+
     Args:
-        request: The medical report request containing scenario description, patient type, and exam type
-        
+        request: A request object containing the scenario description, patient
+            type, and the type of examination to report on.
+
     Returns:
-        MedicalReportResponse: The generated medical report with conclusions and recommendations
+        A response object containing the generated medical report.
     """
+    logger.info(f"Received request to generate medical report: {request.model_dump()}")
     return generate_medical_report(request)
 
 
 @router.get("/exam-types", summary="Get Available Examination Types")
-def get_exam_types():
-    """Get list of available examination types for medical reports."""
+def get_exam_types() -> Dict[str, List[str]]:
+    """Retrieves the lists of available examination and patient types.
+
+    This endpoint provides the supported values for creating medical report
+    requests, which can be used to populate frontend selection inputs.
+
+    Returns:
+        A dictionary containing a list of supported 'exam_types' and
+        'patient_types'.
+    """
     return {
         "exam_types": [
             "ECG (Elettrocardiogramma)", "RX Torace", "TC Torace (con mdc)", "TC Torace (senza mdc)",

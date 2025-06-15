@@ -243,13 +243,12 @@
         </div>
         <article role="main" id="furo-main-content">
           <h1>Source code for agents.scenario_agents</h1><div class="highlight"><pre>
-<span></span><span class="sd">&quot;&quot;&quot;Defines the AI agents and orchestration logic for medical scenario generation.</span>
+<span></span><span class="sd">&quot;&quot;&quot;Defines AI agents and orchestration for medical scenario generation.</span>
 
 <span class="sd">This module contains the core components for the AI-driven scenario creation</span>
-<span class="sd">process. It defines individual &#39;specialist&#39; agents for different parts of a</span>
-<span class="sd">scenario (initial info, clinical timeline, patient script), functions to</span>
-<span class="sd">generate detailed prompts for these agents, and a `MedicalScenarioTeam` class</span>
-<span class="sd">that orchestrates the entire multi-step generation pipeline.</span>
+<span class="sd">process. It defines specialist agents for different parts of a scenario</span>
+<span class="sd">(initial info, timeline, script), functions to generate detailed prompts, and</span>
+<span class="sd">a MedicalScenarioTeam class to orchestrate the generation pipeline.</span>
 
 <span class="sd">Version: 4.2.0</span>
 <span class="sd">&quot;&quot;&quot;</span>
@@ -272,70 +271,66 @@
 <span class="kn">from</span><span class="w"> </span><span class="nn">models.presidi_medici</span><span class="w"> </span><span class="kn">import</span> <span class="n">PRESIDI_MEDICI</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">utils.common</span><span class="w"> </span><span class="kn">import</span> <span class="n">extract_json_from_response</span><span class="p">,</span> <span class="n">get_model</span>
 
-<span class="c1"># --- Module-level Configuration ---</span>
 <span class="n">logging</span><span class="o">.</span><span class="n">basicConfig</span><span class="p">(</span><span class="n">level</span><span class="o">=</span><span class="n">logging</span><span class="o">.</span><span class="n">INFO</span><span class="p">)</span>
 <span class="n">logger</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="vm">__name__</span><span class="p">)</span>
 
-
-<span class="c1"># Define agents</span>
+<span class="c1"># --- Agent Definitions ---</span>
+<span class="c1"># Defines the specialist agents responsible for each part of the scenario generation.</span>
 <span class="n">info_agent</span> <span class="o">=</span> <span class="n">Agent</span><span class="p">(</span>
-    <span class="n">name</span><span class="o">=</span><span class="s2">&quot;Scenario Info Generator&quot;</span><span class="p">,</span> 
-    <span class="n">role</span><span class="o">=</span><span class="s2">&quot;An expert in creating the foundational elements of a medical simulation.&quot;</span><span class="p">,</span> 
-    <span class="n">model</span><span class="o">=</span><span class="n">get_model</span><span class="p">(),</span> 
+    <span class="n">name</span><span class="o">=</span><span class="s2">&quot;Scenario Info Generator&quot;</span><span class="p">,</span>
+    <span class="n">role</span><span class="o">=</span><span class="s2">&quot;An expert in creating the foundational elements of a medical simulation.&quot;</span><span class="p">,</span>
+    <span class="n">model</span><span class="o">=</span><span class="n">get_model</span><span class="p">(),</span>
     <span class="n">instructions</span><span class="o">=</span><span class="p">[</span>
-        <span class="s2">&quot;Your task is to generate the static, initial part of a medical scenario. &quot;</span>
-        <span class="s2">&quot;All text content must be in Italian. &quot;</span>
-        <span class="s2">&quot;Based on the user&#39;s request, you must create a JSON object that strictly matches the required Pydantic schema. &quot;</span>
+        <span class="s2">&quot;Your task is to generate the static, initial part of a medical scenario. &quot;</span><span class="p">,</span>
+        <span class="s2">&quot;All text content must be in Italian. &quot;</span><span class="p">,</span>
+        <span class="s2">&quot;Based on the user&#39;s request, you must create a JSON object that strictly matches the required Pydantic schema. &quot;</span><span class="p">,</span>
         <span class="s2">&quot;Respond ONLY with the valid JSON object.&quot;</span>
     <span class="p">]</span>
 <span class="p">)</span>
 
 <span class="n">timeline_agent</span> <span class="o">=</span> <span class="n">Agent</span><span class="p">(</span>
-    <span class="n">name</span><span class="o">=</span><span class="s2">&quot;Clinical Timeline Generator&quot;</span><span class="p">,</span> 
-    <span class="n">role</span><span class="o">=</span><span class="s2">&quot;An expert in creating dynamic, evolving clinical timelines for medical simulations.&quot;</span><span class="p">,</span> 
-    <span class="n">model</span><span class="o">=</span><span class="n">get_model</span><span class="p">(),</span> 
+    <span class="n">name</span><span class="o">=</span><span class="s2">&quot;Clinical Timeline Generator&quot;</span><span class="p">,</span>
+    <span class="n">role</span><span class="o">=</span><span class="s2">&quot;An expert in creating dynamic, evolving clinical timelines for medical simulations.&quot;</span><span class="p">,</span>
+    <span class="n">model</span><span class="o">=</span><span class="n">get_model</span><span class="p">(),</span>
     <span class="n">instructions</span><span class="o">=</span><span class="p">[</span>
-        <span class="s2">&quot;Your task is to generate a series of timeline events (&#39;tempi&#39;). &quot;</span>
-        <span class="s2">&quot;All text content must be in Italian. &quot;</span>
-        <span class="s2">&quot;Based on the provided initial scenario context, create a realistic clinical evolution. &quot;</span>
-        <span class="s2">&quot;You must respond ONLY with a valid JSON object strictly matching the Pydantic schema. &quot;</span>
-        <span class="s2">&quot;You have to start from T0 with the same parameters as pazienteT0 and then evolve the scenario with 4-5 events. &quot;</span>
+        <span class="s2">&quot;Your task is to generate a series of timeline events (&#39;tempi&#39;). &quot;</span><span class="p">,</span>
+        <span class="s2">&quot;All text content must be in Italian. &quot;</span><span class="p">,</span>
+        <span class="s2">&quot;Based on the provided initial scenario context, create a realistic clinical evolution. &quot;</span><span class="p">,</span>
+        <span class="s2">&quot;You must respond ONLY with a valid JSON object strictly matching the Pydantic schema. &quot;</span><span class="p">,</span>
+        <span class="s2">&quot;You have to start from T0 with the same parameters as pazienteT0 and then evolve the scenario with 4-5 events. &quot;</span><span class="p">,</span>
         <span class="s2">&quot;If the patient is pediatric, include a &#39;ruoloGenitore&#39; field in each event if necessary.&quot;</span>
     <span class="p">]</span>
 <span class="p">)</span>
 
 <span class="n">script_agent</span> <span class="o">=</span> <span class="n">Agent</span><span class="p">(</span>
-    <span class="n">name</span><span class="o">=</span><span class="s2">&quot;Patient Script Writer&quot;</span><span class="p">,</span> 
-    <span class="n">role</span><span class="o">=</span><span class="s2">&quot;A creative writer specializing in scripts for simulated patients.&quot;</span><span class="p">,</span> 
-    <span class="n">model</span><span class="o">=</span><span class="n">get_model</span><span class="p">(),</span> 
+    <span class="n">name</span><span class="o">=</span><span class="s2">&quot;Patient Script Writer&quot;</span><span class="p">,</span>
+    <span class="n">role</span><span class="o">=</span><span class="s2">&quot;A creative writer specializing in scripts for simulated patients.&quot;</span><span class="p">,</span>
+    <span class="n">model</span><span class="o">=</span><span class="n">get_model</span><span class="p">(),</span>
     <span class="n">instructions</span><span class="o">=</span><span class="p">[</span>
-        <span class="s2">&quot;Your task is to write a script (&#39;sceneggiatura&#39;) for a simulated patient. &quot;</span>
-        <span class="s2">&quot;The script must be in Italian and enclosed in &lt;p&gt;&lt;/p&gt; tags. &quot;</span>
-        <span class="s2">&quot;Based on the complete scenario provided, write a script that the patient actor can follow. &quot;</span>
+        <span class="s2">&quot;Your task is to write a script (&#39;sceneggiatura&#39;) for a simulated patient. &quot;</span><span class="p">,</span>
+        <span class="s2">&quot;The script must be in Italian and enclosed in &lt;p&gt;&lt;/p&gt; tags. &quot;</span><span class="p">,</span>
+        <span class="s2">&quot;Based on the complete scenario provided, write a script that the patient actor can follow. &quot;</span><span class="p">,</span>
         <span class="s2">&quot;Respond ONLY with a valid JSON object strictly matching the Pydantic schema.&quot;</span>
     <span class="p">]</span>
 <span class="p">)</span>
 
 
-<span class="c1"># Agent-specific prompt creation functions</span>
-
 <div class="viewcode-block" id="create_info_prompt">
 <a class="viewcode-back" href="../../agents.html#agents.scenario_agents.create_info_prompt">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">create_info_prompt</span><span class="p">(</span><span class="n">request</span><span class="p">:</span> <span class="n">ScenarioRequest</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Creates the detailed, dynamic prompt for the Scenario Info Generator agent.</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Creates the detailed prompt for the Scenario Info Generator agent.</span>
 
-<span class="sd">    This function constructs a comprehensive prompt string that includes user</span>
-<span class="sd">    request details, difficulty-specific guidelines, formatting rules, and the</span>
-<span class="sd">    exact JSON schema the agent must follow.</span>
+<span class="sd">    This function constructs a comprehensive prompt that includes user request</span>
+<span class="sd">    details, difficulty-specific guidelines, formatting rules, and the exact</span>
+<span class="sd">    JSON schema the agent must follow.</span>
 
 <span class="sd">    Args:</span>
-<span class="sd">        request (ScenarioRequest): The user&#39;s request object containing all the</span>
-<span class="sd">            base parameters for the scenario.</span>
+<span class="sd">        request: The user&#39;s request object containing the base parameters</span>
+<span class="sd">            for the scenario.</span>
 
 <span class="sd">    Returns:</span>
-<span class="sd">        str: A fully formatted prompt string to be sent to the info_agent.</span>
+<span class="sd">        A fully formatted prompt string to be sent to the info_agent.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    
     <span class="n">difficulty_guidelines</span> <span class="o">=</span> <span class="p">{</span>
         <span class="s2">&quot;Facile&quot;</span><span class="p">:</span> <span class="p">{</span>
             <span class="s2">&quot;complications&quot;</span><span class="p">:</span> <span class="s2">&quot;Scenario semplice con poche complicazioni. Concentrarsi sui fondamentali.&quot;</span><span class="p">,</span>
@@ -356,10 +351,10 @@
             <span class="s2">&quot;actions&quot;</span><span class="p">:</span> <span class="s2">&quot;Procedure avanzate, farmaci complessi, decisioni critiche sotto pressione.&quot;</span>
         <span class="p">}</span>
     <span class="p">}</span>
-    
+
     <span class="n">difficulty</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="n">difficulty</span> <span class="ow">or</span> <span class="s2">&quot;Facile&quot;</span>
     <span class="n">guidelines</span> <span class="o">=</span> <span class="n">difficulty_guidelines</span><span class="p">[</span><span class="n">difficulty</span><span class="p">]</span>
-    
+
     <span class="k">return</span> <span class="sa">f</span><span class="s2">&quot;&quot;&quot;Generate the base part of a medical scenario in JSON format.</span>
 <span class="s2">    USER REQUEST:</span>
 <span class="s2">    - Description: </span><span class="si">{</span><span class="n">request</span><span class="o">.</span><span class="n">description</span><span class="si">}</span>
@@ -389,7 +384,7 @@
 <span class="s2">    7.  For the &#39;presidi&#39; field, choose ONLY from this list: </span><span class="si">{</span><span class="n">PRESIDI_MEDICI</span><span class="si">}</span>
 <span class="s2">    8.  Based on the primary pathology (&#39;patologia&#39;) and the user&#39;s description, you MUST identify and list some crucial medical actions in the &#39;azioniChiave&#39; field. These actions must be appropriate for the target audience.</span>
 <span class="s2">    9.  **Vascular Access**: If the clinical context suggests it (e.g., trauma, shock), you MUST populate &#39;pazienteT0.accessiVenosi&#39; and/or &#39;pazienteT0.accessiArteriosi&#39;.</span>
-<span class="s2">    10.  **Parent/Guardian Role**: If &#39;tipologia&#39; is &#39;Pediatrico&#39;, &#39;Neonatale&#39;, or &#39;Prematuro&#39;, provide context in &#39;scenario.infoGenitore&#39;, describing the parent at the start of the scenario.</span>
+<span class="s2">    10. **Parent/Guardian Role**: If &#39;tipologia&#39; is &#39;Pediatrico&#39;, &#39;Neonatale&#39;, or &#39;Prematuro&#39;, provide context in &#39;scenario.infoGenitore&#39;, describing the parent at the start of the scenario.</span>
 
 <span class="s2">    JSON SCHEMA TO FOLLOW:</span>
 <span class="s2">    </span><span class="si">{</span><span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">BaseScenario</span><span class="o">.</span><span class="n">model_json_schema</span><span class="p">(),</span><span class="w"> </span><span class="n">indent</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span><span class="si">}</span>
@@ -403,27 +398,23 @@
 <span class="k">def</span><span class="w"> </span><span class="nf">create_timeline_prompt</span><span class="p">(</span><span class="n">context</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Creates the detailed prompt for the Clinical Timeline Generator agent.</span>
 
-<span class="sd">    This function uses the initial scenario context to build a prompt that asks</span>
-<span class="sd">    for a realistic clinical evolution, respecting the scenario&#39;s difficulty</span>
-<span class="sd">    level.</span>
+<span class="sd">    This function uses the initial scenario context to build a prompt asking</span>
+<span class="sd">    for a realistic clinical evolution that respects the difficulty level.</span>
 
 <span class="sd">    Args:</span>
-<span class="sd">        context (Dict[str, Any]): A dictionary containing the foundational</span>
-<span class="sd">            elements of the scenario, such as pathology and initial patient</span>
-<span class="sd">            parameters.</span>
+<span class="sd">        context: A dictionary containing foundational scenario elements,</span>
+<span class="sd">            such as pathology and initial patient parameters.</span>
 
 <span class="sd">    Returns:</span>
-<span class="sd">        str: A fully formatted prompt string to be sent to the timeline_agent.</span>
+<span class="sd">        A fully formatted prompt string for the timeline_agent.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    
     <span class="n">difficulty</span> <span class="o">=</span> <span class="n">context</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;difficulty&#39;</span><span class="p">,</span> <span class="s1">&#39;Facile&#39;</span><span class="p">)</span>
-    
     <span class="n">difficulty_timeline_rules</span> <span class="o">=</span> <span class="p">{</span>
         <span class="s2">&quot;Facile&quot;</span><span class="p">:</span> <span class="s2">&quot;Evoluzione graduale e stabile. Massimo 1 complicazione minore. Tempi di reazione lenti (5-10 minuti tra eventi).&quot;</span><span class="p">,</span>
         <span class="s2">&quot;Medio&quot;</span><span class="p">:</span> <span class="s2">&quot;Evoluzione moderatamente dinamica. 1-2 complicazioni gestibili. Tempi di reazione normali (2-5 minuti tra eventi).&quot;</span><span class="p">,</span>
         <span class="s2">&quot;Difficile&quot;</span><span class="p">:</span> <span class="s2">&quot;Evoluzione rapida e critica. Multiple complicazioni simultanee. Deterioramento rapido se non trattato. Tempi di reazione rapidi (30 secondi - 2 minuti).&quot;</span>
     <span class="p">}</span>
-    
+
     <span class="k">return</span> <span class="sa">f</span><span class="s2">&quot;&quot;&quot;Given the following medical scenario context, generate a clinical timeline.</span>
 <span class="s2">    CONTEXT: </span><span class="si">{</span><span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">context</span><span class="p">,</span><span class="w"> </span><span class="n">indent</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span><span class="si">}</span>
 <span class="s2">    </span>
@@ -450,13 +441,12 @@
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Creates the detailed prompt for the Patient Script Writer agent.</span>
 
 <span class="sd">    Args:</span>
-<span class="sd">        context (Dict[str, Any]): A dictionary containing the complete scenario</span>
-<span class="sd">            data, including the timeline, to inform the script.</span>
+<span class="sd">        context: A dictionary containing the complete scenario data,</span>
+<span class="sd">            including the timeline, to inform the script.</span>
 
 <span class="sd">    Returns:</span>
-<span class="sd">        str: A fully formatted prompt string to be sent to the script_agent.</span>
+<span class="sd">        A fully formatted prompt string for the script_agent.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-
     <span class="k">return</span> <span class="sa">f</span><span class="s2">&quot;&quot;&quot;Given the following complete medical scenario, write a script for the simulated patient.</span>
 <span class="s2">    FULL SCENARIO CONTEXT: </span><span class="si">{</span><span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">context</span><span class="p">,</span><span class="w"> </span><span class="n">indent</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span><span class="si">}</span>
 <span class="s2">    INSTRUCTIONS:</span>
@@ -474,19 +464,19 @@
 <span class="k">class</span><span class="w"> </span><span class="nc">MedicalScenarioTeam</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Manages a team of agents to generate a complete medical scenario.</span>
 
-<span class="sd">    This class orchestrates a multi-step pipeline, where each agent contributes</span>
+<span class="sd">    This class orchestrates a multi-step pipeline where each agent contributes</span>
 <span class="sd">    its specialty in sequence to build a rich, detailed, and validated</span>
 <span class="sd">    medical simulation scenario.</span>
 
 <span class="sd">    Attributes:</span>
-<span class="sd">        members (Dict[str, Agent]): A dictionary mapping agent names to agent</span>
-<span class="sd">            instances.</span>
+<span class="sd">        members: A dictionary mapping agent names to agent instances.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
+
     <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">members</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">Agent</span><span class="p">]):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Initializes the MedicalScenarioTeam.</span>
 
 <span class="sd">        Args:</span>
-<span class="sd">            members (List[Agent]): A list of Agent instances that form the team.</span>
+<span class="sd">            members: A list of Agent instances that form the team.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">members</span> <span class="o">=</span> <span class="p">{</span><span class="n">agent</span><span class="o">.</span><span class="n">name</span><span class="p">:</span> <span class="n">agent</span> <span class="k">for</span> <span class="n">agent</span> <span class="ow">in</span> <span class="n">members</span><span class="p">}</span>
 
@@ -494,10 +484,10 @@
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Retrieves a team member by name.</span>
 
 <span class="sd">        Args:</span>
-<span class="sd">            name (str): The name of the agent to retrieve.</span>
+<span class="sd">            name: The name of the agent to retrieve.</span>
 
 <span class="sd">        Returns:</span>
-<span class="sd">            Agent: The requested agent instance.</span>
+<span class="sd">            The requested agent instance.</span>
 
 <span class="sd">        Raises:</span>
 <span class="sd">            ValueError: If an agent with the specified name is not found.</span>
@@ -513,19 +503,19 @@
 
 <span class="sd">        The pipeline proceeds in the following order:</span>
 <span class="sd">        1.  The `Scenario Info Generator` creates the base scenario.</span>
-<span class="sd">        2.  The `Clinical Timeline Generator` adds the evolving timeline (if applicable).</span>
-<span class="sd">        3.  The `Patient Script Writer` creates the patient&#39;s script (if applicable).</span>
+<span class="sd">        2.  The `Clinical Timeline Generator` adds the evolving timeline.</span>
+<span class="sd">        3.  The `Patient Script Writer` creates the patient&#39;s script.</span>
 <span class="sd">        4.  The final result is validated against the FullScenario model.</span>
 
 <span class="sd">        Args:</span>
-<span class="sd">            request (ScenarioRequest): The initial request from the user.</span>
+<span class="sd">            request: The initial request from the user.</span>
 
 <span class="sd">        Returns:</span>
-<span class="sd">            FullScenario: The complete and validated medical scenario.</span>
+<span class="sd">            The complete and validated medical scenario.</span>
 
 <span class="sd">        Raises:</span>
-<span class="sd">            HTTPException: If any step of the generation, validation, or parsing</span>
-<span class="sd">                fails, an appropriate HTTPException is raised.</span>
+<span class="sd">            HTTPException: If any step of the generation, validation, or</span>
+<span class="sd">                parsing fails.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">try</span><span class="p">:</span>
             <span class="c1"># STEP 1: Run Info Agent</span>
@@ -534,15 +524,17 @@
             <span class="n">info_response</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_agent</span><span class="p">(</span><span class="s2">&quot;Scenario Info Generator&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">info_prompt</span><span class="p">)</span> <span class="c1"># type: ignore</span>
             <span class="n">base_scenario_dict</span> <span class="o">=</span> <span class="n">extract_json_from_response</span><span class="p">(</span><span class="n">info_response</span><span class="o">.</span><span class="n">content</span><span class="p">)</span>
             <span class="n">BaseScenario</span><span class="o">.</span><span class="n">model_validate</span><span class="p">(</span><span class="n">base_scenario_dict</span><span class="p">)</span>
-            
+
             <span class="n">full_scenario_data</span> <span class="o">=</span> <span class="n">base_scenario_dict</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
             <span class="n">full_scenario_data</span><span class="p">[</span><span class="s2">&quot;tempi&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span>
-            <span class="n">full_scenario_data</span><span class="p">[</span><span class="s2">&quot;sceneggiatura&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>            <span class="c1"># STEP 2: Run Timeline Agent (if needed)</span>
+            <span class="n">full_scenario_data</span><span class="p">[</span><span class="s2">&quot;sceneggiatura&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+
+            <span class="c1"># STEP 2: Run Timeline Agent (if needed)</span>
             <span class="k">if</span> <span class="n">request</span><span class="o">.</span><span class="n">scenario_type</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;Advanced Scenario&quot;</span><span class="p">,</span> <span class="s2">&quot;Patient Simulated Scenario&quot;</span><span class="p">]:</span>
                 <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Team Pipeline: Running &#39;Clinical Timeline Generator&#39;...&quot;</span><span class="p">)</span>
-                <span class="n">context</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span>      
-                    <span class="s2">&quot;pathology&quot;</span><span class="p">:</span> <span class="n">base_scenario_dict</span><span class="p">[</span><span class="s2">&quot;scenario&quot;</span><span class="p">][</span><span class="s2">&quot;patologia&quot;</span><span class="p">],</span> 
-                    <span class="s2">&quot;patient_t0&quot;</span><span class="p">:</span> <span class="n">base_scenario_dict</span><span class="p">[</span><span class="s2">&quot;pazienteT0&quot;</span><span class="p">],</span> 
+                <span class="n">context</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span>
+                    <span class="s2">&quot;pathology&quot;</span><span class="p">:</span> <span class="n">base_scenario_dict</span><span class="p">[</span><span class="s2">&quot;scenario&quot;</span><span class="p">][</span><span class="s2">&quot;patologia&quot;</span><span class="p">],</span>
+                    <span class="s2">&quot;patient_t0&quot;</span><span class="p">:</span> <span class="n">base_scenario_dict</span><span class="p">[</span><span class="s2">&quot;pazienteT0&quot;</span><span class="p">],</span>
                     <span class="s2">&quot;patient_typology&quot;</span><span class="p">:</span> <span class="n">base_scenario_dict</span><span class="p">[</span><span class="s2">&quot;scenario&quot;</span><span class="p">][</span><span class="s2">&quot;tipologia&quot;</span><span class="p">],</span>
                     <span class="s2">&quot;difficulty&quot;</span><span class="p">:</span> <span class="n">request</span><span class="o">.</span><span class="n">difficulty</span>
                 <span class="p">}</span>
@@ -550,7 +542,7 @@
                 <span class="n">timeline_response</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_agent</span><span class="p">(</span><span class="s2">&quot;Clinical Timeline Generator&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">timeline_prompt</span><span class="p">)</span> <span class="c1"># type: ignore</span>
                 <span class="n">timeline_dict</span> <span class="o">=</span> <span class="n">extract_json_from_response</span><span class="p">(</span><span class="n">timeline_response</span><span class="o">.</span><span class="n">content</span><span class="p">)</span>
                 <span class="n">full_scenario_data</span><span class="p">[</span><span class="s2">&quot;tempi&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">Timeline</span><span class="o">.</span><span class="n">model_validate</span><span class="p">(</span><span class="n">timeline_dict</span><span class="p">)</span><span class="o">.</span><span class="n">model_dump</span><span class="p">()[</span><span class="s2">&quot;tempi&quot;</span><span class="p">]</span>
-    
+
             <span class="c1"># STEP 3: Run Script Agent (if needed)</span>
             <span class="k">if</span> <span class="n">request</span><span class="o">.</span><span class="n">scenario_type</span> <span class="o">==</span> <span class="s2">&quot;Patient Simulated Scenario&quot;</span><span class="p">:</span>
                 <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Team Pipeline: Running &#39;Patient Script Writer&#39;...&quot;</span><span class="p">)</span>
@@ -559,11 +551,11 @@
                 <span class="n">script_response</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_agent</span><span class="p">(</span><span class="s2">&quot;Patient Script Writer&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">script_prompt</span><span class="p">)</span> <span class="c1"># type: ignore</span>
                 <span class="n">script_dict</span> <span class="o">=</span> <span class="n">extract_json_from_response</span><span class="p">(</span><span class="n">script_response</span><span class="o">.</span><span class="n">content</span><span class="p">)</span>
                 <span class="n">full_scenario_data</span><span class="p">[</span><span class="s2">&quot;sceneggiatura&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">script_dict</span><span class="p">[</span><span class="s2">&quot;sceneggiatura&quot;</span><span class="p">]</span>
-    
+
             <span class="c1"># STEP 4: Final Validation</span>
             <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Team Pipeline: Assembling and validating final scenario...&quot;</span><span class="p">)</span>
             <span class="k">return</span> <span class="n">FullScenario</span><span class="o">.</span><span class="n">model_validate</span><span class="p">(</span><span class="n">full_scenario_data</span><span class="p">)</span>
-            
+
         <span class="k">except</span> <span class="p">(</span><span class="n">ValidationError</span><span class="p">,</span> <span class="ne">ValueError</span><span class="p">)</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
             <span class="n">logger</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Data validation or extraction error in pipeline: </span><span class="si">{</span><span class="n">e</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">exc_info</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
             <span class="k">raise</span> <span class="n">HTTPException</span><span class="p">(</span><span class="n">status_code</span><span class="o">=</span><span class="mi">422</span><span class="p">,</span> <span class="n">detail</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;error&quot;</span><span class="p">:</span> <span class="s2">&quot;Generated content failed validation or parsing.&quot;</span><span class="p">,</span> <span class="s2">&quot;details&quot;</span><span class="p">:</span> <span class="nb">str</span><span class="p">(</span><span class="n">e</span><span class="p">)})</span>
@@ -574,29 +566,29 @@
 
 
 
-<span class="c1"># Create team instance</span>
+<span class="c1"># --- Team Instantiation ---</span>
 <span class="n">medical_team</span> <span class="o">=</span> <span class="n">MedicalScenarioTeam</span><span class="p">(</span><span class="n">members</span><span class="o">=</span><span class="p">[</span><span class="n">info_agent</span><span class="p">,</span> <span class="n">timeline_agent</span><span class="p">,</span> <span class="n">script_agent</span><span class="p">])</span>
 
 
 <div class="viewcode-block" id="generate_medical_scenario">
 <a class="viewcode-back" href="../../agents.html#agents.scenario_agents.generate_medical_scenario">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">generate_medical_scenario</span><span class="p">(</span><span class="n">request</span><span class="p">:</span> <span class="n">ScenarioRequest</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">FullScenario</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Generates a complete medical scenario based on request parameters.</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Generates a medical scenario by orchestrating a team of agents.</span>
 
 <span class="sd">    This function serves as the main public entry point for the scenario</span>
-<span class="sd">    generation service. It takes a user request and delegates the complex</span>
-<span class="sd">    generation logic to the `medical_team`.</span>
+<span class="sd">    generation service. It delegates the complex generation logic to the</span>
+<span class="sd">    `medical_team`.</span>
 
 <span class="sd">    Args:</span>
-<span class="sd">        request (ScenarioRequest): The scenario request containing the description,</span>
-<span class="sd">            type, target audience, and other parameters.</span>
+<span class="sd">        request: The scenario request containing the description, type,</span>
+<span class="sd">            target audience, and other parameters.</span>
 
 <span class="sd">    Returns:</span>
-<span class="sd">        FullScenario: The complete, generated medical scenario.</span>
+<span class="sd">        The complete, generated medical scenario.</span>
 
 <span class="sd">    Raises:</span>
-<span class="sd">        HTTPException: Propagated from the `MedicalScenarioTeam.run` method if</span>
-<span class="sd">            the generation or validation process fails.</span>
+<span class="sd">        HTTPException: Propagated from the `MedicalScenarioTeam.run` method</span>
+<span class="sd">            if the generation or validation process fails.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Received request to generate medical scenario: </span><span class="si">{</span><span class="n">request</span><span class="o">.</span><span class="n">scenario_type</span><span class="si">}</span><span class="s2"> for </span><span class="si">{</span><span class="n">request</span><span class="o">.</span><span class="n">target</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">medical_team</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">request</span><span class="p">)</span></div>

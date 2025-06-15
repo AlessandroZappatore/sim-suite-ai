@@ -1,38 +1,257 @@
-<!DOCTYPE html>
+<!doctype html>
+<html class="no-js" lang="en" data-content_root="../../">
+  <head><meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width,initial-scale=1"/>
+    <meta name="color-scheme" content="light dark"><link rel="index" title="Index" href="../../genindex.html" /><link rel="search" title="Search" href="../../search.html" />
 
-<html lang="en" data-content_root="../../">
-  <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>models.scenario_models &#8212; sim-suite-ai 1.0 documentation</title>
-    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=5ecbeea2" />
-    <link rel="stylesheet" type="text/css" href="../../_static/basic.css?v=b08954a9" />
-    <link rel="stylesheet" type="text/css" href="../../_static/alabaster.css?v=27fed22d" />
-    <script src="../../_static/documentation_options.js?v=f2a433a1"></script>
-    <script src="../../_static/doctools.js?v=9bcbadda"></script>
-    <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
-    <link rel="index" title="Index" href="../../genindex.html" />
-    <link rel="search" title="Search" href="../../search.html" />
-   
-  <link rel="stylesheet" href="../../_static/custom.css" type="text/css" />
+    <!-- Generated with Sphinx 8.2.3 and Furo 2024.08.06 -->
+        <title>models.scenario_models - sim-suite-ai 1.0 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=8f2a1f02" />
+    <link rel="stylesheet" type="text/css" href="../../_static/styles/furo.css?v=354aac6f" />
+    <link rel="stylesheet" type="text/css" href="../../_static/styles/furo-extensions.css?v=302659d7" />
+    
+    
+
+
+<style>
+  body {
+    --color-code-background: #f8f8f8;
+  --color-code-foreground: black;
   
+  }
+  @media not print {
+    body[data-theme="dark"] {
+      --color-code-background: #202020;
+  --color-code-foreground: #d0d0d0;
+  
+    }
+    @media (prefers-color-scheme: dark) {
+      body:not([data-theme="light"]) {
+        --color-code-background: #202020;
+  --color-code-foreground: #d0d0d0;
+  
+      }
+    }
+  }
+</style></head>
+  <body>
+    
+    <script>
+      document.body.dataset.theme = localStorage.getItem("theme") || "auto";
+    </script>
+    
 
+<svg xmlns="http://www.w3.org/2000/svg" style="display: none;">
+  <symbol id="svg-toc" viewBox="0 0 24 24">
+    <title>Contents</title>
+    <svg stroke="currentColor" fill="currentColor" stroke-width="0" viewBox="0 0 1024 1024">
+      <path d="M408 442h480c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8H408c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8zm-8 204c0 4.4 3.6 8 8 8h480c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8H408c-4.4 0-8 3.6-8 8v56zm504-486H120c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8h784c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8zm0 632H120c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8h784c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8zM115.4 518.9L271.7 642c5.8 4.6 14.4.5 14.4-6.9V388.9c0-7.4-8.5-11.5-14.4-6.9L115.4 505.1a8.74 8.74 0 0 0 0 13.8z"/>
+    </svg>
+  </symbol>
+  <symbol id="svg-menu" viewBox="0 0 24 24">
+    <title>Menu</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather-menu">
+      <line x1="3" y1="12" x2="21" y2="12"></line>
+      <line x1="3" y1="6" x2="21" y2="6"></line>
+      <line x1="3" y1="18" x2="21" y2="18"></line>
+    </svg>
+  </symbol>
+  <symbol id="svg-arrow-right" viewBox="0 0 24 24">
+    <title>Expand</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather-chevron-right">
+      <polyline points="9 18 15 12 9 6"></polyline>
+    </svg>
+  </symbol>
+  <symbol id="svg-sun" viewBox="0 0 24 24">
+    <title>Light mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="feather-sun">
+      <circle cx="12" cy="12" r="5"></circle>
+      <line x1="12" y1="1" x2="12" y2="3"></line>
+      <line x1="12" y1="21" x2="12" y2="23"></line>
+      <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+      <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+      <line x1="1" y1="12" x2="3" y2="12"></line>
+      <line x1="21" y1="12" x2="23" y2="12"></line>
+      <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+      <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+    </svg>
+  </symbol>
+  <symbol id="svg-moon" viewBox="0 0 24 24">
+    <title>Dark mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-moon">
+      <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+      <path d="M12 3c.132 0 .263 0 .393 0a7.5 7.5 0 0 0 7.92 12.446a9 9 0 1 1 -8.313 -12.454z" />
+    </svg>
+  </symbol>
+  <symbol id="svg-sun-with-moon" viewBox="0 0 24 24">
+    <title>Auto light/dark, in light mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round"
+      class="icon-custom-derived-from-feather-sun-and-tabler-moon">
+      <path style="opacity: 50%" d="M 5.411 14.504 C 5.471 14.504 5.532 14.504 5.591 14.504 C 3.639 16.319 4.383 19.569 6.931 20.352 C 7.693 20.586 8.512 20.551 9.25 20.252 C 8.023 23.207 4.056 23.725 2.11 21.184 C 0.166 18.642 1.702 14.949 4.874 14.536 C 5.051 14.512 5.231 14.5 5.411 14.5 L 5.411 14.504 Z"/>
+      <line x1="14.5" y1="3.25" x2="14.5" y2="1.25"/>
+      <line x1="14.5" y1="15.85" x2="14.5" y2="17.85"/>
+      <line x1="10.044" y1="5.094" x2="8.63" y2="3.68"/>
+      <line x1="19" y1="14.05" x2="20.414" y2="15.464"/>
+      <line x1="8.2" y1="9.55" x2="6.2" y2="9.55"/>
+      <line x1="20.8" y1="9.55" x2="22.8" y2="9.55"/>
+      <line x1="10.044" y1="14.006" x2="8.63" y2="15.42"/>
+      <line x1="19" y1="5.05" x2="20.414" y2="3.636"/>
+      <circle cx="14.5" cy="9.55" r="3.6"/>
+    </svg>
+  </symbol>
+  <symbol id="svg-moon-with-sun" viewBox="0 0 24 24">
+    <title>Auto light/dark, in dark mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round"
+      class="icon-custom-derived-from-feather-sun-and-tabler-moon">
+      <path d="M 8.282 7.007 C 8.385 7.007 8.494 7.007 8.595 7.007 C 5.18 10.184 6.481 15.869 10.942 17.24 C 12.275 17.648 13.706 17.589 15 17.066 C 12.851 22.236 5.91 23.143 2.505 18.696 C -0.897 14.249 1.791 7.786 7.342 7.063 C 7.652 7.021 7.965 7 8.282 7 L 8.282 7.007 Z"/>
+      <line style="opacity: 50%" x1="18" y1="3.705" x2="18" y2="2.5"/>
+      <line style="opacity: 50%" x1="18" y1="11.295" x2="18" y2="12.5"/>
+      <line style="opacity: 50%" x1="15.316" y1="4.816" x2="14.464" y2="3.964"/>
+      <line style="opacity: 50%" x1="20.711" y1="10.212" x2="21.563" y2="11.063"/>
+      <line style="opacity: 50%" x1="14.205" y1="7.5" x2="13.001" y2="7.5"/>
+      <line style="opacity: 50%" x1="21.795" y1="7.5" x2="23" y2="7.5"/>
+      <line style="opacity: 50%" x1="15.316" y1="10.184" x2="14.464" y2="11.036"/>
+      <line style="opacity: 50%" x1="20.711" y1="4.789" x2="21.563" y2="3.937"/>
+      <circle style="opacity: 50%" cx="18" cy="7.5" r="2.169"/>
+    </svg>
+  </symbol>
+  <symbol id="svg-pencil" viewBox="0 0 24 24">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-pencil-code">
+      <path d="M4 20h4l10.5 -10.5a2.828 2.828 0 1 0 -4 -4l-10.5 10.5v4" />
+      <path d="M13.5 6.5l4 4" />
+      <path d="M20 21l2 -2l-2 -2" />
+      <path d="M17 17l-2 2l2 2" />
+    </svg>
+  </symbol>
+  <symbol id="svg-eye" viewBox="0 0 24 24">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-eye-code">
+      <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+      <path d="M10 12a2 2 0 1 0 4 0a2 2 0 0 0 -4 0" />
+      <path
+        d="M11.11 17.958c-3.209 -.307 -5.91 -2.293 -8.11 -5.958c2.4 -4 5.4 -6 9 -6c3.6 0 6.6 2 9 6c-.21 .352 -.427 .688 -.647 1.008" />
+      <path d="M20 21l2 -2l-2 -2" />
+      <path d="M17 17l-2 2l2 2" />
+    </svg>
+  </symbol>
+</svg>
+
+<input type="checkbox" class="sidebar-toggle" name="__navigation" id="__navigation">
+<input type="checkbox" class="sidebar-toggle" name="__toc" id="__toc">
+<label class="overlay sidebar-overlay" for="__navigation">
+  <div class="visually-hidden">Hide navigation sidebar</div>
+</label>
+<label class="overlay toc-overlay" for="__toc">
+  <div class="visually-hidden">Hide table of contents sidebar</div>
+</label>
+
+<a class="skip-to-content muted-link" href="#furo-main-content">Skip to content</a>
+
+
+
+<div class="page">
+  <header class="mobile-header">
+    <div class="header-left">
+      <label class="nav-overlay-icon" for="__navigation">
+        <div class="visually-hidden">Toggle site navigation sidebar</div>
+        <i class="icon"><svg><use href="#svg-menu"></use></svg></i>
+      </label>
+    </div>
+    <div class="header-center">
+      <a href="../../index.html"><div class="brand">sim-suite-ai 1.0 documentation</div></a>
+    </div>
+    <div class="header-right">
+      <div class="theme-toggle-container theme-toggle-header">
+        <button class="theme-toggle">
+          <div class="visually-hidden">Toggle Light / Dark / Auto color theme</div>
+          <svg class="theme-icon-when-auto-light"><use href="#svg-sun-with-moon"></use></svg>
+          <svg class="theme-icon-when-auto-dark"><use href="#svg-moon-with-sun"></use></svg>
+          <svg class="theme-icon-when-dark"><use href="#svg-moon"></use></svg>
+          <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
+        </button>
+      </div>
+      <label class="toc-overlay-icon toc-header-icon no-toc" for="__toc">
+        <div class="visually-hidden">Toggle table of contents sidebar</div>
+        <i class="icon"><svg><use href="#svg-toc"></use></svg></i>
+      </label>
+    </div>
+  </header>
+  <aside class="sidebar-drawer">
+    <div class="sidebar-container">
+      
+      <div class="sidebar-sticky"><a class="sidebar-brand" href="../../index.html">
   
   
-
-  </head><body>
+  <span class="sidebar-brand-text">sim-suite-ai 1.0 documentation</span>
   
+</a><form class="sidebar-search-container" method="get" action="../../search.html" role="search">
+  <input class="sidebar-search" placeholder="Search" name="q" aria-label="Search">
+  <input type="hidden" name="check_keywords" value="yes">
+  <input type="hidden" name="area" value="default">
+</form>
+<div id="searchbox"></div><div class="sidebar-scroll"><div class="sidebar-tree">
+  <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../modules.html">AGENTS</a><input class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" role="switch" type="checkbox"/><label for="toctree-checkbox-1"><div class="visually-hidden">Toggle navigation of AGENTS</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../agents.html">agents package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../api.html">api package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../config.html">config module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../main.html">main module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../models.html">models package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../utils.html">utils package</a></li>
+</ul>
+</li>
+</ul>
 
-    <div class="document">
-      <div class="documentwrapper">
-        <div class="bodywrapper">
-          
+</div>
+</div>
 
-          <div class="body" role="main">
-            
-  <h1>Source code for models.scenario_models</h1><div class="highlight"><pre>
-<span></span><span class="c1"># Pydantic models for Medical Simulation Scenarios</span>
-<span class="c1"># Version 4.2 - Refactored from sim_suite_ai.py</span>
+      </div>
+      
+    </div>
+  </aside>
+  <div class="main">
+    <div class="content">
+      <div class="article-container">
+        <a href="#" class="back-to-top muted-link">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+            <path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8v12z"></path>
+          </svg>
+          <span>Back to top</span>
+        </a>
+        <div class="content-icon-container">
+          <div class="theme-toggle-container theme-toggle-content">
+            <button class="theme-toggle">
+              <div class="visually-hidden">Toggle Light / Dark / Auto color theme</div>
+              <svg class="theme-icon-when-auto-light"><use href="#svg-sun-with-moon"></use></svg>
+              <svg class="theme-icon-when-auto-dark"><use href="#svg-moon-with-sun"></use></svg>
+              <svg class="theme-icon-when-dark"><use href="#svg-moon"></use></svg>
+              <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
+            </button>
+          </div>
+          <label class="toc-overlay-icon toc-content-icon no-toc" for="__toc">
+            <div class="visually-hidden">Toggle table of contents sidebar</div>
+            <i class="icon"><svg><use href="#svg-toc"></use></svg></i>
+          </label>
+        </div>
+        <article role="main" id="furo-main-content">
+          <h1>Source code for models.scenario_models</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;Pydantic models for medical simulation scenarios.</span>
+
+<span class="sd">This module defines the data structures used throughout the Medical Simulation</span>
+<span class="sd">Suite for creating, validating, and managing clinical scenarios. The models</span>
+<span class="sd">cover everything from patient state and physical exams to scenario timelines</span>
+<span class="sd">and request parameters.</span>
+
+<span class="sd">Version: 4.2</span>
+<span class="sd">&quot;&quot;&quot;</span>
 
 <span class="kn">from</span><span class="w"> </span><span class="nn">__future__</span><span class="w"> </span><span class="kn">import</span> <span class="n">annotations</span>
 
@@ -45,6 +264,14 @@
 <div class="viewcode-block" id="AccessoVenosso">
 <a class="viewcode-back" href="../../models.html#models.scenario_models.AccessoVenosso">[docs]</a>
 <span class="k">class</span><span class="w"> </span><span class="nc">AccessoVenosso</span><span class="p">(</span><span class="n">BaseModel</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Represents a single venous access point on a patient.</span>
+
+<span class="sd">    Attributes:</span>
+<span class="sd">        tipologia: The type of venous access.</span>
+<span class="sd">        posizione: The anatomical location of the access point.</span>
+<span class="sd">        lato: The side of the body (DX for right, SX for left).</span>
+<span class="sd">        misura: The gauge size of the access device (e.g., 18G).</span>
+<span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">tipologia</span><span class="p">:</span> <span class="n">Literal</span><span class="p">[</span><span class="s2">&quot;Periferico&quot;</span><span class="p">,</span> <span class="s2">&quot;Centrale&quot;</span><span class="p">,</span> <span class="s2">&quot;CVC a breve termine&quot;</span><span class="p">,</span> <span class="s2">&quot;CVC tunnellizzato&quot;</span><span class="p">,</span> <span class="s2">&quot;PICC&quot;</span><span class="p">,</span> <span class="s2">&quot;Midline&quot;</span><span class="p">,</span> <span class="s2">&quot;Intraosseo&quot;</span><span class="p">,</span> <span class="s2">&quot;PORT&quot;</span><span class="p">,</span> <span class="s2">&quot;Dialysis catheter&quot;</span><span class="p">,</span> <span class="s2">&quot;Altri&quot;</span><span class="p">]</span>
     <span class="n">posizione</span><span class="p">:</span> <span class="nb">str</span>
     <span class="n">lato</span><span class="p">:</span> <span class="n">Literal</span><span class="p">[</span><span class="s2">&quot;DX&quot;</span><span class="p">,</span> <span class="s2">&quot;SX&quot;</span><span class="p">]</span>
@@ -55,6 +282,14 @@
 <div class="viewcode-block" id="AccessoArterioso">
 <a class="viewcode-back" href="../../models.html#models.scenario_models.AccessoArterioso">[docs]</a>
 <span class="k">class</span><span class="w"> </span><span class="nc">AccessoArterioso</span><span class="p">(</span><span class="n">BaseModel</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Represents a single arterial access point on a patient.</span>
+
+<span class="sd">    Attributes:</span>
+<span class="sd">        tipologia: The type of arterial access.</span>
+<span class="sd">        posizione: The anatomical location of the access point.</span>
+<span class="sd">        lato: The side of the body (DX for right, SX for left).</span>
+<span class="sd">        misura: The gauge size of the access device (e.g., 20G).</span>
+<span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">tipologia</span><span class="p">:</span> <span class="n">Literal</span><span class="p">[</span><span class="s2">&quot;Radiale&quot;</span><span class="p">,</span> <span class="s2">&quot;Femorale&quot;</span><span class="p">,</span> <span class="s2">&quot;Omerale&quot;</span><span class="p">,</span> <span class="s2">&quot;Brachiale&quot;</span><span class="p">,</span> <span class="s2">&quot;Ascellare&quot;</span><span class="p">,</span> <span class="s2">&quot;Pedidia&quot;</span><span class="p">,</span> <span class="s2">&quot;Altro&quot;</span><span class="p">]</span>
     <span class="n">posizione</span><span class="p">:</span> <span class="nb">str</span>
     <span class="n">lato</span><span class="p">:</span> <span class="n">Literal</span><span class="p">[</span><span class="s2">&quot;DX&quot;</span><span class="p">,</span> <span class="s2">&quot;SX&quot;</span><span class="p">]</span>
@@ -65,14 +300,29 @@
 <div class="viewcode-block" id="PazienteT0">
 <a class="viewcode-back" href="../../models.html#models.scenario_models.PazienteT0">[docs]</a>
 <span class="k">class</span><span class="w"> </span><span class="nc">PazienteT0</span><span class="p">(</span><span class="n">BaseModel</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Defines the initial state and vital signs of the patient at time zero.</span>
+
+<span class="sd">    Attributes:</span>
+<span class="sd">        RR: Respiratory Rate in breaths per minute.</span>
+<span class="sd">        SpO2: Oxygen saturation in percent.</span>
+<span class="sd">        FiO2: Fraction of Inspired Oxygen.</span>
+<span class="sd">        LitriO2: Oxygen flow in liters per minute.</span>
+<span class="sd">        EtCO2: End-tidal CO2 in mmHg.</span>
+<span class="sd">        Monitor: Description of the initial patient monitoring setup.</span>
+<span class="sd">        accessiVenosi: A list of established venous access points.</span>
+<span class="sd">        accessiArteriosi: A list of established arterial access points.</span>
+<span class="sd">        PA: Blood pressure, formatted as &#39;systolic/diastolic&#39;.</span>
+<span class="sd">        FC: Heart rate in beats per minute.</span>
+<span class="sd">        T: Body temperature in Celsius.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">RR</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span><span class="n">description</span><span class="o">=</span><span class="s2">&quot;Respiratory Rate (atti/min)&quot;</span><span class="p">)</span>
     <span class="n">SpO2</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span><span class="n">description</span><span class="o">=</span><span class="s2">&quot;Oxygen Saturation (%)&quot;</span><span class="p">)</span>
     <span class="n">FiO2</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span><span class="n">default</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">description</span><span class="o">=</span><span class="s2">&quot;Fraction of Inspired Oxygen (%)&quot;</span><span class="p">)</span>
     <span class="n">LitriO2</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span><span class="n">default</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">description</span><span class="o">=</span><span class="s2">&quot;Oxygen flow (L/min)&quot;</span><span class="p">)</span>
     <span class="n">EtCO2</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span><span class="n">default</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">description</span><span class="o">=</span><span class="s2">&quot;End-tidal CO2 (mmHg)&quot;</span><span class="p">)</span>
     <span class="n">Monitor</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span><span class="n">description</span><span class="o">=</span><span class="s2">&quot;Descrizione del monitoraggio (plain text, es. ECG, Saturimetria)&quot;</span><span class="p">)</span>
-    <span class="n">accessiVenosi</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">AccessoVenosso</span><span class="p">]</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span><span class="n">default_factory</span><span class="o">=</span><span class="nb">list</span><span class="p">)</span>  <span class="c1"># type: ignore</span>
-    <span class="n">accessiArteriosi</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">AccessoArterioso</span><span class="p">]</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span><span class="n">default_factory</span><span class="o">=</span><span class="nb">list</span><span class="p">)</span>  <span class="c1"># type: ignore</span>
+    <span class="n">accessiVenosi</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">AccessoVenosso</span><span class="p">]</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span><span class="n">default_factory</span><span class="o">=</span><span class="nb">list</span><span class="p">)</span> <span class="c1"># type: ignore</span>
+    <span class="n">accessiArteriosi</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">AccessoArterioso</span><span class="p">]</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span><span class="n">default_factory</span><span class="o">=</span><span class="nb">list</span><span class="p">)</span> <span class="c1"># type: ignore</span>
     <span class="n">PA</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span><span class="n">description</span><span class="o">=</span><span class="s2">&quot;Blood Pressure (es. &#39;120/80&#39;)&quot;</span><span class="p">)</span>
     <span class="n">FC</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span><span class="n">description</span><span class="o">=</span><span class="s2">&quot;Heart Rate (bpm)&quot;</span><span class="p">)</span>
     <span class="n">T</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span><span class="n">description</span><span class="o">=</span><span class="s2">&quot;Temperature (Celsius)&quot;</span><span class="p">)</span>
@@ -82,9 +332,8 @@
     <span class="nd">@field_validator</span><span class="p">(</span><span class="s1">&#39;PA&#39;</span><span class="p">)</span>
     <span class="nd">@classmethod</span>
     <span class="k">def</span><span class="w"> </span><span class="nf">validate_blood_pressure</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">v</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
-        <span class="k">if</span> <span class="ow">not</span> <span class="n">v</span> <span class="ow">or</span> <span class="ow">not</span> <span class="n">v</span><span class="o">.</span><span class="n">strip</span><span class="p">():</span> 
-            <span class="k">return</span> <span class="s2">&quot;0/0&quot;</span>
-        <span class="k">if</span> <span class="n">re</span><span class="o">.</span><span class="n">match</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;^\d+/\d+$&#39;</span><span class="p">,</span> <span class="n">v</span><span class="o">.</span><span class="n">strip</span><span class="p">()):</span> 
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Validates that blood pressure is in the format &#39;number/number&#39;.&quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">v</span> <span class="ow">and</span> <span class="n">re</span><span class="o">.</span><span class="n">match</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;^\d+/\d+$&#39;</span><span class="p">,</span> <span class="n">v</span><span class="o">.</span><span class="n">strip</span><span class="p">()):</span>
             <span class="k">return</span> <span class="n">v</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
         <span class="k">return</span> <span class="s2">&quot;0/0&quot;</span></div>
 </div>
@@ -94,8 +343,13 @@
 <div class="viewcode-block" id="EsameFisicoSections">
 <a class="viewcode-back" href="../../models.html#models.scenario_models.EsameFisicoSections">[docs]</a>
 <span class="k">class</span><span class="w"> </span><span class="nc">EsameFisicoSections</span><span class="p">(</span><span class="n">BaseModel</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Contains the detailed findings for each section of a physical exam.</span>
+
+<span class="sd">    Each attribute holds HTML-formatted text describing the findings for that</span>
+<span class="sd">    specific part of the examination.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">Generale</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span><span class="n">description</span><span class="o">=</span><span class="s2">&quot;General examination findings (html format)&quot;</span><span class="p">)</span>
-    <span class="n">Pupille</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span><span class="n">description</span><span class="o">=</span><span class="s2">&quot;Pupil examination findings (html format)&quot;</span><span class="p">)</span> 
+    <span class="n">Pupille</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span><span class="n">description</span><span class="o">=</span><span class="s2">&quot;Pupil examination findings (html format)&quot;</span><span class="p">)</span>
     <span class="n">Cute</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span><span class="n">description</span><span class="o">=</span><span class="s2">&quot;Skin examination findings (html format)&quot;</span><span class="p">)</span>
     <span class="n">Collo</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span><span class="n">description</span><span class="o">=</span><span class="s2">&quot;Neck examination findings (html format)&quot;</span><span class="p">)</span>
     <span class="n">Torace</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span><span class="n">description</span><span class="o">=</span><span class="s2">&quot;Chest examination findings (html format)&quot;</span><span class="p">)</span>
@@ -111,6 +365,12 @@
 <div class="viewcode-block" id="EsameFisico">
 <a class="viewcode-back" href="../../models.html#models.scenario_models.EsameFisico">[docs]</a>
 <span class="k">class</span><span class="w"> </span><span class="nc">EsameFisico</span><span class="p">(</span><span class="n">BaseModel</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;A container for the structured physical examination findings.</span>
+
+<span class="sd">    Attributes:</span>
+<span class="sd">        sections: An object containing the detailed findings for each</span>
+<span class="sd">            part of the physical exam.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">sections</span><span class="p">:</span> <span class="n">EsameFisicoSections</span></div>
 
 
@@ -118,9 +378,27 @@
 <div class="viewcode-block" id="ScenarioInfo">
 <a class="viewcode-back" href="../../models.html#models.scenario_models.ScenarioInfo">[docs]</a>
 <span class="k">class</span><span class="w"> </span><span class="nc">ScenarioInfo</span><span class="p">(</span><span class="n">BaseModel</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Holds general information and metadata about the simulation scenario.</span>
+
+<span class="sd">    Attributes:</span>
+<span class="sd">        nome_paziente: The patient&#39;s name.</span>
+<span class="sd">        patto_aula: The &quot;classroom agreement&quot; or rules for the simulation.</span>
+<span class="sd">        obiettivo: The primary learning objective of the scenario.</span>
+<span class="sd">        timer_generale: The total duration of the scenario in minutes.</span>
+<span class="sd">        infoGenitore: Information provided by a parent (for pediatric cases).</span>
+<span class="sd">        titolo: The title of the scenario.</span>
+<span class="sd">        patologia: The primary pathology or condition being simulated.</span>
+<span class="sd">        descrizione: A general description of the scenario.</span>
+<span class="sd">        briefing: The pre-scenario briefing for participants.</span>
+<span class="sd">        moulage: Description of the patient manikin&#39;s setup and appearance.</span>
+<span class="sd">        liquidi: Description of available fluids and drugs.</span>
+<span class="sd">        autori: The authors of the scenario.</span>
+<span class="sd">        tipologia: The patient type (e.g., Adult, Pediatric).</span>
+<span class="sd">        target: The target audience for the simulation (e.g., medical students).</span>
+<span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">nome_paziente</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span><span class="n">description</span><span class="o">=</span><span class="s2">&quot;Invented or given patient name (plain text)&quot;</span><span class="p">)</span>
-    <span class="n">patto_aula</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span><span class="n">description</span><span class="o">=</span><span class="s2">&quot;Classroom agreement (html format)&quot;</span><span class="p">)</span> 
-    <span class="n">obiettivo</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span><span class="n">description</span><span class="o">=</span><span class="s2">&quot;Learning objective (html format)&quot;</span><span class="p">)</span> 
+    <span class="n">patto_aula</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span><span class="n">description</span><span class="o">=</span><span class="s2">&quot;Classroom agreement (html format)&quot;</span><span class="p">)</span>
+    <span class="n">obiettivo</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span><span class="n">description</span><span class="o">=</span><span class="s2">&quot;Learning objective (html format)&quot;</span><span class="p">)</span>
     <span class="n">timer_generale</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span><span class="n">description</span><span class="o">=</span><span class="s2">&quot;General timer for the scenario in minutes&quot;</span><span class="p">)</span>
     <span class="n">infoGenitore</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span><span class="n">default</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">description</span><span class="o">=</span><span class="s2">&quot;Information given by the parent about the situation (html format)&quot;</span><span class="p">)</span>
     <span class="n">titolo</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span><span class="n">description</span><span class="o">=</span><span class="s2">&quot;Scenario title (plain text)&quot;</span><span class="p">)</span>
@@ -138,6 +416,13 @@
 <div class="viewcode-block" id="ParametroAggiuntivo">
 <a class="viewcode-back" href="../../models.html#models.scenario_models.ParametroAggiuntivo">[docs]</a>
 <span class="k">class</span><span class="w"> </span><span class="nc">ParametroAggiuntivo</span><span class="p">(</span><span class="n">BaseModel</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Represents an additional, custom vital sign or parameter.</span>
+
+<span class="sd">    Attributes:</span>
+<span class="sd">        unitaMisura: The unit of measurement for the parameter.</span>
+<span class="sd">        nome: The name of the parameter.</span>
+<span class="sd">        valore: The value of the parameter.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">unitaMisura</span><span class="p">:</span> <span class="nb">str</span>
     <span class="n">nome</span><span class="p">:</span> <span class="nb">str</span>
     <span class="n">valore</span><span class="p">:</span> <span class="nb">str</span></div>
@@ -147,6 +432,18 @@
 <div class="viewcode-block" id="Tempo">
 <a class="viewcode-back" href="../../models.html#models.scenario_models.Tempo">[docs]</a>
 <span class="k">class</span><span class="w"> </span><span class="nc">Tempo</span><span class="p">(</span><span class="n">BaseModel</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Represents a specific time point or event within the scenario&#39;s timeline.</span>
+
+<span class="sd">    Attributes:</span>
+<span class="sd">        idTempo: A unique identifier for the time point (e.g., 0 for T0).</span>
+<span class="sd">        TSi: The ID of the next time point if the correct action is taken.</span>
+<span class="sd">        TNo: The ID of the next time point if the incorrect action is taken.</span>
+<span class="sd">        altriDettagli: Additional details about the state at this time.</span>
+<span class="sd">        timerTempo: A specific timer for this event in seconds.</span>
+<span class="sd">        ruoloGenitore: Role or actions of a parent at this time point.</span>
+<span class="sd">        Azione: The key action required to proceed to the &#39;TSi&#39; state.</span>
+<span class="sd">        parametriAggiuntivi: A list of any custom parameters for this time point.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">idTempo</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span><span class="n">description</span><span class="o">=</span><span class="s2">&quot;Unique identifier for the time event (ex. 0 for T0, 1 for T1, etc.)&quot;</span><span class="p">)</span>
     <span class="n">RR</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span><span class="n">description</span><span class="o">=</span><span class="s2">&quot;Respiratory Rate (atti/min)&quot;</span><span class="p">)</span>
     <span class="n">SpO2</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span><span class="n">description</span><span class="o">=</span><span class="s2">&quot;Oxygen Saturation (%)&quot;</span><span class="p">)</span>
@@ -162,16 +459,15 @@
     <span class="n">FC</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span><span class="n">description</span><span class="o">=</span><span class="s2">&quot;Heart Rate (bpm)&quot;</span><span class="p">)</span>
     <span class="n">T</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span><span class="n">description</span><span class="o">=</span><span class="s2">&quot;Temperature (Celsius)&quot;</span><span class="p">)</span>
     <span class="n">Azione</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span><span class="n">description</span><span class="o">=</span><span class="s2">&quot;Action to be performed at this time to go to TSi (plain text)&quot;</span><span class="p">)</span>
-    <span class="n">parametriAggiuntivi</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">ParametroAggiuntivo</span><span class="p">]</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span><span class="n">default_factory</span><span class="o">=</span><span class="nb">list</span><span class="p">)</span>  <span class="c1"># type: ignore</span>
+    <span class="n">parametriAggiuntivi</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">ParametroAggiuntivo</span><span class="p">]</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span><span class="n">default_factory</span><span class="o">=</span><span class="nb">list</span><span class="p">)</span> <span class="c1"># type: ignore</span>
 
 <div class="viewcode-block" id="Tempo.validate_blood_pressure">
 <a class="viewcode-back" href="../../models.html#models.scenario_models.Tempo.validate_blood_pressure">[docs]</a>
     <span class="nd">@field_validator</span><span class="p">(</span><span class="s1">&#39;PA&#39;</span><span class="p">)</span>
     <span class="nd">@classmethod</span>
     <span class="k">def</span><span class="w"> </span><span class="nf">validate_blood_pressure</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">v</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
-        <span class="k">if</span> <span class="ow">not</span> <span class="n">v</span> <span class="ow">or</span> <span class="ow">not</span> <span class="n">v</span><span class="o">.</span><span class="n">strip</span><span class="p">():</span> 
-            <span class="k">return</span> <span class="s2">&quot;0/0&quot;</span>
-        <span class="k">if</span> <span class="n">re</span><span class="o">.</span><span class="n">match</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;^\d+/\d+$&#39;</span><span class="p">,</span> <span class="n">v</span><span class="o">.</span><span class="n">strip</span><span class="p">()):</span> 
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Validates that blood pressure is in the format &#39;number/number&#39;.&quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">v</span> <span class="ow">and</span> <span class="n">re</span><span class="o">.</span><span class="n">match</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;^\d+/\d+$&#39;</span><span class="p">,</span> <span class="n">v</span><span class="o">.</span><span class="n">strip</span><span class="p">()):</span>
             <span class="k">return</span> <span class="n">v</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
         <span class="k">return</span> <span class="s2">&quot;0/0&quot;</span></div>
 </div>
@@ -181,7 +477,17 @@
 <div class="viewcode-block" id="BaseScenario">
 <a class="viewcode-back" href="../../models.html#models.scenario_models.BaseScenario">[docs]</a>
 <span class="k">class</span><span class="w"> </span><span class="nc">BaseScenario</span><span class="p">(</span><span class="n">BaseModel</span><span class="p">):</span>
-    <span class="n">azioniChiave</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> 
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Defines the foundational components of a medical scenario.</span>
+
+<span class="sd">    Attributes:</span>
+<span class="sd">        azioniChiave: A list of key actions or learning objectives.</span>
+<span class="sd">        tipo: The type of scenario (e.g., Quick, Advanced).</span>
+<span class="sd">        scenario: General information and metadata about the scenario.</span>
+<span class="sd">        presidi: A list of required medical equipment.</span>
+<span class="sd">        esameFisico: The structured physical examination findings.</span>
+<span class="sd">        pazienteT0: The initial state of the patient.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">azioniChiave</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span>
     <span class="n">tipo</span><span class="p">:</span> <span class="n">Literal</span><span class="p">[</span><span class="s2">&quot;Quick Scenario&quot;</span><span class="p">,</span> <span class="s2">&quot;Advanced Scenario&quot;</span><span class="p">,</span> <span class="s2">&quot;Patient Simulated Scenario&quot;</span><span class="p">]</span>
     <span class="n">scenario</span><span class="p">:</span> <span class="n">ScenarioInfo</span>
     <span class="n">presidi</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span>
@@ -193,6 +499,11 @@
 <div class="viewcode-block" id="Timeline">
 <a class="viewcode-back" href="../../models.html#models.scenario_models.Timeline">[docs]</a>
 <span class="k">class</span><span class="w"> </span><span class="nc">Timeline</span><span class="p">(</span><span class="n">BaseModel</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;A container for the entire sequence of time events in a scenario.</span>
+
+<span class="sd">    Attributes:</span>
+<span class="sd">        tempi: A list of `Tempo` objects that define the scenario&#39;s progression.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">tempi</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">Tempo</span><span class="p">]</span></div>
 
 
@@ -200,6 +511,11 @@
 <div class="viewcode-block" id="Sceneggiatura">
 <a class="viewcode-back" href="../../models.html#models.scenario_models.Sceneggiatura">[docs]</a>
 <span class="k">class</span><span class="w"> </span><span class="nc">Sceneggiatura</span><span class="p">(</span><span class="n">BaseModel</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Contains the script for a simulated patient or actor.</span>
+
+<span class="sd">    Attributes:</span>
+<span class="sd">        sceneggiatura: An HTML-formatted string containing the script.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">sceneggiatura</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span><span class="n">description</span><span class="o">=</span><span class="s2">&quot;Script for the simulated patient (html format)&quot;</span><span class="p">)</span></div>
 
 
@@ -207,6 +523,11 @@
 <div class="viewcode-block" id="FullScenario">
 <a class="viewcode-back" href="../../models.html#models.scenario_models.FullScenario">[docs]</a>
 <span class="k">class</span><span class="w"> </span><span class="nc">FullScenario</span><span class="p">(</span><span class="n">BaseModel</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Represents a complete, advanced scenario with all possible components.</span>
+
+<span class="sd">    This model combines the base scenario with a timeline and a script for a</span>
+<span class="sd">    fully interactive simulation.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">azioniChiave</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span>
     <span class="n">tipo</span><span class="p">:</span> <span class="n">Literal</span><span class="p">[</span><span class="s2">&quot;Quick Scenario&quot;</span><span class="p">,</span> <span class="s2">&quot;Advanced Scenario&quot;</span><span class="p">,</span> <span class="s2">&quot;Patient Simulated Scenario&quot;</span><span class="p">]</span>
     <span class="n">scenario</span><span class="p">:</span> <span class="n">ScenarioInfo</span>
@@ -221,74 +542,58 @@
 <div class="viewcode-block" id="ScenarioRequest">
 <a class="viewcode-back" href="../../models.html#models.scenario_models.ScenarioRequest">[docs]</a>
 <span class="k">class</span><span class="w"> </span><span class="nc">ScenarioRequest</span><span class="p">(</span><span class="n">BaseModel</span><span class="p">):</span>
-    <span class="n">description</span><span class="p">:</span> <span class="nb">str</span> 
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Defines the request model for generating a new simulation scenario.</span>
+
+<span class="sd">    Attributes:</span>
+<span class="sd">        description: A text description of the desired clinical case.</span>
+<span class="sd">        scenario_type: The type of scenario to generate.</span>
+<span class="sd">        target: The intended audience for the scenario.</span>
+<span class="sd">        difficulty: The desired difficulty level, which influences clinical</span>
+<span class="sd">            complexity and potential complications.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">description</span><span class="p">:</span> <span class="nb">str</span>
     <span class="n">scenario_type</span><span class="p">:</span> <span class="n">Literal</span><span class="p">[</span><span class="s2">&quot;Quick Scenario&quot;</span><span class="p">,</span> <span class="s2">&quot;Advanced Scenario&quot;</span><span class="p">,</span> <span class="s2">&quot;Patient Simulated Scenario&quot;</span><span class="p">]</span>
     <span class="n">target</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
     <span class="n">difficulty</span><span class="p">:</span> <span class="n">Literal</span><span class="p">[</span><span class="s2">&quot;Facile&quot;</span><span class="p">,</span> <span class="s2">&quot;Medio&quot;</span><span class="p">,</span> <span class="s2">&quot;Difficile&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span>
-        <span class="n">default</span><span class="o">=</span><span class="s2">&quot;Facile&quot;</span><span class="p">,</span> 
+        <span class="n">default</span><span class="o">=</span><span class="s2">&quot;Facile&quot;</span><span class="p">,</span>
         <span class="n">description</span><span class="o">=</span><span class="s2">&quot;Livello di difficoltà dello scenario che influenza la complessità clinica, le complicazioni e i dettagli&quot;</span>
     <span class="p">)</span></div>
 
 </pre></div>
-
-          </div>
+        </article>
+      </div>
+      <footer>
+        
+        <div class="related-pages">
+          
           
         </div>
-      </div>
-      <div class="sphinxsidebar" role="navigation" aria-label="Main">
-        <div class="sphinxsidebarwrapper">
-<h1 class="logo"><a href="../../index.html">sim-suite-ai</a></h1>
-
-
-
-
-
-
-
-
-
-<search id="searchbox" style="display: none" role="search">
-    <div class="searchformwrapper">
-    <form class="search" action="../../search.html" method="get">
-      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" placeholder="Search"/>
-      <input type="submit" value="Go" />
-    </form>
-    </div>
-</search>
-<script>document.getElementById('searchbox').style.display = "block"</script><h3>Navigation</h3>
-
-<div class="relations">
-<h3>Related Topics</h3>
-<ul>
-  <li><a href="../../index.html">Documentation overview</a><ul>
-  <li><a href="../index.html">Module code</a><ul>
-  </ul></li>
-  </ul></li>
-</ul>
-</div>
-
-
-
-
-
-
-
-
+        <div class="bottom-of-page">
+          <div class="left-details">
+            <div class="copyright">
+                Copyright &#169; 2025, Alessandro Zappatore
+            </div>
+            Made with <a href="https://www.sphinx-doc.org/">Sphinx</a> and <a class="muted-link" href="https://pradyunsg.me">@pradyunsg</a>'s
+            
+            <a href="https://github.com/pradyunsg/furo">Furo</a>
+            
+          </div>
+          <div class="right-details">
+            
+          </div>
         </div>
-      </div>
-      <div class="clearer"></div>
+        
+      </footer>
     </div>
-    <div class="footer">
-      &#169;2025, Alessandro Zappatore.
+    <aside class="toc-drawer no-toc">
       
-      |
-      Powered by <a href="https://www.sphinx-doc.org/">Sphinx 8.2.3</a>
-      &amp; <a href="https://alabaster.readthedocs.io">Alabaster 1.0.0</a>
       
-    </div>
-
-    
-
-    
-  </body>
+      
+    </aside>
+  </div>
+</div><script src="../../_static/documentation_options.js?v=f2a433a1"></script>
+    <script src="../../_static/doctools.js?v=9bcbadda"></script>
+    <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../_static/scripts/furo.js?v=5fa4622c"></script>
+    </body>
 </html>

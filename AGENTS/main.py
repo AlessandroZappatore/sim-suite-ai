@@ -1,8 +1,8 @@
 """Main entry point for the Medical Simulation Suite AI.
 
-This module initializes the main FastAPI application and mounts all the
-sub-applications (APIs) for different services like scenarios, exams,
-and medical reports. It also defines the main health check endpoints.
+Initializes and configures the main FastAPI application. This module serves as
+the primary entry point, mounting all service-specific sub-applications
+(e.g., scenarios, exams) and defining core health check endpoints.
 
 Version: 4.2.0
 """
@@ -17,6 +17,7 @@ from api.exam_api import router as exam_router
 from api.scenario_api import router as scenario_router
 from api.medical_report_api import router as report_router
 from api.mat_api import router as material_router
+
 # --- Basic Configuration ---
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
@@ -29,8 +30,7 @@ app = FastAPI(
     version="4.2.0"
 )
 
-# --- Mount Sub-Applications ---
-# Each sub-application handles a specific domain of the suite.
+# --- Include Sub-Applications ---
 app.include_router(scenario_router)
 app.include_router(exam_router)
 app.include_router(report_router)
@@ -42,12 +42,9 @@ app.include_router(material_router)
 def root() -> Dict[str, Any]:
     """Provides a detailed health check of the main application.
 
-    This root endpoint returns a JSON object containing the operational status,
-    service name, version, and a dictionary of available sub-application
-    documentation endpoints.
-
     Returns:
-        Dict[str, Any]: A dictionary with service status and essential metadata.
+        A dictionary containing the service status, name, version, and a
+        map of available sub-application documentation endpoints.
     """
     return {
         "status": "healthy",
@@ -66,24 +63,16 @@ def root() -> Dict[str, Any]:
 def health_check() -> Dict[str, str]:
     """Provides a simple health check for monitoring services.
 
-    This endpoint is typically used by load balancers, uptime monitors,
-    or other automated services to verify that the application is running
-    and responsive.
+    This endpoint is ideal for use by automated services like load balancers
+    or uptime monitors to confirm that the application is responsive.
 
     Returns:
-        Dict[str, str]: A dictionary indicating the service is healthy.
+        A dictionary indicating the service status is healthy.
     """
     return {"status": "healthy", "service": "Medical Simulation Suite AI"}
 
 
 # --- Main execution block ---
 if __name__ == "__main__":
-    """Main execution block to run the Uvicorn server.
-
-    This block is executed when the script is run directly (e.g., `python main.py`).
-    It starts the Uvicorn web server, making the API available. The `reload=True`
-    parameter enables auto-reloading for development, where the server restarts
-    after code changes.
-    """
     logger.info("Starting Medical Simulation Suite AI...")
     uvicorn.run("main:app", host="0.0.0.0", port=8001, reload=True)

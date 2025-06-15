@@ -1,12 +1,14 @@
-# Configuration file for Medical Simulation Suite AI
-# Version 4.2 - Refactored configuration
+"""Configuration settings for the Medical Simulation Suite AI.
+
+This module centralizes application configuration, including API metadata,
+model selections, and logging settings. It loads sensitive credentials,
+such as the Google API key, from environment variables.
+"""
 
 import os
 from typing import Dict, Any
-
 from dotenv import load_dotenv
 
-# Load environment variables
 load_dotenv()
 
 # API Configuration

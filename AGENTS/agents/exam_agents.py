@@ -1,11 +1,19 @@
-# Agents for Medical Exam Generation
-# Version 1.1 - Refactored from exam_agent.py
+"""Defines the AI agent and logic for medical exam generation.
+
+This module contains the core components for the AI-driven lab exam
+creation process. It defines a specialist agent for generating lab results,
+a function to create a detailed prompt, and the main function that
+orchestrates the generation and validation pipeline.
+
+Version: 1.1
+"""
 
 import json
 import logging
 
 from agno.agent import Agent
 from fastapi import HTTPException
+from pydantic import ValidationError
 
 from models.exam_models import LabExamRequest, LabExamResponse
 from utils.common import extract_json_from_response, get_exam_model
@@ -14,11 +22,11 @@ from utils.common import extract_json_from_response, get_exam_model
 logger = logging.getLogger(__name__)
 
 
-# Agent Definition
+# --- Agent Definition ---
 exam_agent = Agent(
     name="Lab Exam Generator",
     role="An expert clinical pathologist who generates realistic lab results for medical simulations.",
-    model=get_exam_model(),    
+    model=get_exam_model(),
     instructions=[
         "Your task is to generate a set of relevant laboratory exams based on a clinical scenario.",
         "All text content, including test names, categories, and interpretations, must be in **Italian**.",
@@ -34,7 +42,15 @@ exam_agent = Agent(
 
 
 def create_exam_prompt(request: LabExamRequest) -> str:
-    """Creates the detailed prompt for the lab exam generation agent."""
+    """Creates the detailed prompt for the lab exam generation agent.
+
+    Args:
+        request: The user's request containing the clinical scenario,
+            patient type, and objective exam findings.
+
+    Returns:
+        A fully formatted prompt string to be sent to the exam_agent.
+    """
     return f"""
     Generate a set of relevant laboratory exams in JSON format for a medical simulation.
 
@@ -63,36 +79,40 @@ def create_exam_prompt(request: LabExamRequest) -> str:
 
 
 def generate_lab_exams(request: LabExamRequest) -> LabExamResponse:
-    """
-    Generate laboratory exams for a medical scenario.
-    
+    """Generates laboratory exams for a medical scenario.
+
+    This function orchestrates the exam generation process by creating a
+    prompt, running the agent, and validating the final output.
+
     Args:
-        request: The lab exam request containing scenario description and patient type
-        
+        request: The lab exam request containing the scenario description
+            and patient type.
+
     Returns:
-        LabExamResponse: The generated lab exams
-        
+        The generated and validated laboratory exams.
+
     Raises:
-        HTTPException: If generation fails
+        HTTPException: If the generation, parsing, or validation fails.
     """
     logger.info(f"Received request to generate lab exams for: {request.tipologia_paziente}")
-    
+
     try:
         # Create the prompt for the agent
         prompt = create_exam_prompt(request)
-        
+
         # Run the agent to get the response
-        agent_response = exam_agent.run(prompt)  # type: ignore
-        
+        agent_response = exam_agent.run(prompt) # type: ignore
+
         # Extract and validate the JSON from the response
         exam_dict = extract_json_from_response(agent_response.content)
-        
+
         # Validate the data with the Pydantic model
         validated_exams = LabExamResponse.model_validate(exam_dict)
-        
+
+        logger.info(f"Successfully generated lab exams for {request.tipologia_paziente}")
         return validated_exams
-        
-    except (ValueError, json.JSONDecodeError) as e:
+
+    except (ValidationError, ValueError, json.JSONDecodeError) as e:
         logger.error(f"Data validation or extraction error: {e}", exc_info=True)
         raise HTTPException(status_code=422, detail={"error": "Generated content failed validation or parsing.", "details": str(e)})
     except Exception as e:

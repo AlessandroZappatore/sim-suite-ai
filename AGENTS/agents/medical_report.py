@@ -1,11 +1,19 @@
-# Agent for Medical Report Generation
-# Version 1.0 - Medical report generation agent
+"""Defines the AI agent and logic for medical report generation.
+
+This module contains the core components for the AI-driven medical report
+creation process. It defines a specialist agent for generating reports, a
+function to create a detailed prompt for the agent, and the main function
+that orchestrates the generation and validation pipeline.
+
+Version: 1.0
+"""
 
 import json
 import logging
 
 from agno.agent import Agent
 from fastapi import HTTPException
+from pydantic import ValidationError
 
 from models.medical_report_models import MedicalReportRequest, MedicalReportResponse
 from utils.common import extract_json_from_response, get_exam_model
@@ -14,11 +22,11 @@ from utils.common import extract_json_from_response, get_exam_model
 logger = logging.getLogger(__name__)
 
 
-# Agent Definition
+# --- Agent Definition ---
 medical_report_agent = Agent(
     name="Medical Report Generator",
     role="An expert radiologist and clinician who generates detailed medical reports for various diagnostic examinations.",
-    model=get_exam_model(),    
+    model=get_exam_model(),
     instructions=[
         "Your task is to generate realistic medical reports based on clinical scenarios.",
         "All text content must be in **Italian**.",
@@ -35,14 +43,22 @@ medical_report_agent = Agent(
 
 
 def create_medical_report_prompt(request: MedicalReportRequest) -> str:
-    """Creates the detailed prompt for the medical report generation agent."""
+    """Creates the detailed prompt for the medical report generation agent.
+
+    Args:
+        request: The user's request containing clinical context, patient type,
+            and examination type.
+
+    Returns:
+        A fully formatted prompt string to be sent to the medical_report_agent.
+    """
     exam_type = request.tipologia_esame
-    
+
     return f"""
     Generate a detailed medical report in JSON format for a diagnostic examination.
 
     CLINICAL CONTEXT:
-    - Patient Type: {request.tipologia_paziente}    
+    - Patient Type: {request.tipologia_paziente}
     - Scenario Description: {request.descrizione_scenario}
     - Examination Type: {exam_type}
     - Objective Examination (Esame obiettivo): {request.esame_obiettivo}
@@ -77,38 +93,41 @@ def create_medical_report_prompt(request: MedicalReportRequest) -> str:
 
 
 def generate_medical_report(request: MedicalReportRequest) -> MedicalReportResponse:
-    """
-    Generate a medical report for a diagnostic examination.
-    
+    """Generates a medical report for a diagnostic examination.
+
+    This function orchestrates the report generation process by creating a
+    prompt, running the agent, and validating the final output.
+
     Args:
-        request: The medical report request containing scenario, patient type, and exam type
-        
+        request: The medical report request containing the scenario, patient
+            type, and exam type.
+
     Returns:
-        MedicalReportResponse: The generated medical report
-        
+        The generated and validated medical report.
+
     Raises:
-        HTTPException: If generation fails
+        HTTPException: If the generation, parsing, or validation fails.
     """
     exam_type = request.tipologia_esame
     logger.info(f"Received request to generate medical report for: {exam_type} - Patient: {request.tipologia_paziente}")
-    
+
     try:
         # Create the prompt for the agent
         prompt = create_medical_report_prompt(request)
-        
+
         # Run the agent to get the response
-        agent_response = medical_report_agent.run(prompt)  # type: ignore
-        
+        agent_response = medical_report_agent.run(prompt) # type: ignore
+
         # Extract and validate the JSON from the response
         report_dict = extract_json_from_response(agent_response.content)
-        
+
         # Validate the data with the Pydantic model
         validated_report = MedicalReportResponse.model_validate(report_dict)
-        
+
         logger.info(f"Successfully generated medical report for {exam_type}")
         return validated_report
-        
-    except (ValueError, json.JSONDecodeError) as e:
+
+    except (ValidationError, ValueError, json.JSONDecodeError) as e:
         logger.error(f"Data validation or extraction error: {e}", exc_info=True)
         raise HTTPException(status_code=422, detail={"error": "Generated content failed validation or parsing.", "details": str(e)})
     except Exception as e:
