@@ -1,0 +1,48 @@
+{
+  "patologia": "Embolia Polmonare Acuta Massiva",
+  "descrizione_generale": "Ostruzione di uno o più rami principali dell'arteria polmonare da parte di materiale trombotico, che causa un'improvvisa compromissione emodinamica (shock ostruttivo).",
+  "segni_sintomi_chiave": ["dispnea ingravescente ad esordio improvviso", "dolore toracico pleurico", "sincope", "cianosi", "tachicardia severa"],
+  "reperti_esame_obiettivo": ["paziente in shock: ipoteso (PA < 90 mmHg), tachicardico (>110 bpm)", "paziente cianotico e freddo", "turgore delle giugulari", "ipossiemia severa nonostante supplementazione di ossigeno"],
+  "esami_laboratorio_tipici": [
+    {
+      "categoria": "Coagulazione",
+      "nome_test": "D-Dimero",
+      "valore_tipico": "9500",
+      "unita_misura": "ng/mL",
+      "range_riferimento": "< 500",
+      "interpretazione_clinica": "Valore eccezionalmente alto, riflette un'intensa attivazione della coagulazione e della fibrinolisi. Altamente suggestivo di estesa trombosi."
+    },
+    {
+      "categoria": "Emogasanalisi Arteriosa (EGA)",
+      "nome_test": "pO2 (Pressione parziale di ossigeno)",
+      "valore_tipico": "55",
+      "unita_misura": "mmHg",
+      "range_riferimento": "80 - 100",
+      "interpretazione_clinica": "Grave ipossiemia refrattaria, causata dall'effetto shunt e dall'alterazione del rapporto ventilazione/perfusione."
+    },
+    {
+      "categoria": "Emogasanalisi Arteriosa (EGA)",
+      "nome_test": "pCO2 (Pressione parziale di anidride carbonica)",
+      "valore_tipico": "30",
+      "unita_misura": "mmHg",
+      "range_riferimento": "35 - 45",
+      "interpretazione_clinica": "Ipocapnia dovuta all'iperventilazione compensatoria (tachipnea) in risposta all'ipossiemia."
+    },
+    {
+      "categoria": "Marcatori di Necrosi Cardiaca",
+      "nome_test": "Troponina I ad alta sensibilità (hs-cTnI)",
+      "valore_tipico": "85",
+      "unita_misura": "ng/L",
+      "range_riferimento": "< 14 ng/L",
+      "interpretazione_clinica": "Aumento moderato, non ai livelli dell'IMA, indicativo di sovraccarico acuto e strain del ventricolo destro."
+    },
+    {
+      "categoria": "Marcatori di Scompenso",
+      "nome_test": "Peptide Natriuretico Cerebrale (BNP)",
+      "valore_tipico": "900",
+      "unita_misura": "pg/mL",
+      "range_riferimento": "< 100",
+      "interpretazione_clinica": "Valore elevato a causa della dilatazione e dello stress di parete del ventricolo destro."
+    }
+  ]
+}

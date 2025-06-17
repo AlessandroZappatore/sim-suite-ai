@@ -1,0 +1,48 @@
+{
+  "patologia": "Anemia Sideropenica Grave",
+  "descrizione_generale": "Forma di anemia causata da una carenza cronica di ferro, che porta a una ridotta sintesi dell'emoglobina e alla produzione di globuli rossi piccoli (microcitici) e pallidi (ipocromici).",
+  "segni_sintomi_chiave": ["astenia profonda (stanchezza)", "pallore cutaneo e mucoso", "dispnea da sforzo", "tachicardia", "cefalea", "vertigini", "pica (desiderio di ingerire sostanze non nutritive)"],
+  "reperti_esame_obiettivo": ["pallore marcato della congiuntiva, del palmo delle mani e del letto ungueale", "tachicardia a riposo", "soffio cardiaco sistolico funzionale", "fragilità di unghie e capelli"],
+  "esami_laboratorio_tipici": [
+    {
+      "categoria": "Ematologia",
+      "nome_test": "Emoglobina (Hb)",
+      "valore_tipico": "7.2",
+      "unita_misura": "g/dL",
+      "range_riferimento": "12.0 - 16.0",
+      "interpretazione_clinica": "Anemia di grado severo, responsabile della sintomatologia da ridotto trasporto di ossigeno."
+    },
+    {
+      "categoria": "Ematologia",
+      "nome_test": "Volume Corpuscolare Medio (MCV)",
+      "valore_tipico": "68",
+      "unita_misura": "fL",
+      "range_riferimento": "80 - 100",
+      "interpretazione_clinica": "Microcitosi marcata, segno distintivo di una ridotta sintesi emoglobinica per carenza di ferro."
+    },
+    {
+      "categoria": "Studio del Ferro",
+      "nome_test": "Ferritina",
+      "valore_tipico": "5",
+      "unita_misura": "ng/mL",
+      "range_riferimento": "30 - 300",
+      "interpretazione_clinica": "Ipoferritinemia severa, indica l'esaurimento completo delle riserve di ferro dell'organismo. È il test più specifico per la diagnosi."
+    },
+    {
+      "categoria": "Studio del Ferro",
+      "nome_test": "Sideremia (Ferro serico)",
+      "valore_tipico": "20",
+      "unita_misura": "µg/dL",
+      "range_riferimento": "60 - 170",
+      "interpretazione_clinica": "Valore molto basso, indica la scarsità di ferro circolante disponibile per l'eritropoiesi."
+    },
+    {
+      "categoria": "Studio del Ferro",
+      "nome_test": "Saturazione della Transferrina",
+      "valore_tipico": "8",
+      "unita_misura": "%",
+      "range_riferimento": "20 - 50",
+      "interpretazione_clinica": "Bassa saturazione, indica che la transferrina (proteina di trasporto del ferro) è per lo più 'vuota', confermando la carenza di ferro."
+    }
+  ]
+}

@@ -507,7 +507,8 @@ public class ExamSupport {
                     LabExamGenerationRequest request = new LabExamGenerationRequest(
                             scenario.getDescrizione(),
                             scenario.getTipologia(),
-                            esameFisicoService.getEsameFisicoById(scenarioId).toString()
+                            esameFisicoService.getEsameFisicoById(scenarioId).toString(),
+                            scenario.getPatologia()
                     );
                     Optional<LabExamSet> labExamSetOptional = externalApiService.generateLabExamsFromScenario(request);
 

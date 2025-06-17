@@ -1,0 +1,48 @@
+{
+  "patologia": "Sepsi da Pielonefrite (Urosepsi)",
+  "descrizione_generale": "Disfunzione d'organo potenzialmente fatale causata da una risposta disregolata dell'organismo a un'infezione delle vie urinarie che si è diffusa a livello sistemico.",
+  "segni_sintomi_chiave": ["febbre alta con brividi", "dolore lombare o al fianco", "disuria (bruciore a urinare)", "ipotensione", "tachicardia", "tachipnea", "stato confusionale"],
+  "reperti_esame_obiettivo": ["paziente sofferente, febbrile", "ipotensione (es. 90/50 mmHg)", "frequenza cardiaca > 100 bpm", "frequenza respiratoria > 22 atti/min", "dolorabilità alla percussione della loggia renale (manovra di Giordano positiva)"],
+  "esami_laboratorio_tipici": [
+    {
+      "categoria": "Marcatori di Infiammazione",
+      "nome_test": "Proteina C Reattiva (PCR)",
+      "valore_tipico": "250",
+      "unita_misura": "mg/L",
+      "range_riferimento": "< 5",
+      "interpretazione_clinica": "Valore estremamente elevato, indicativo di una severa risposta infiammatoria sistemica."
+    },
+     {
+      "categoria": "Marcatori di Infiammazione",
+      "nome_test": "Procalcitonina (PCT)",
+      "valore_tipico": "15",
+      "unita_misura": "ng/mL",
+      "range_riferimento": "< 0.5",
+      "interpretazione_clinica": "Valore molto elevato, altamente suggestivo di sepsi di origine batterica."
+    },
+    {
+      "categoria": "Ematologia",
+      "nome_test": "Globuli Bianchi (WBC)",
+      "valore_tipico": "18.200",
+      "unita_misura": "/µL",
+      "range_riferimento": "4.000 - 10.000",
+      "interpretazione_clinica": "Marcata leucocitosi con spostamento a sinistra (aumento dei neutrofili immaturi), tipica di un'infezione batterica severa."
+    },
+    {
+      "categoria": "Disfunzione d'Organo",
+      "nome_test": "Lattato Arterioso",
+      "valore_tipico": "4.1",
+      "unita_misura": "mmol/L",
+      "range_riferimento": "< 2.0",
+      "interpretazione_clinica": "Iperlattatemia indicativa di ipoperfusione tissutale e shock settico."
+    },
+    {
+      "categoria": "Disfunzione d'Organo",
+      "nome_test": "Creatinina",
+      "valore_tipico": "2.1",
+      "unita_misura": "mg/dL",
+      "range_riferimento": "0.6 - 1.2",
+      "interpretazione_clinica": "Aumento indicativo di danno renale acuto (Acute Kidney Injury - AKI), una comune disfunzione d'organo nella sepsi."
+    }
+  ]
+}

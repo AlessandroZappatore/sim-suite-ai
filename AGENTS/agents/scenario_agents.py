@@ -26,7 +26,7 @@ from models.scenario_models import (
 from models.presidi_medici import PRESIDI_MEDICI
 from utils.common import extract_json_from_response, get_model
 
-logging.basicConfig(level=logging.INFO)
+# Logger instance (will use the configuration from main.py)
 logger = logging.getLogger(__name__)
 
 # --- Agent Definitions ---

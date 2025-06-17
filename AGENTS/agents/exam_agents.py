@@ -16,17 +16,17 @@ from fastapi import HTTPException
 from pydantic import ValidationError
 
 from models.exam_models import LabExamRequest, LabExamResponse
-from utils.common import extract_json_from_response, get_exam_model
+from utils.common import extract_json_from_response, get_exam_model, get_knowledge_base
 
 # Configure logging
 logger = logging.getLogger(__name__)
-
 
 # --- Agent Definition ---
 exam_agent = Agent(
     name="Lab Exam Generator",
     role="An expert clinical pathologist who generates realistic lab results for medical simulations.",
     model=get_exam_model(),
+    knowledge=get_knowledge_base(),
     instructions=[
         "Your task is to generate a set of relevant laboratory exams based on a clinical scenario.",
         "All text content, including test names, categories, and interpretations, must be in **Italian**.",
@@ -55,29 +55,38 @@ def create_exam_prompt(request: LabExamRequest) -> str:
     return f"""
     Generate a set of relevant laboratory exams in JSON format for a medical simulation.
 
-    SCENARIO CONTEXT:
+    ## User-Provided Scenario ##
     - Patient Type: {request.tipologia_paziente}
     - Scenario Description: {request.descrizione_scenario}
-    - Objective Examination (Esame obiettivo): {request.esame_obiettivo}
+    - Objective Examination: {request.esame_obiettivo}
+    - Patologia (se specificata): {request.patologia if request.patologia else 'Nessuna patologia specificata'}
+    ---
 
-    INSTRUCTIONS:
-    1.  Based on the scenario and objective examination findings, create a list of pertinent lab exams.
-    2.  Use the objective examination results to guide the selection of appropriate laboratory tests.
-    3.  Consider which lab tests would be most clinically relevant given the physical examination findings.
-    4.  Group the exams into logical categories (e.g., 'Ematologia', 'Coagulazione', 'Chimica Clinica', 'Emogasanalisi Arteriosa').
-    5.  All names, categories, and textual reports MUST be in ITALIAN.
-    6.  The values should be realistic for the given clinical picture and consistent with the objective examination.
-    7.  For each test, you MUST include a `referto` field containing a brief clinical interpretation of the result that correlates with the clinical scenario and objective examination (e.g., "Valore nella norma", "Valore critico indicativo di infiammazione", "Leggermente diminuito compatibile con il quadro clinico").
-    8.  The `unita_misura` field MUST always be a string. If a test has no unit (e.g., a qualitative result like 'Positivo/Negativo'), use an empty string "" or "N/A".
-    9.  Ensure the lab results are coherent with the physical examination findings described in the esame_obiettivo.
-    10. Strictly adhere to the JSON schema provided below. Do NOT add any extra text or explanations outside the JSON structure.
+    ## INSTRUCTIONS ##
+    Your goal is to generate a complete and clinically coherent set of lab results.
+    You will be automatically provided with retrieved clinical context (RAG). You MUST follow this hierarchy of information:
 
-    JSON SCHEMA TO FOLLOW:
+    1.  **Primary Source (Retrieved RAG Context):** The retrieved clinical context is your primary source of truth.
+        - You MUST use the specific values, units, and interpretations it provides for any listed exams.
+        - Do not invent different values for exams already present in the retrieved context.
+
+    2.  **Secondary Source (User-Provided Scenario):** Use the "User-Provided Scenario" section above to:
+        - Understand the overall clinical picture.
+        - Select relevant *additional* lab tests that are NOT mentioned in the retrieved context.
+        - Ensure the entire lab panel is plausible and consistent with the patient's described condition and physical findings.
+
+    3.  **Language Requirement:** All names, categories, and textual reports MUST be in ITALIAN. This is a critical requirement.
+
+    4.  **Formatting and Content Rules:**
+        - You MUST strictly adhere to the JSON schema provided below.
+        - All fields defined as strings in the schema MUST be strings in the output. For fields like `range_riferimento` or `unita_misura`, if a value is not applicable, you MUST provide an empty string `""` or a descriptive text like 'N/A'.
+        - **You MUST NOT use `null` for any field in the JSON output. This is a critical rule to prevent validation errors.**
+
+    ## JSON SCHEMA TO FOLLOW ##
     {json.dumps(LabExamResponse.model_json_schema(), indent=2)}
 
     Respond ONLY with the valid JSON object.
     """
-
 
 def generate_lab_exams(request: LabExamRequest) -> LabExamResponse:
     """Generates laboratory exams for a medical scenario.

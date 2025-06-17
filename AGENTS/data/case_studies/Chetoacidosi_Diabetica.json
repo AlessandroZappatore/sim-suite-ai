@@ -1,0 +1,48 @@
+{
+  "patologia": "Chetoacidosi Diabetica (DKA)",
+  "descrizione_generale": "Complicanza acuta e grave del diabete mellito (più comune nel tipo 1), caratterizzata da iperglicemia, acidosi metabolica e chetonemia.",
+  "segni_sintomi_chiave": ["poliuria", "polidipsia", "nausea e vomito", "dolore addominale", "respiro di Kussmaul (profondo e affannoso)", "alito acetonemico (odore di frutta matura)", "alterazione dello stato di coscienza"],
+  "reperti_esame_obiettivo": ["segni di disidratazione severa (mucose secche, ridotto turgore cutaneo)", "tachicardia", "ipotensione", "ipotermia o febbre (se infezione scatenante)"],
+  "esami_laboratorio_tipici": [
+    {
+      "categoria": "Emogasanalisi Arteriosa (EGA)",
+      "nome_test": "pH",
+      "valore_tipico": "7.15",
+      "unita_misura": "",
+      "range_riferimento": "7.35 - 7.45",
+      "interpretazione_clinica": "Acidosi metabolica severa, segno distintivo della DKA."
+    },
+    {
+      "categoria": "Emogasanalisi Arteriosa (EGA)",
+      "nome_test": "Bicarbonati (HCO3-)",
+      "valore_tipico": "10",
+      "unita_misura": "mEq/L",
+      "range_riferimento": "22 - 28",
+      "interpretazione_clinica": "Valore marcatamente ridotto a causa del consumo per tamponare l'eccesso di acidi (chetoacidi)."
+    },
+    {
+      "categoria": "Chimica Clinica",
+      "nome_test": "Glucosio",
+      "valore_tipico": "520",
+      "unita_misura": "mg/dL",
+      "range_riferimento": "70 - 100",
+      "interpretazione_clinica": "Iperglicemia severa dovuta a deficit insulinico assoluto o relativo."
+    },
+    {
+      "categoria": "Chimica Clinica",
+      "nome_test": "Potassio (K+)",
+      "valore_tipico": "5.7",
+      "unita_misura": "mEq/L",
+      "range_riferimento": "3.5 - 5.0",
+      "interpretazione_clinica": "Iperkaliemia apparente dovuta allo shift extracellulare del potassio causato dall'acidosi e dall'iperosmolarità, nonostante un deficit di potassio corporeo totale."
+    },
+    {
+      "categoria": "Chimica Clinica",
+      "nome_test": "Beta-idrossibutirrato (sangue)",
+      "valore_tipico": "6.8",
+      "unita_misura": "mmol/L",
+      "range_riferimento": "< 0.6",
+      "interpretazione_clinica": "Chetonemia elevata, conferma la diagnosi di chetoacidosi."
+    }
+  ]
+}

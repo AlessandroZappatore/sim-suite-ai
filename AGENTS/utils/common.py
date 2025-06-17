@@ -17,7 +17,18 @@ from agno.models.anthropic import Claude
 from agno.models.google import Gemini
 from dotenv import load_dotenv
 
-logging.basicConfig(level=logging.INFO)
+from agno.vectordb.chroma import ChromaDb
+from agno.knowledge.json import JSONKnowledgeBase
+from agno.embedder.google import GeminiEmbedder
+
+vector_db = ChromaDb(collection="sim_suite_data", path="tmp/chromadb", persistent_client=True, embedder=GeminiEmbedder())
+
+knowledge_base = JSONKnowledgeBase(
+    path="./data/case_studies/",
+    vector_db=vector_db,
+)
+
+# Logger instance (will use the configuration from main.py)
 logger = logging.getLogger(__name__)
 
 load_dotenv()
@@ -131,3 +142,11 @@ def sanitize_json_string(json_str: str) -> str:
     json_str = re.sub(r'[\x00-\x08\x0b\x0c\x0e-\x1f\x7f]', '', json_str)
 
     return json_str
+
+def get_knowledge_base() -> JSONKnowledgeBase:
+    """Provides access to the knowledge base.
+
+    Returns:
+        The initialized JSONKnowledgeBase instance.
+    """
+    return knowledge_base

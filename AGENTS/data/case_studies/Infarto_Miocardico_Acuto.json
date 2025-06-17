@@ -1,0 +1,40 @@
+{
+  "patologia": "Infarto Miocardico Acuto (IMA) senza sopraslivellamento del tratto ST (NSTEMI)",
+  "descrizione_generale": "Necrosi del miocardio dovuta a un'ischemia acuta e prolungata, causata da un'occlusione parziale di un'arteria coronaria. Caratterizzata da un aumento dei marcatori di necrosi cardiaca senza il tipico sopraslivellamento del tratto ST all'ECG.",
+  "segni_sintomi_chiave": ["dolore toracico oppressivo a riposo", "dolore retrosternale", "irradiazione al braccio sinistro o alla mandibola", "dispnea", "sudorazione fredda (diaforesi)", "nausea"],
+  "reperti_esame_obiettivo": ["paziente sofferente, pallido e diaforetico", "pressione arteriosa normale o bassa", "frequenza cardiaca aumentata", "possibili rantoli polmonari basali se presente scompenso cardiaco incipiente"],
+  "esami_laboratorio_tipici": [
+    {
+      "categoria": "Marcatori di Necrosi Cardiaca",
+      "nome_test": "Troponina I ad alta sensibilità (hs-cTnI)",
+      "valore_tipico": "7500 ng/L",
+      "unita_misura": "ng/L",
+      "range_riferimento": "< 14 ng/L",
+      "interpretazione_clinica": "Valore marcatamente elevato, indicativo di danno miocardico acuto e necrosi cellulare."
+    },
+    {
+      "categoria": "Ematologia",
+      "nome_test": "Globuli Bianchi (WBC)",
+      "valore_tipico": "14.500",
+      "unita_misura": "/µL",
+      "range_riferimento": "4.000 - 10.000",
+      "interpretazione_clinica": "Leucocitosi neutrofila, reazione infiammatoria sistemica allo stress e al danno tissutale."
+    },
+    {
+      "categoria": "Chimica Clinica",
+      "nome_test": "Glucosio",
+      "valore_tipico": "170",
+      "unita_misura": "mg/dL",
+      "range_riferimento": "70 - 100",
+      "interpretazione_clinica": "Iperglicemia da stress, comune durante eventi ischemici acuti."
+    },
+    {
+        "categoria": "Coagulazione",
+        "nome_test": "D-Dimero",
+        "valore_tipico": "450",
+        "unita_misura": "ng/mL",
+        "range_riferimento": "< 500",
+        "interpretazione_clinica": "Valore nella norma o leggermente aumentato, utile per la diagnosi differenziale ma non specifico per IMA."
+    }
+  ]
+}

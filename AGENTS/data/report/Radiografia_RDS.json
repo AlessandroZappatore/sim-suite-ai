@@ -1,0 +1,24 @@
+{
+  "nome_esame": "Radiografia del Torace",
+  "patologia_sospetta": "Sindrome da Distress Respiratorio (RDS) del Neonato Pretermine",
+  "reperti_caratteristici": [
+    {
+      "reperto": "Bassi volumi polmonari",
+      "descrizione": "Indicativo di una ridotta espansione polmonare."
+    },
+    {
+      "reperto": "Aspetto diffuso reticolare a vetro smerigliato (ground glass)",
+      "descrizione": "Associato a broncogrammi aerei, questo pattern deriva dall'atelettasia alveolare che contrasta con le vie aeree pervie."
+    },
+    {
+      "reperto": "Contributo dell'edema polmonare",
+      "descrizione": "L'edema polmonare può contribuire all'aspetto diffuso osservato."
+    }
+  ],
+  "reperti_non_comuni_inizialmente": [
+    {
+      "reperto": "Pneumotorace e perdite d'aria",
+      "contesto": "Sono reperti non comuni nella radiografia iniziale, ma vengono osservati più frequentemente quando la compliance polmonare migliora."
+    }
+  ]
+}
