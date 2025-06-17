@@ -4,3 +4,4 @@ google-genai
 uvicorn
 fastapi
 python-dotenv
+anthropic

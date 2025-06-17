@@ -44,6 +44,7 @@ materials_agent = Agent(
         "You MUST respond with a valid JSON array enclosed in ```json code blocks.",
         "The JSON must follow this exact structure: [{\"nome\": \"Material Name\", \"descrizione\": \"General Description\"}]",
         "ALWAYS wrap your JSON response in ```json and ``` code blocks.",
+        "Your FINAL response MUST be a single, raw, RFC 8259 compliant JSON object. Do not use any markdown formatting (like ```json). All newlines within JSON string values MUST be escaped as \\n.",
     ]
 )
 

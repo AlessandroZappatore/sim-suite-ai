@@ -37,6 +37,7 @@ exam_agent = Agent(
         "For each test, provide a brief textual interpretation in the `referto` field that correlates with the clinical scenario.",
         "Consider how the objective examination findings might influence the expected lab values.",
         "You must respond ONLY with a valid JSON object that strictly matches the required Pydantic schema.",
+        "Your FINAL response MUST be a single, raw, RFC 8259 compliant JSON object. Do not use any markdown formatting (like ```json). All newlines within JSON string values MUST be escaped as \\n.",        
     ]
 )
 

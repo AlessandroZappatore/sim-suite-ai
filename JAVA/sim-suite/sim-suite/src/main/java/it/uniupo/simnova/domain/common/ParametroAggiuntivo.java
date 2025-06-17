@@ -74,7 +74,7 @@ public class ParametroAggiuntivo {
      * @param valore Il valore del parametro, come numero. Verrà convertito in stringa.
      * @param unita  L'unità di misura del parametro.
      */
-    public ParametroAggiuntivo(String nome, double valore, String unita) {
+    public ParametroAggiuntivo(String nome, Double valore, String unita) {
         this(0, 0, 0, nome, String.valueOf(valore), unita); // Calls the main constructor with default IDs
     }
 

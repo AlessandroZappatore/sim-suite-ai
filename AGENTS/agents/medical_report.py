@@ -37,7 +37,7 @@ medical_report_agent = Agent(
         "Generate ONLY the medical report content without adding conclusions, recommendations, or additional commentary.",
         "Focus on objective findings and observations without interpretative conclusions.",
         "Correlate the diagnostic findings with the clinical examination findings when appropriate.",
-        "You must respond ONLY with a valid JSON object that strictly matches the required Pydantic schema.",
+        "Your FINAL response MUST be a single, raw, RFC 8259 compliant JSON object. Do not use any markdown formatting (like ```json). All newlines within JSON string values MUST be escaped as \\n."
     ]
 )
 

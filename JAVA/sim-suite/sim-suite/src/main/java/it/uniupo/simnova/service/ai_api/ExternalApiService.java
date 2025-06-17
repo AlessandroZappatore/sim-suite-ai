@@ -64,7 +64,7 @@ public class ExternalApiService {
             ResponseEntity<String> response = restTemplate.postForEntity(scenarioApiUrl, requestEntity, String.class);
 
             if (response.getStatusCode() == HttpStatus.OK && response.getBody() != null) {
-                logger.info("Risposta ricevuta con successo dall'API di generazione scenario.");
+                logger.info("Risposta ricevuta con successo dall'API di generazione scenario: {}.", response);
                 return Optional.of(response.getBody());
             } else {
                 logger.warn("Risposta non valida dall'API di generazione scenario: Status {}", response.getStatusCode());

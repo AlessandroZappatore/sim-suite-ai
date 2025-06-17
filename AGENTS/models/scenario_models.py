@@ -157,7 +157,7 @@ class ParametroAggiuntivo(BaseModel):
     """
     unitaMisura: str
     nome: str
-    valore: str
+    valore: float = Field(description="Value of the additional parameter (e.g., 5.0, 10.0, etc.)")
 
 
 class Tempo(BaseModel):

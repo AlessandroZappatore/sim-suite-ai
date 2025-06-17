@@ -133,11 +133,11 @@ def create_info_prompt(request: ScenarioRequest) -> str:
         - **FOR LISTS**: When generating content that represents a list (e.g., in the 'liquidi' or 'moulage' fields), you MUST use proper HTML list tags. Use a `<ul>` tag to enclose the list and `<li>` tags for each item.
           - GOOD EXAMPLE: `<ul><li>Soluzione fisiologica.</li><li>Glucosata al 5%.</li><li>Midazolam.</li></ul>`
           - BAD EXAMPLE (DO NOT USE): `Avrete a disposizione:<br><br>Soluzione fisiologica.`
-
-    7.  For the 'presidi' field, choose ONLY from this list: {PRESIDI_MEDICI}
-    8.  Based on the primary pathology ('patologia') and the user's description, you MUST identify and list some crucial medical actions in the 'azioniChiave' field. These actions must be appropriate for the target audience.
-    9.  **Vascular Access**: If the clinical context suggests it (e.g., trauma, shock), you MUST populate 'pazienteT0.accessiVenosi' and/or 'pazienteT0.accessiArteriosi'.
-    10. **Parent/Guardian Role**: If 'tipologia' is 'Pediatrico', 'Neonatale', or 'Prematuro', provide context in 'scenario.infoGenitore', describing the parent at the start of the scenario.
+    7.  **NUMERIC PARAMETERS**: For all numeric fields representing vital signs (e.g., RR, SpO2, FiO2, LitriO2, EtCO2, T, FC), you MUST provide a valid number. If a parameter is not measured, not applicable, or unknown, you MUST use the numeric value `0`. **DO NOT use text strings like 'Non misurata' or 'N/A'.**
+    8.  For the 'presidi' field, choose ONLY from this list: {PRESIDI_MEDICI}
+    9.  Based on the primary pathology ('patologia') and the user's description, you MUST identify and list some crucial medical actions in the 'azioniChiave' field. These actions must be appropriate for the target audience.
+    10. **Vascular Access**: If the clinical context suggests it (e.g., trauma, shock), you MUST populate 'pazienteT0.accessiVenosi' and/or 'pazienteT0.accessiArteriosi'.
+    11. **Parent/Guardian Role**: If 'tipologia' is 'Pediatrico', 'Neonatale', or 'Prematuro', provide context in 'scenario.infoGenitore', describing the parent at the start of the scenario.
 
     JSON SCHEMA TO FOLLOW:
     {json.dumps(BaseScenario.model_json_schema(), indent=2)}
@@ -172,11 +172,12 @@ def create_timeline_prompt(context: Dict[str, Any]) -> str:
     1. Generate a list of 4-5 timeline events ('tempi'), starting from T0 which must reflect the initial state.
     2. All descriptive text MUST be in ITALIAN.
     3. **DIFFICULTY ADAPTATION - {difficulty}**: {difficulty_timeline_rules[difficulty]}
-    4. **Parent/Guardian Role Explanation**: If the patient is pediatric ('Pediatrico'), the 'ruoloGenitore' field in each 'Tempo' MUST be used to describe the parent's or guardian's actions, words, or emotional state during that specific phase of the timeline. This shows their reaction to the patient's evolving condition.
-       - Example for T1: '<p>La madre diventa sempre più agitata, chiede continuamente se il bambino morirà e interferisce con le manovre del team.</p>'
-       - Example for T2: '<p>Dopo la somministrazione del farmaco, il padre nota il miglioramento e appare sollevato. Ringrazia i medici.</p>'
-       If the parent's role is not relevant for a specific step, you can omit the field or leave it as null.
-    4. Strictly follow the JSON schema provided.
+    4. **NUMERIC PARAMETERS**: For all numeric fields representing vital signs (e.g., RR, SpO2, FiO2, LitriO2, EtCO2, T, FC), you MUST provide a valid number. If a parameter is not measured or not applicable, you MUST use the numeric value `0`. **DO NOT use text strings like 'Non misurata' or 'N/A'.**
+    5. **Parent/Guardian Role Explanation**: If the patient is pediatric ('Pediatrico'), the 'ruoloGenitore' field in each 'Tempo' MUST be used to describe the parent's or guardian's actions, words, or emotional state during that specific phase of the timeline. This shows their reaction to the patient's evolving condition.
+        - Example for T1: '<p>La madre diventa sempre più agitata, chiede continuamente se il bambino morirà e interferisce con le manovre del team.</p>'
+        - Example for T2: '<p>Dopo la somministrazione del farmaco, il padre nota il miglioramento e appare sollevato. Ringrazia i medici.</p>'
+        If the parent's role is not relevant for a specific step, you can omit the field or leave it as null.
+    6. Strictly follow the JSON schema provided.
     
     JSON SCHEMA TO FOLLOW:
     {json.dumps(Timeline.model_json_schema(), indent=2)}

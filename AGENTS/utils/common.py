@@ -4,15 +4,16 @@ This module provides a collection of helper functions designed to support variou
 tasks within the application. These utilities include model initialization for
 different generation tasks and robust JSON parsing from model responses.
 
-Version: 4.2
+Version: 4.3
 """
 
 import json
 import logging
 import os
 import re
-from typing import Any, Dict, Optional
+from typing import Any, Dict, Optional, Union
 
+from agno.models.anthropic import Claude
 from agno.models.google import Gemini
 from dotenv import load_dotenv
 
@@ -21,26 +22,48 @@ logger = logging.getLogger(__name__)
 
 load_dotenv()
 
+use_anthorpic = False
 if not os.getenv("GOOGLE_API_KEY"):
-    logger.warning("GOOGLE_API_KEY not found in environment variables")
+    logger.warning("GOOGLE_API_KEY not found. Attempting to fall back to Anthropic.")
+    if os.getenv("ANTHROPIC_API_KEY"):
+        use_anthorpic = True
+        logger.info("Using Anthropic (Claude) as the AI provider.")
+    else:
+        raise EnvironmentError(
+            "No API key found. Please set either GOOGLE_API_KEY or ANTHROPIC_API_KEY in your environment."
+        )
+else:
+    logger.info("Using Google (Gemini) as the AI provider.")
 
 
-def get_model() -> Gemini:
-    """Initializes and returns the Gemini model for scenario generation.
+def get_model() -> Union[Gemini, Claude]:
+    """Initializes and returns the primary generation model.
+
+    Returns an instance of Gemini ('gemini-2.0-flash') if GOOGLE_API_KEY is set.
+    Otherwise, falls back to Anthropic ('claude-3.5-sonnet') if ANTHROPIC_API_KEY is set.
 
     Returns:
-        An instance of the Gemini model configured for 'gemini-2.0-flash'.
+        An instance of the configured AI model (Gemini or Anthropic).
     """
-    return Gemini("gemini-2.0-flash")
+    if use_anthorpic:
+        return Claude("claude-3-5-haiku-20241022") # claude-3-7-sonnet-20250219 claude-3-5-haiku-20241022
+    else:
+        return Gemini("gemini-2.0-flash") # gemini-2.0-flash gemini-1.5-flash-latest gemini-2.5-flash
 
 
-def get_exam_model() -> Gemini:
-    """Initializes and returns the Gemini model for exam generation.
+def get_exam_model() -> Union[Gemini, Claude]:
+    """Initializes and returns the model for exam generation.
+
+    Returns an instance of Gemini ('gemini-1.5-flash-latest') if GOOGLE_API_KEY is set.
+    Otherwise, falls back to Anthropic ('claude-3.5-sonnet') if ANTHROPIC_API_KEY is set.
 
     Returns:
-        An instance of the Gemini model configured for 'gemini-1.5-flash-latest'.
+        An instance of the configured AI model (Gemini or Anthropic).
     """
-    return Gemini("gemini-1.5-flash-latest")
+    if use_anthorpic:
+        return Claude("claude-3-5-haiku-20241022") # claude-3-7-sonnet-20250219 claude-3-5-haiku-20241022
+    else:
+        return Gemini("gemini-1.5-flash-latest") # gemini-2.0-flash gemini-1.5-flash-latest gemini-2.5-flash
 
 
 def extract_json_from_response(response_text: Optional[str]) -> Dict[str, Any]:
@@ -74,7 +97,9 @@ def extract_json_from_response(response_text: Optional[str]) -> Dict[str, Any]:
             raise ValueError("No JSON block found in the response.")
 
     try:
-        return json.loads(json_str.strip())
+        # Sanifica la stringa prima del parsing per una maggiore robustezza
+        sanitized_str = sanitize_json_string(json_str)
+        return json.loads(sanitized_str.strip())
     except json.JSONDecodeError as e:
         logger.error(f"JSON Decode Error: {e}\nResponse text received: {json_str}")
         raise ValueError(f"Invalid JSON in AI response: {e}") from e
