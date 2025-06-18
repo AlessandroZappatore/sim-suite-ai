@@ -24,7 +24,7 @@ from models.scenario_models import (
     Sceneggiatura
 )
 from models.presidi_medici import PRESIDI_MEDICI
-from utils.common import extract_json_from_response, get_model
+from utils.common import extract_json_from_response, get_model, get_knowledge_base
 
 # Logger instance (will use the configuration from main.py)
 logger = logging.getLogger(__name__)
@@ -34,6 +34,7 @@ logger = logging.getLogger(__name__)
 info_agent = Agent(
     name="Scenario Info Generator",
     role="An expert in creating the foundational elements of a medical simulation.",
+    knowledge=get_knowledge_base(),
     model=get_model(),
     instructions=[
         "Your task is to generate the static, initial part of a medical scenario. ",
@@ -47,6 +48,7 @@ timeline_agent = Agent(
     name="Clinical Timeline Generator",
     role="An expert in creating dynamic, evolving clinical timelines for medical simulations.",
     model=get_model(),
+    knowledge=get_knowledge_base(),
     instructions=[
         "Your task is to generate a series of timeline events ('tempi'). ",
         "All text content must be in Italian. ",

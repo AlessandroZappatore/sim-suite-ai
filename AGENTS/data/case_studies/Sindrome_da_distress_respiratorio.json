@@ -1,0 +1,38 @@
+{
+  "patologia": "Sindrome da distress respiratorio (RDS) nel neonato pretermine",
+  "corso_clinico": {
+    "storico_pre_terapia_con_surfattante": {
+      "progressione": "L'RDS non complicato progrediva tipicamente per 48-72 ore.",
+      "miglioramento": "La progressione era associata a un miglioramento della funzione respiratoria man mano che la produzione di surfattante endogeno aumentava.",
+      "risoluzione": "Si risolveva tipicamente entro una settimana di vita.",
+      "segno_predittivo_miglioramento": "Una marcata diuresi precedeva tipicamente il miglioramento della funzione polmonare."
+    },
+    "corso_modificato_dalla_terapia_moderna": {
+      "storia_naturale": "La storia naturale dell'RDS è notevolmente modificata dalle terapie moderne.",
+      "terapia_con_surfattante_esogeno": "Migliora drasticamente la funzione polmonare, portando alla risoluzione dei sintomi e abbreviando il decorso clinico.",
+      "pressione_positiva_continua_delle_vie_aeree_cpap": "Ha migliorato il decorso clinico dell'RDS, anche nei neonati che non ricevono la terapia con surfattante."
+    }
+  },
+  "risultati_di_laboratorio_e_imaging": {
+    "radiografia_del_torace": {
+      "indicazione": "Generalmente ottenuta per tutti i neonati con distress respiratorio.",
+      "ruolo_diagnostico": "Le caratteristiche radiografiche in un neonato pretermine con distress respiratorio soddisfano i criteri di diagnosi clinica per l'RDS.",
+      "reperti_caratteristici": [
+        "Basso volume polmonare",
+        "Aspetto classico diffuso reticolare a vetro smerigliato (ground glass)",
+        "Broncogrammi aerei"
+      ]
+    },
+    "emogasanalisi_arteriosa": {
+      "reperti_tipici": "Mostrano tipicamente ipossiemia che risponde alla somministrazione di ossigeno supplementare.",
+      "pco2_parziale": "La pressione parziale dell'anidride carbonica (PCO2) è inizialmente normale o leggermente elevata, ma di solito aumenta con il peggiorare della malattia."
+    },
+    "altri_reperti_di_laboratorio": {
+      "iponatremia": {
+        "contesto": "Può svilupparsi con il progredire della malattia.",
+        "causa": "Deriva dalla ritenzione idrica.",
+        "gestione_e_prevenzione": "Solitamente migliora con la restrizione dei fluidi. Una gestione attenta dei fluidi previene l'iponatremia, e di conseguenza, questo reperto è osservato meno comunemente."
+      }
+    }
+  }
+}

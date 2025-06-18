@@ -73,6 +73,7 @@ public class AICreation extends Composite<VerticalLayout> {
     private Button sendTarget; // Nuovo pulsante di invio per il target
     private Button sendDesc;
     private Button sendDiff;
+    private Button nextButton;
 
 
     public AICreation(FileStorageService fileStorageService,
@@ -126,7 +127,7 @@ public class AICreation extends Composite<VerticalLayout> {
         contentLayout.add(headerSection, chatLayout);
         contentLayout.setHorizontalComponentAlignment(FlexComponent.Alignment.CENTER, chatLayout);
 
-        Button nextButton = StyleApp.getNextButton();
+        nextButton = StyleApp.getNextButton();
         HorizontalLayout footerLayout = StyleApp.getFooterLayout(nextButton);
         nextButton.setVisible(false);
         nextButton.addClickListener(e -> nextButton.getUI().ifPresent(ui -> ui.navigate("scenari")));
@@ -319,6 +320,7 @@ public class AICreation extends Composite<VerticalLayout> {
         } else if (step >= 4 && difficultySelect.getValue() != null) {
             chatLayout.add(aiMsgStep2); // Mostra il messaggio AI precedente
             chatLayout.add(createUserMessage(difficultySelect.getValue()));
+            nextButton.setVisible(true);
         }
     }
 

@@ -1,0 +1,79 @@
+{
+  "patologia": "ICTUS",
+  "sintomi": {
+    "nota": "Il testo fornito si concentra esclusivamente sugli studi di laboratorio; i sintomi non sono dettagliati."
+  },
+  "esame_fisico": {
+    "nota": "Il testo fornito si concentra esclusivamente sugli studi di laboratorio; i reperti dell'esame fisico non sono dettagliati."
+  },
+  "risultati_di_laboratorio": {
+    "studi_di_laboratorio_generali": {
+      "descrizione": "Una serie di esami del sangue possono essere indicati in pazienti selezionati con ischemia o emorragia cerebrale.",
+      "elenco_test": [
+        {
+          "test": "Glicemia"
+        },
+        {
+          "test": "Emocromo completo",
+          "componenti": [
+            "Emoglobina",
+            "Ematocrito",
+            "Conta dei globuli bianchi",
+            "Conta piastrinica"
+          ]
+        },
+        {
+          "test": "Profilo coagulativo",
+          "componenti": [
+            "Tempo di protrombina (PT)",
+            "International normalized ratio (INR)",
+            "Tempo di tromboplastina parziale attivato (aPTT)"
+          ]
+        },
+        {
+          "test": "Test di coagulazione specifici",
+          "componenti": [
+            "Tempo di trombina",
+            "Tempo di coagulazione con ecarina"
+          ],
+          "condizione": "Indicati se il paziente è noto o si sospetta stia assumendo un inibitore diretto della trombina o un inibitore diretto del fattore Xa."
+        },
+        {
+          "test": "Profilo lipidico",
+          "componenti": [
+            "Colesterolo totale",
+            "Colesterolo HDL (lipoproteine ad alta densità)",
+            "Colesterolo LDL (lipoproteine a bassa densità)",
+            "Trigliceridi"
+          ]
+        }
+      ],
+      "altri_marcatori": [
+        {
+          "test": "D-dimero e Fibrinogeno",
+          "utilita": "Possono essere utili per rilevare pazienti la cui ischemia cerebrale può essere correlata a cancro o a malattie infiammatorie."
+        }
+      ]
+    },
+    "studi_per_ipercoagulabilita": {
+      "limitazioni": "L'esecuzione di test su larga scala per questi disturbi è limitata da una prevalenza relativamente bassa di trombofilie e dall'alterazione della sensibilità e specificità dei test nel contesto di un evento ischemico acuto.",
+      "indicazioni_al_test": [
+        "Una storia personale o familiare di trombosi sistemiche.",
+        "Nessuna eziologia chiara per l'ictus ischemico o l'attacco ischemico transitorio (TIA), nonostante l'imaging cardiaco e vascolare, specialmente nei pazienti giovani.",
+        "Reperti clinici che suggeriscono il lupus eritematoso sistemico o la sindrome da anticorpi antifosfolipidi."
+      ]
+    },
+    "anticorpi_antifosfolipidi": {
+      "contesto": "Il ruolo degli anticorpi antifosfolipidi (aPL) nella patogenesi dell'ictus ischemico rimane incerto, poiché si possono osservare elevazioni transitorie nel contesto di un ictus acuto.",
+      "indicazioni_al_test": [
+        "Una storia di lupus o sintomi compatibili con il lupus.",
+        "Caratteristiche che suggeriscono la sindrome da anticorpi antifosfolipidi come aborti spontanei, trombosi venosa o emicranie.",
+        "Ictus criptogenetico o TIA in giovane età."
+      ]
+    },
+    "altri_studi": {
+      "fibrinogeno": "I livelli di fibrinogeno plasmatico sono fattori di rischio per malattie coronariche e ictus, ma il loro uso di routine come marcatore di rischio cardiovascolare è limitato dalla variabilità delle misurazioni.",
+      "test_selezionati": "Altri studi possono includere l'elettroforesi dell'emoglobina in pazienti con sospetta emoglobinopatia, la velocità di eritrosedimentazione (VES), e test per la malattia di Lyme, la sifilide e l'infezione da HIV in pazienti selezionati."
+    }
+  }
+}

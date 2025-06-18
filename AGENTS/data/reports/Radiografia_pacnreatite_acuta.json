@@ -1,0 +1,24 @@
+{
+  "nome_esame": "Radiografia Addome e Torace",
+  "patologia_sospetta": "Pancreatite Acuta",
+  "reperti": {
+    "addome": {
+      "pancreatite_lieve": "Quadro non rilevante.",
+      "pancreatite_severa": [
+        "Ileo localizzato di un segmento dell'intestino tenue (ansa sentinella).",
+        "Segno del 'colon cut-off' (paucità d'aria nel colon distale alla flessura splenica).",
+        "Aspetto a vetro smerigliato, che può indicare la presenza di una raccolta fluida peripancreatica acuta."
+      ]
+    },
+    "torace": {
+      "prevalenza": "Anomalie visibili in circa un terzo dei pazienti.",
+      "reperti_possibili": [
+        "Elevazione di un emidiaframma",
+        "Versamenti pleurici",
+        "Atelettasia basale",
+        "Infiltrati polmonari",
+        "Sindrome da distress respiratorio acuto (ARDS)"
+      ]
+    }
+  }
+}

@@ -21,12 +21,20 @@ from agno.vectordb.chroma import ChromaDb
 from agno.knowledge.json import JSONKnowledgeBase
 from agno.embedder.google import GeminiEmbedder
 
-vector_db = ChromaDb(collection="sim_suite_data", path="tmp/chromadb", persistent_client=True, embedder=GeminiEmbedder())
+vector_db = ChromaDb(collection="sim_suite_data", path="data/chromadb/general", persistent_client=True, embedder=GeminiEmbedder())
 
 knowledge_base = JSONKnowledgeBase(
     path="./data/case_studies/",
     vector_db=vector_db,
 )
+
+report_vector_db = ChromaDb(collection="sim_suite_reports", path="data/chromadb/reports", persistent_client=True, embedder=GeminiEmbedder())
+
+report_knowledge_base = JSONKnowledgeBase(
+    path="./data/reports/",
+    vector_db=report_vector_db,
+)
+
 
 # Logger instance (will use the configuration from main.py)
 logger = logging.getLogger(__name__)
@@ -150,3 +158,11 @@ def get_knowledge_base() -> JSONKnowledgeBase:
         The initialized JSONKnowledgeBase instance.
     """
     return knowledge_base
+
+def get_report_knowledge_base() -> JSONKnowledgeBase:
+    """Provides access to the report knowledge base.
+
+    Returns:
+        The initialized JSONKnowledgeBase instance for reports.
+    """
+    return report_knowledge_base

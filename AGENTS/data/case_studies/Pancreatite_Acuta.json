@@ -1,0 +1,110 @@
+{
+  "patologia": "PANCREATITE ACUTA",
+  "sintomi": {
+    "dolore_addominale": {
+      "descrizione": "La maggior parte dei pazienti presenta un'insorgenza acuta di dolore addominale persistente e severo, localizzato nell'epigastrio e nel quadrante superiore sinistro. Raramente, il dolore può essere confinato al quadrante superiore destro o sinistro.",
+      "caratteristiche_per_eziologia": [
+        {
+          "causa": "Pancreatite biliare (calcoli)",
+          "descrizione_dolore": "Dolore ben localizzato, insorgenza rapida che raggiunge la massima intensità in 10-20 minuti."
+        },
+        {
+          "causa": "Cause ereditarie, metaboliche o alcol",
+          "descrizione_dolore": "Insorgenza del dolore meno brusca e dolore mal localizzato."
+        }
+      ],
+      "irradiazione": "Nel 50% circa dei pazienti, il dolore si irradia alla schiena.",
+      "durata": "Persiste per diverse ore o giorni.",
+      "fattori_di_sollievo": "Può essere parzialmente alleviato stando seduti o piegandosi in avanti."
+    },
+    "nausea_e_vomito": {
+      "prevalenza": "Circa il 90% dei pazienti presenta nausea e vomito associati.",
+      "durata": "Possono persistere per diverse ore."
+    },
+    "dispnea": {
+      "contesto": "Pazienti con pancreatite acuta severa.",
+      "cause": "Infiammazione diaframmatica secondaria alla pancreatite, versamenti pleurici o sindrome da distress respiratorio acuto (ARDS)."
+    },
+    "pancreatite_indolore": {
+      "prevalenza": "Circa il 5-10% dei pazienti con pancreatite acuta severa.",
+      "presentazione": "Malattia indolore con ipotensione inspiegabile (es. pazienti post-operatori, critici, in dialisi)."
+    }
+  },
+  "esame_fisico": {
+    "reperti_generali": "I reperti fisici variano a seconda della severità della pancreatite.",
+    "pancreatite_lieve": "Minima dolorabilità alla palpazione dell'epigastrio.",
+    "pancreatite_severa": [
+      "Notevole dolorabilità alla palpazione in epigastrio o più diffusa.",
+      "Distensione addominale e suoni intestinali ipoattivi (dovuti a ileo).",
+      "Febbre, tachipnea, ipossiemia e ipotensione."
+    ],
+    "ittero_sclerale": "Può essere presente a causa di ittero ostruttivo (dovuto a coledocolitiasi o edema della testa del pancreas).",
+    "segni_di_sanguinamento_retroperitoneale": {
+      "prevalenza": "Nel 3% dei pazienti con pancreatite acuta.",
+      "segni": [
+        {
+          "nome": "Segno di Cullen",
+          "descrizione": "Colorazione ecchimotica nella regione periombelicale."
+        },
+        {
+          "nome": "Segno di Grey Turner",
+          "descrizione": "Colorazione ecchimotica lungo il fianco."
+        }
+      ],
+      "significato": "Suggeriscono la presenza di sanguinamento retroperitoneale nel contesto di necrosi pancreatica."
+    },
+    "reperti_suggestivi_dell_eziologia": [
+      "Epatomegalia in pazienti con pancreatite alcolica.",
+      "Xantomi in pancreatite iperlipidemica.",
+      "Gonfiore parotideo in pazienti con parotite."
+    ]
+  },
+  "risultati_di_laboratorio": {
+    "enzimi_pancreatici": {
+      "amilasi_serica": {
+        "tempistiche": "Aumenta entro 6-12 ore dall'insorgenza. Ritorna alla normalità entro 3-5 giorni a causa di una breve emivita (circa 10 ore).",
+        "valore_diagnostico": "Un'elevazione superiore a tre volte il limite normale ha una sensibilità del 67-83% e una specificità del 85-98%.",
+        "limitazioni": [
+          "Potrebbe non essere elevata in circa il 20% dei pazienti con pancreatite alcolica.",
+          "Potrebbe non essere elevata nel 50% dei pazienti con pancreatite associata a ipertrigliceridemia.",
+          "La diagnosi può essere mancata in pazienti che si presentano >24 ore dopo l'insorgenza."
+        ]
+      },
+      "lipasi_serica": {
+        "sensibilita": "Varia dall'82 al 100%.",
+        "tempistiche": "Aumenta entro 4-8 ore dall'insorgenza, raggiunge il picco a 24 ore e ritorna alla normalità entro 8-14 giorni.",
+        "vantaggi": "Aumenta prima e dura più a lungo rispetto all'amilasi, rendendola particolarmente utile in pazienti che si presentano >24 ore dopo l'insorgenza del dolore. È anche più sensibile dell'amilasi nella pancreatite secondaria ad alcol."
+      },
+      "altri_enzimi": [
+        "Peptide di attivazione del tripsinogeno (TAP)",
+        "Tripsinogeno-2 urinario e sierico",
+        "Tripsina",
+        "Fosfolipasi",
+        "Carbossipeptidasi",
+        "Carbossilestere lipasi",
+        "Colipasi",
+        "Isoamilasi pancreatica"
+      ]
+    },
+    "marcatori_di_attivazione_immunitaria": {
+      "mediatori_rilasciati": "Citochine e mediatori infiammatori a seguito dell'attivazione di granulociti e macrofagi.",
+      "marcatori_elevati": [
+        "Proteina C-reattiva (CRP)",
+        "Interleuchina (IL)-6",
+        "IL-8",
+        "IL-10",
+        "Fattore di necrosi tumorale (TNF)",
+        "PMN elastasi"
+      ],
+      "crp_e_severita": "Un livello di CRP superiore a 150 mg/L a 48 ore è associato a pancreatite severa."
+    },
+    "altri_reperti_di_laboratorio": [
+      "Leucocitosi",
+      "Ematocrito elevato per emoconcentrazione",
+      "Azoto ureico ematico (BUN) elevato",
+      "Ipocalcemia",
+      "Iperglicemia",
+      "Ipoglicemia"
+    ]
+  }
+}

@@ -16,7 +16,7 @@ from fastapi import HTTPException
 from pydantic import ValidationError
 
 from models.medical_report_models import MedicalReportRequest, MedicalReportResponse
-from utils.common import extract_json_from_response, get_exam_model
+from utils.common import extract_json_from_response, get_exam_model, get_report_knowledge_base
 
 # Configure logging
 logger = logging.getLogger(__name__)
@@ -27,13 +27,14 @@ medical_report_agent = Agent(
     name="Medical Report Generator",
     role="An expert radiologist and clinician who generates detailed medical reports for various diagnostic examinations.",
     model=get_exam_model(),
+    knowledge=get_report_knowledge_base(),
     instructions=[
         "Your task is to generate realistic medical reports based on clinical scenarios.",
+        "You MUST generate specific and plausible data for all fields. DO NOT use placeholders, brackets like `[...]`, or generic text.", # <-- NUOVA ISTRUZIONE
         "All text content must be in **Italian**.",
         "The reports must be medically accurate and appropriate for the described pathology.",
         "Pay particular attention to the objective examination findings (esame_obiettivo) to ensure the report is consistent with clinical observations.",
         "Use the objective examination information to guide the expected findings in the diagnostic report.",
-        "Format the main report as plain text with clear structure and proper medical terminology.",
         "Generate ONLY the medical report content without adding conclusions, recommendations, or additional commentary.",
         "Focus on objective findings and observations without interpretative conclusions.",
         "Correlate the diagnostic findings with the clinical examination findings when appropriate.",
@@ -47,13 +48,14 @@ def create_medical_report_prompt(request: MedicalReportRequest) -> str:
 
     Args:
         request: The user's request containing clinical context, patient type,
-            and examination type.
+                 and examination type.
 
     Returns:
         A fully formatted prompt string to be sent to the medical_report_agent.
     """
     exam_type = request.tipologia_esame
 
+    # Aggiungiamo istruzioni più forti e chiare
     return f"""
     Generate a detailed medical report in JSON format for a diagnostic examination.
 
@@ -63,24 +65,27 @@ def create_medical_report_prompt(request: MedicalReportRequest) -> str:
     - Examination Type: {exam_type}
     - Objective Examination (Esame obiettivo): {request.esame_obiettivo}
 
+    *** CRITICAL RULES ***
+    1.  **GENERATE REAL DATA**: You MUST fill all JSON fields with specific, realistic, and fabricated data based on the clinical context. Your role is to simulate a real clinician filling out the report.
+    2.  **NO PLACEHOLDERS**: You MUST NOT use any placeholders, brackets like `[...]`, ellipses like `...`, or any placeholder text (e.g., '[Inserire valore]'). Every field must contain a concrete value.
+    3.  **ITALIAN LANGUAGE ONLY**: All generated text content inside the JSON must be in ITALIAN.
+
     INSTRUCTIONS:
-    1. Generate a realistic medical report appropriate for the clinical scenario and examination type.
-    2. All text content MUST be in ITALIAN.
-    3. Use the objective examination findings to guide the expected results in the diagnostic report.
-    4. Ensure the diagnostic findings are consistent with the clinical examination described in "Esame obiettivo".
-    5. The `referto` field should contain ONLY the medical report formatted as plain text with clear structure:
-       - Include relevant anatomical details and measurements when applicable
-       - Structure the text clearly without HTML tags
-       - Focus on objective findings and observations
-       - Correlate diagnostic findings with clinical examination when relevant
-       - DO NOT include conclusions, recommendations, or interpretative comments
-       - DO NOT add summary sections or final remarks
-    6. Make the report consistent with the patient's age group ({request.tipologia_paziente}).
-    7. Ensure medical terminology is accurate and appropriate for the examination type.
+    1.  Generate a realistic medical report appropriate for the clinical scenario and examination type.
+    2.  Use the objective examination findings to guide the expected results in the diagnostic report.
+    3.  Ensure the diagnostic findings are consistent with the clinical examination described in "Esame obiettivo".
+    4.  The `referto` field should contain ONLY the medical report formatted as plain text with clear structure:
+        - Include relevant anatomical details and measurements when applicable
+        - Structure the text clearly without HTML tags
+        - Focus on objective findings and observations
+        - Correlate diagnostic findings with clinical examination when relevant
+        - DO NOT include conclusions, recommendations, or interpretative comments
+    5.  Make the report consistent with the patient's age group ({request.tipologia_paziente}).
+    6.  Ensure medical terminology is accurate and appropriate for the examination type.
 
     EXAMINATION-SPECIFIC GUIDELINES:
     - For imaging (X-ray, CT, MRI): Include technical parameters, anatomical structures examined, and specific findings
-    - For ECG: Include rhythm, rate, intervals, and any abnormalities
+    - For ECG: Include rhythm, rate, intervals, and any abnormalities (e.g., Ritmo: Sinusale, Frequenza cardiaca: 72 bpm)
     - For Echo: Include chamber dimensions, valve function, and hemodynamic assessment
     - For endoscopy: Include preparation, procedure details, and mucosal findings
     - For functional tests: Include parameters measured and interpretation
@@ -88,7 +93,7 @@ def create_medical_report_prompt(request: MedicalReportRequest) -> str:
     JSON SCHEMA TO FOLLOW:
     {json.dumps(MedicalReportResponse.model_json_schema(), indent=2)}
 
-    Respond ONLY with the valid JSON object.
+    Respond ONLY with a single, raw, RFC 8259 compliant JSON object with no markdown.
     """
 
 

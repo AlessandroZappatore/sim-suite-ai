@@ -1,0 +1,43 @@
+{
+  "patologia": "INFARTO MIOCARDICO ACUTO",
+  "sintomi": {
+    "sintomo_principale": {
+      "descrizione": "Dolore o fastidio toracico è il sintomo più comune dell'infarto miocardico acuto (IMA).",
+      "importanza_diagnostica": "La presenza di dolore toracico, specialmente se caratteristico di ischemia miocardica, può influenzare le decisioni sulla probabilità di un IMA."
+    },
+    "anamnesi_dolore": "La raccolta della storia clinica dovrebbe essere mirata a: durata, carattere, somiglianza con episodi precedenti, fattori scatenanti e storia passata di fattori di rischio per malattia coronarica.",
+    "dolore_classico": {
+      "carattere": "Oppressione o pressione toracica.",
+      "localizzazione": "Area retrosternale.",
+      "irradiazione": "Braccio sinistro e/o mandibola."
+    },
+    "sintomi_associati": [
+      "Mancanza di respiro (dispnea)",
+      "Sudorazione (diaforesi)",
+      "Debolezza",
+      "Ansia"
+    ],
+    "presentazioni_atipiche": {
+      "descrizione": "I sintomi tipici possono non essere presenti e le presentazioni atipiche sono comuni.",
+      "popolazioni_a_rischio": [
+        "Donne",
+        "Pazienti con diabete",
+        "Pazienti anziani"
+      ]
+    },
+    "fattori_aggravanti_e_allevianti": "Devono essere indagati per distinguere le cause cardiache da quelle non cardiache dei sintomi."
+  },
+  "esame_fisico": {
+    "nota": "Il testo fornito si concentra principalmente sui sintomi e sui risultati di laboratorio; i reperti specifici dell'esame fisico non sono dettagliati."
+  },
+  "risultati_di_laboratorio": {
+    "biomarcatori_cardiaci": [
+      {
+        "nome": "Troponina Cardiaca (cTn) I e T",
+        "ruolo": "Sono i test sierologici di elezione per la valutazione dei pazienti con sospetto IMA, essendo biomarcatori specifici e sensibili di danno cardiaco.",
+        "valore_anormale": "Valori ≥99° percentile del limite superiore di riferimento sono considerati anormali.",
+        "nota": "Il valore soglia specifico per la troponina varia a seconda del test (assay) utilizzato."
+      }
+    ]
+  }
+}

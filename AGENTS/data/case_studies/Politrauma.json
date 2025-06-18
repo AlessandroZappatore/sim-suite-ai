@@ -1,0 +1,72 @@
+{
+  "patologia": "POLITRAUMA",
+  "lesioni_potenzialmente_occulte": {
+    "lesione_intra_addominale": {
+      "importanza_clinica": "Una diagnosi mancata o ritardata di lesione intra-addominale costituisce una causa importante di morte prevenibile nei pazienti traumatizzati, in particolare nel contesto di un trauma chiuso.",
+      "sospetto_clinico": "Una lesione intra-addominale non diagnosticata dovrebbe essere sospettata in pazienti con trauma chiuso o penetrante che presentano evidenza di acidosi continua, tachicardia persistente, necessità di rianimazione fluida o trasfusionale continua, sepsi addominale e sindrome da risposta infiammatoria sistemica (SIRS).",
+      "tempistiche_manifestazione": "La sepsi addominale è un reperto tardivo, mentre gli altri segni clinici di solito si manifestano entro 24-36 ore dalla lesione.",
+      "diagnosi": {
+        "test": [
+          "Tomografia computerizzata (TC)",
+          "Ecografia",
+          "Colangiopancreatografia con risonanza magnetica",
+          "Colangiopancreatografia retrograda endoscopica",
+          "Lavaggio peritoneale diagnostico"
+        ],
+        "gold_standard": "La laparotomia esplorativa rimane il gold standard e dovrebbe essere eseguita in qualsiasi paziente per il quale si sospetti una lesione operabile significativa ma non determinabile con altri mezzi."
+      }
+    },
+    "lesione_del_diaframma": {
+      "difficolta_diagnostica": "Le lesioni del diaframma, in particolare quelle legate a traumi penetranti, sono spesso difficili da rilevare.",
+      "alto_indice_di_sospetto": "Dovrebbe essere mantenuto un alto indice di sospetto nei pazienti con meccanismi di lesione associati a rottura del diaframma (es. lesioni simultanee sopra e sotto il diaframma)."
+    },
+    "contusione_polmonare": {
+      "descrizione": "Lesione del parenchima polmonare, è la lesione polmonare più comune identificata nel trauma toracico chiuso, verificandosi nel 17% dei pazienti politraumatizzati.",
+      "mortalita": "Il tasso di mortalità associato varia dal 6 al 25%, spesso a causa di polmonite sovrapposta o sindrome da distress respiratorio acuto.",
+      "diagnosi_ritardata": "Spesso non viene sospettata inizialmente perché i reperti clinici e radiografici (opacizzazione omogenea del polmone) sono ritardati. Può verificarsi in assenza di lesioni visibili alla parete toracica.",
+      "trattamento": "Il trattamento è di supporto; il paziente deve essere monitorato per l'insufficienza respiratoria nei primi giorni successivi alla lesione."
+    },
+    "lesione_arteriosa": {
+      "presentazione": "Una lesione da trauma chiuso a un'arteria potrebbe non essere immediatamente evidente. Le lesioni di alto grado (pseudoaneurisma, transezione) sono di solito sintomatiche, ma le lacerazioni intimali sono spesso asintomatiche.",
+      "progressione": "Le lesioni di basso grado possono progredire come una dissezione subintimale che può causare un restringimento del lume o un'occlusione acuta del vaso."
+    },
+    "lesione_cranica_e_cerebrale": {
+      "lesioni_frequentemente_mancate": "Le lacerazioni del cuoio capelluto vengono frequentemente mancate alla valutazione iniziale poiché possono essere oscurate da capelli folti.",
+      "lesioni_intracraniche_non_rilevate": "Sebbene non comuni, gravi lesioni intracraniche possono rimanere non rilevate a causa della mancata esecuzione di una TC indicata, di un errore nell'interpretazione degli studi di imaging cerebrale o perché la lesione non era evidente nella scansione iniziale.",
+      "monitoraggio_e_valutazione": "La valutazione neurologica ripetuta e continua determina la necessità di ottenere ulteriori studi di imaging. I pazienti con trauma cranico possono avere indicazioni per il monitoraggio della pressione intracranica.",
+      "imaging_avanzato": "La Risonanza Magnetica (RM) può essere presa in considerazione per valutare un danno assonale diffuso in pazienti che rimangono ottusi senza una causa distinguibile alla TC."
+    }
+  },
+  "studi_di_laboratorio": {
+    "emoglobina": {
+      "scopo": "Ottenere un emocromo completo e confrontarlo con i valori all'arrivo. La misurazione seriale dell'emoglobina può essere utile per monitorare un sanguinamento interno lento.",
+      "frequenza": "Tipicamente ogni sei ore (e secondo necessità) in pazienti con lesioni d'organo solido gestite in modo conservativo e pazienti con fratture pelviche."
+    },
+    "funzione_renale": {
+      "test": "Azoto ureico ematico (BUN), creatinina.",
+      "indicazioni": "Dovrebbero essere ottenuti quotidianamente nei pazienti che hanno ricevuto mezzi di contrasto endovenosi, in particolare se ad alto rischio di nefropatia indotta da contrasto.",
+      "segni_nefropatia_da_contrasto": "Un aumento della creatinina sierica entro 24-48 ore dalla somministrazione del contrasto può indicare una nefropatia indotta da contrasto."
+    },
+    "parametri_coagulativi": {
+      "cause_coagulopatia": "Alterazioni fisiologiche come acidosi, ipotermia, emodiluizione, e rottura dei tessuti. Può verificarsi una coagulopatia acuta indipendente da questi fattori, specialmente dopo un grave trauma cranico.",
+      "test_consigliati": "Studi di coagulazione e tromboelastografia (TEG) o tromboelastometria rotazionale (ROTEM) per rilevare la causa specifica della coagulopatia.",
+      "frequenza": "Nei pazienti che hanno ricevuto trasfusioni massive o che hanno requisiti trasfusionali continui, gli studi di coagulazione dovrebbero essere eseguiti ogni 4-6 ore."
+    },
+    "creatina_chinasi_e_mioglobina": {
+      "indicazioni": "La rabdomiolisi e la mioglobinuria possono svilupparsi in pazienti con lesioni muscolari significative (es. lesioni da schiacciamento, immobilizzazione prolungata, sindrome compartimentale).",
+      "presentazione": "Enzimi muscolari sierici elevati (inclusa la creatina chinasi) e urine di colore da rosso a marrone a causa della mioglobinuria.",
+      "monitoraggio": "I valori di creatina chinasi dovrebbero essere misurati fino a quando non si osservano livelli in diminuzione. Anche i livelli di potassio dovrebbero essere monitorati."
+    },
+    "emogasanalisi_arteriosa": {
+      "scopo": "Ottenere un'emogasanalisi arteriosa (EGA) di base in tutti i pazienti ventilati meccanicamente per garantire una ventilazione e una tensione di anidride carbonica (PaCO2) appropriate. Permette anche una valutazione dell'equilibrio acido/base del paziente."
+    },
+    "lattato": {
+      "indicazioni": "Un livello di lattato sierico dovrebbe essere prelevato in tutti i pazienti gravemente feriti.",
+      "scopo": "La clearance del lattato è un marcatore della perfusione degli organi terminali e del metabolismo normale e può servire come guida per la rianimazione continua.",
+      "valore_prognostico": "La mancata normalizzazione del lattato entro 24 ore dalla lesione è associata a un aumento della mortalità."
+    },
+    "deficit_di_basi": {
+      "scopo": "Simile al lattato, il deficit di basi (BD) è un biomarcatore che riflette la perfusione tissutale."
+    }
+  }
+}

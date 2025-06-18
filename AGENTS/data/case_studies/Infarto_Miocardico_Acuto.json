@@ -7,7 +7,7 @@
     {
       "categoria": "Marcatori di Necrosi Cardiaca",
       "nome_test": "Troponina I ad alta sensibilità (hs-cTnI)",
-      "valore_tipico": "7500 ng/L",
+      "valore_tipico": "7500",
       "unita_misura": "ng/L",
       "range_riferimento": "< 14 ng/L",
       "interpretazione_clinica": "Valore marcatamente elevato, indicativo di danno miocardico acuto e necrosi cellulare."

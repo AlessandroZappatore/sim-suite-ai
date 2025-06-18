@@ -17,7 +17,7 @@ from api.exam_api import router as exam_router
 from api.scenario_api import router as scenario_router
 from api.medical_report_api import router as report_router
 from api.mat_api import router as material_router
-from utils.common import get_knowledge_base
+from utils.common import get_knowledge_base, get_report_knowledge_base
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
@@ -77,4 +77,6 @@ if __name__ == "__main__":
     logger.info("Starting Medical Simulation Suite AI...")
     knowledge_base = get_knowledge_base()
     knowledge_base.load(recreate=False)
+    report_knowledge_base = get_report_knowledge_base()
+    report_knowledge_base.load(recreate=False)
     uvicorn.run("main:app", host="0.0.0.0", port=8001, reload=True)

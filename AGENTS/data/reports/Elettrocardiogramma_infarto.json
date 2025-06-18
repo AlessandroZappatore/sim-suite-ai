@@ -1,0 +1,68 @@
+{
+  "nome_esame": "Elettrocardiogramma (ECG)",
+  "patologia_sospetta": "Sindrome Coronarica Acuta (SCA) / Infarto Miocardico",
+  "reperti": {
+    "categorizzazione_iniziale": [
+      {
+        "categoria": "STEMI (Infarto Miocardico con Sopraslivellamento ST)",
+        "descrizione": "Presenza di sopraslivellamento del tratto ST o di un nuovo blocco di branca sinistra (BBS)."
+      },
+      {
+        "categoria": "NSTE-ACS (Sindrome Coronarica Acuta senza Sopraslivellamento ST)",
+        "descrizione": "Presenza di sottoslivellamento del tratto ST, inversione dell'onda T o sopraslivellamento transitorio del tratto ST. Include NSTEMI e Angina Instabile (UA)."
+      },
+      {
+        "categoria": "Sindrome Dolorosa Toracica Indifferenziata",
+        "descrizione": "ECG non diagnostico."
+      }
+    ],
+    "dettagli_stemi": {
+      "evoluzione_tipica_ecg": [
+        "Sviluppo iniziale di onde T iperacute o appuntite.",
+        "Elevazione del punto J e del tratto ST, che diventa progressivamente più convesso.",
+        "Ritorno graduale del tratto ST alla linea isoelettrica, con riduzione dell'ampiezza dell'onda R e approfondimento dell'onda Q.",
+        "Inversione dell'onda T, che generalmente si verifica entro le prime due settimane."
+      ],
+      "criteri_diagnostici_formali": {
+        "descrizione": "Criteri del comitato congiunto ESC/ACCF/AHA/WHF per la diagnosi di STEMI.",
+        "regole": [
+          "Nuovo sopraslivellamento del tratto ST al punto J in due derivazioni contigue, con soglie specifiche:",
+          "≥0.1 mV in tutte le derivazioni diverse da V2-V3.",
+          "Per le derivazioni V2-V3: ≥2 mm negli uomini di età ≥40 anni; ≥2.5 mm negli uomini di età <40 anni; o ≥1.5 mm nelle donne indipendentemente dall'età."
+        ]
+      },
+      "equivalenti_stemi": [
+        "Nuovo o presumibilmente nuovo blocco di branca sinistra (BBS).",
+        "Vero infarto miocardico posteriore."
+      ],
+      "diagnosi_differenziale_sopraslivellamento_st": [
+        "Miocardite",
+        "Pericardite acuta",
+        "Vecchio infarto miocardico con sopraslivellamento persistente del ST (spesso associato ad anomalie del movimento parietale).",
+        "Variante di ripolarizzazione precoce."
+      ]
+    },
+    "dettagli_nste_acs": {
+      "reperti_caratteristici": [
+        "Sottoslivellamento del tratto ST.",
+        "Inversione dell'onda T."
+      ],
+      "distinzione_iniziale": "NSTEMI e Angina Instabile (UA) sono spesso indistinguibili alla valutazione iniziale, prima della disponibilità dei biomarcatori.",
+      "criteri_diagnostici_formali_nstemi": "Nuovo sottoslivellamento del ST orizzontale o discendente ≥0.5 mm in due derivazioni contigue e/o inversione dell'onda T >1 mm in due derivazioni contigue con onda R prominente o rapporto R/S >1.",
+      "evoluzione_distintiva": [
+        {
+          "condizione": "NSTEMI",
+          "evoluzione": "Il sottoslivellamento del ST e/o l'inversione dell'onda T di solito evolvono e persistono nei giorni successivi, ma senza la formazione di onde Q patologiche."
+        },
+        {
+          "condizione": "Angina Instabile (UA)",
+          "evoluzione": "Le alterazioni del tratto ST e dell'onda T di solito si risolvono completamente."
+        }
+      ]
+    },
+    "note_operative": {
+      "tempistica": "Un ECG precoce è essenziale, con un obiettivo di esecuzione entro 10 minuti dal primo contatto medico.",
+      "localizzazione_e_derivazioni_aggiuntive": "L'ECG può aiutare a localizzare la sede dell'infarto. In caso di evidenza di ischemia della parete inferiore (alterazioni nelle derivazioni II, III, aVF), si dovrebbero ottenere anche le derivazioni destre (V4R, V5R, V6R) per valutare un possibile infarto ventricolare destro. Le derivazioni posteriori (V7-V9) sono indicate in caso di sottoslivellamento ST per valutare un possibile infarto posteriore."
+    }
+  }
+}
