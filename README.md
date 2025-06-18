@@ -28,11 +28,12 @@ pip install -r requirements.txt
 Crea un file `.env` nella cartella `AGENTS/` con:
 ```env
 GOOGLE_API_KEY=la_tua_chiave_google
+ANTRHOPIC_API_KEY=la_tua_chiave_anthropic
 ```
 
 ### 3. Avvia i Servizi
 
-**Backend AI (Porta 8000):**
+**Backend AI (Porta 8001):**
 ```bash
 python main.py
 ```
@@ -83,7 +84,7 @@ cd JAVA/sim-suite
 
 - Python 3.12+
 - Connessione Internet
-- API Key Google AI
+- API Key Google AI o Anthropic
 - Java (per interfaccia SimSuite)
 
 ---
@@ -108,7 +109,7 @@ sim-suite-ai/
 
 **Non riesco ad accedere a SimSuite?**
 - Assicurati che l'interfaccia Java sia avviata sulla porta 9090
-- Controlla che il backend sia attivo sulla porta 8000
+- Controlla che il backend sia attivo sulla porta 8001
 
 **Errori di generazione?**
 - Verifica la connessione internet
