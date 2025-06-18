@@ -215,7 +215,7 @@
                     <div class="feature-process">
                         <div class="process-step">
                             <span class="step-number">1</span>
-                            <span class="step-text">Input: Tipologia e Target</span>
+                            <span class="step-text">Input: Tipologia, Target e breve Descrizione</span>
                         </div>
                         <div class="process-step">
                             <span class="step-number">2</span>
@@ -268,7 +268,7 @@
                             </div>
                             <div class="material-type">
                                 <div class="material-icon">
-                                    <i class="fas fa-monitor-heart-rate"></i>
+                                    <i class="fa-solid fa-tv"></i>
                                 </div>
                                 <span>Attrezzature di Monitoraggio</span>
                             </div>
@@ -484,7 +484,7 @@
                         </div>
                         <div class="background-content">
                             <h4>Elaborazione Asincrona</h4>
-                            <p>Una volta avviata la creazione di uno scenario o degli esami di laboratorio, tutte le operazioni vengono eseguite in <strong>background</strong>. Questo significa che puoi continuare a utilizzare l'applicazione normalmente mentre l'AI sta lavorando.</p>
+                            <p>Una volta avviata la generazione automatica, tutte le operazioni vengono eseguite in <strong>background</strong>. Questo significa che puoi continuare a utilizzare l'applicazione normalmente mentre l'AI sta lavorando.</p>
                         </div>
                     </div>
                     
@@ -653,7 +653,7 @@ ANTHROPIC_API_KEY=your_anthropic_api_key_here
                             <div class="code-block">
                                 <pre><code>cd AGENTS
 aienv\Scripts\activate
-pip install -r requirements.txt</code></pre>
+uv pip install -r requirements.txt</code></pre>
                             </div>
                             <p><strong>Nota:</strong> Assicurati che l'environment virtuale <code>aienv</code> sia già stato creato nella cartella AGENTS.</p>
                         </div>
@@ -665,11 +665,11 @@ pip install -r requirements.txt</code></pre>
                             <h3>Avvio del Backend Python</h3>
                         </div>
                         <div class="step-content">
-                            <p>Con l'environment attivato, avvia il backend AI con FastAPI utilizzando uvicorn:</p>
+                            <p>Con l'environment attivato, avvia il backend AI con FastAPI:</p>
                             <div class="code-block">
-                                <pre><code>uvicorn main:main_app --reload</code></pre>
+                                <pre><code>python main.py</code></pre>
                             </div>
-                            <p>Il server sarà disponibile su <code>http://localhost:8000</code></p>
+                            <p>Il server sarà disponibile su <code>http://localhost:8001</code></p>
                         </div>
                     </div>
                       <div class="setup-step">
@@ -744,61 +744,9 @@ pip install -r requirements.txt</code></pre>
                     <h3>La Missione di Simnova</h3>
                     <p>Simnova è un centro di eccellenza dedicato alla formazione medica attraverso la simulazione clinica. Il centro utilizza tecnologie all'avanguardia, inclusi manichini ad alta fedeltà e ambienti simulati realistici, per fornire agli studenti di medicina e ai professionisti sanitari un'esperienza di apprendimento sicura ed efficace. Attraverso scenari clinici realistici, Simnova permette di acquisire competenze pratiche senza rischi per i pazienti reali.</p>
                 </div>
-                
-                <div class="simnova-features">
-                    <div class="feature-card">
-                        <div class="feature-icon">
-                            <i class="fas fa-graduation-cap"></i>
-                        </div>
-                        <h3>Formazione Medica Avanzata</h3>
-                        <p>Simnova offre programmi di formazione specializzati per studenti di medicina, specializzandi e professionisti sanitari, utilizzando metodologie innovative di simulazione clinica.</p>
-                    </div>
-                    
-                    <div class="feature-card">
-                        <div class="feature-icon">
-                            <i class="fas fa-robot"></i>
-                        </div>
-                        <h3>Tecnologie All'Avanguardia</h3>
-                        <p>Il centro dispone di manichini simulatori ad alta fedeltà, sale operatorie simulate e tecnologie di realtà virtuale per creare esperienze di apprendimento immersive.</p>
-                    </div>
-                    
-                    <div class="feature-card">
-                        <div class="feature-icon">
-                            <i class="fas fa-heart"></i>
-                        </div>
-                        <h3>Sicurezza del Paziente</h3>
-                        <p>Attraverso la simulazione, gli studenti possono praticare procedure complesse e gestire situazioni di emergenza in un ambiente controllato, migliorando la sicurezza del paziente.</p>
-                    </div>
-                </div>
                   <div class="tutor-acknowledgment">
                     <div class="acknowledgment-note">
                         <p>Ringraziamenti al tutor <strong>Antonio Scalogna</strong>, ideatore di SimSuite, per i suggerimenti nella parte AI.</p>
-                    </div>
-                </div>
-                
-                <div class="simulation-benefits">
-                    <h3>I Risultati dello Stage: SIMSUITEAI</h3>
-                    <div class="benefits-grid">
-                        <div class="benefit">
-                            <i class="fas fa-lightbulb"></i>
-                            <h4>Innovazione AI</h4>
-                            <p>Integrazione dell'intelligenza artificiale per la generazione automatica di scenari</p>
-                        </div>
-                        <div class="benefit">
-                            <i class="fas fa-rocket"></i>
-                            <h4>Efficienza Migliorata</h4>
-                            <p>Riduzione drastica dei tempi di creazione degli scenari clinici</p>
-                        </div>
-                        <div class="benefit">
-                            <i class="fas fa-users"></i>
-                            <h4>Esperienza Utente</h4>
-                            <p>Interfaccia intuitiva che semplifica il lavoro degli istruttori</p>
-                        </div>
-                        <div class="benefit">
-                            <i class="fas fa-trophy"></i>
-                            <h4>Qualità Accademica</h4>
-                            <p>Scenari didatticamente strutturati e medicamente accurati</p>
-                        </div>
                     </div>
                 </div>
             </div>

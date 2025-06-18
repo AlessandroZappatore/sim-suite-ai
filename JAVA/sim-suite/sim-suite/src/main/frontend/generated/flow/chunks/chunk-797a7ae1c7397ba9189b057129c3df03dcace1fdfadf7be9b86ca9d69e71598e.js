@@ -1,0 +1,12 @@
+import '@vaadin/tooltip/theme/lumo/vaadin-tooltip.js';
+import '@vaadin/polymer-legacy-adapter/style-modules.js';
+import '@vaadin/icon/theme/lumo/vaadin-icon.js';
+import '@vaadin/icons/vaadin-iconset.js';
+import '@vaadin/progress-bar/theme/lumo/vaadin-progress-bar.js';
+import '@vaadin/horizontal-layout/theme/lumo/vaadin-horizontal-layout.js';
+import '@vaadin/button/theme/lumo/vaadin-button.js';
+import 'Frontend/generated/jar-resources/disableOnClickFunctions.js';
+import '@vaadin/notification/theme/lumo/vaadin-notification.js';
+import 'Frontend/generated/jar-resources/flow-component-renderer.js';
+import '@vaadin/vertical-layout/theme/lumo/vaadin-vertical-layout.js';
+import '@vaadin/app-layout/theme/lumo/vaadin-app-layout.js';
