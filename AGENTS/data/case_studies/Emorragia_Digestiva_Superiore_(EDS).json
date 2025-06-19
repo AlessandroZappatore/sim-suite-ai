@@ -1,0 +1,46 @@
+{
+  "patologia": "Emorragia Digestiva Superiore (EDS)",
+  "descrizione_generale": "Sanguinamento che origina da una fonte prossimale al legamento di Treitz, che comprende esofago, stomaco e duodeno.",
+  "cause_comuni": [
+    "Malattia ulcerosa peptica (ulcera gastrica o duodenale) - la causa più comune.",
+    "Varici esofagee o gastriche (solitamente in pazienti con ipertensione portale/cirrosi epatica).",
+    "Sindrome di Mallory-Weiss (lacerazione della giunzione esofago-gastrica dopo vomito profuso).",
+    "Esofagite, Gastrite, Duodenite erosiva.",
+    "Neoplasie (tumori esofagei o gastrici)."
+  ],
+  "segni_sintomi_chiave": {
+    "ematemesi": "Vomito di sangue rosso vivo, indicativo di un sanguinamento attivo e rapido.",
+    "vomito caffeano": "Vomito di materiale scuro, simile a fondi di caffè, che indica che il sangue è stato parzialmente digerito dall'acido gastrico (sanguinamento meno recente o meno rapido).",
+    "melena": "Emissione di feci nere, picee, maleodoranti. Indica che il sangue è rimasto nel tratto GI per almeno 8 ore. Può essere causata da un sanguinamento anche di soli 50-100 mL.",
+    "sintomi_di_ipovolemia": "Vertigini, debolezza, sincope (svenimento), sudorazione fredda, palpitazioni. Indicano una perdita di sangue significativa."
+  },
+  "valutazione_e_scoring": {
+    "score_di_rischio": {
+      "nome": "Glasgow-Blatchford Score (GBS)",
+      "utilizzo": "Utilizzato al momento della presentazione del paziente, prima dell'endoscopia, per stratificare il rischio e decidere la necessità di intervento urgente e il setting di cura (es. ambulatoriale vs ricovero).",
+      "parametri_inclusi": "Azoto ureico ematico (BUN), emoglobina, pressione arteriosa sistolica, frequenza cardiaca, presenza di melena, sincope, malattia epatica o scompenso cardiaco."
+    }
+  },
+  "esami_laboratorio_tipici": [
+    {
+      "categoria": "Ematologia",
+      "nome_test": "Emocromo Completo (con Emoglobina - Hb)",
+      "interpretazione_clinica": "L'Hb iniziale può essere falsamente normale prima che avvenga l'emodiluizione. Il suo valore va monitorato serialmente. Piastrinopenia può indicare una malattia epatica cronica."
+    },
+    {
+      "categoria": "Funzionalità Renale/Metabolismo",
+      "nome_test": "Rapporto Azotemia/Creatinina (BUN/Cr)",
+      "interpretazione_clinica": "Un rapporto BUN/Cr marcatamente aumentato (es. > 30) è altamente suggestivo di EDS. Questo avviene perché le proteine del sangue digerito vengono assorbite, aumentando l'azotemia senza un proporzionale aumento della creatinina."
+    },
+    {
+      "categoria": "Coagulazione",
+      "nome_test": "PT, PTT, INR",
+      "interpretazione_clinica": "Fondamentali per identificare e correggere eventuali coagulopatie, sia preesistenti (es. terapia anticoagulante) sia secondarie a epatopatia."
+    }
+  ],
+  "gestione_chiave": {
+    "rianimazione_emodinamica": "Accessi venosi di grosso calibro, ripristino del volume con cristalloidi e trasfusioni di emazie concentrate se indicato (target Hb > 7 g/dL).",
+    "terapia_farmacologica": "Inibitori di pompa protonica (IPP) ad alte dosi per via endovenosa. Terapia vasoattiva (es. octreotide, terlipressina) in caso di sospetto sanguinamento da varici.",
+    "endoscopia_urgente": "L'Esofagogastroduodenoscopia (EGDS) è l'esame diagnostico e terapeutico di scelta, da eseguire entro 24 ore."
+  }
+}

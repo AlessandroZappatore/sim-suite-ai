@@ -1,0 +1,45 @@
+{
+  "nome_esame": "Ecocardiogramma Transtoracico (ETT)",
+  "patologia_sospetta": "Scompenso Cardiaco / Cardiomiopatia",
+  "reperti": {
+    "valutazione_ventricolo_sinistro": {
+      "dimensioni": "Valutazione dei diametri e volumi telediastolico e telesistolico. Una dilatazione ventricolare è comune nello scompenso con frazione di eiezione ridotta.",
+      "spessori_parietali": "Misurazione dello spessore del setto interventricolare e della parete posteriore. Un'ipertrofia ventricolare può essere presente in entrambi i tipi di scompenso.",
+      "funzione_sistolica_globale": {
+        "parametro": "Frazione di Eiezione (FE o EF)",
+        "classificazione": [
+          {
+            "categoria": "HFrEF (Heart Failure with reduced Ejection Fraction)",
+            "valore_fe": "≤ 40%",
+            "descrizione": "Disfunzione sistolica primaria con ridotta capacità contrattile del ventricolo."
+          },
+          {
+            "categoria": "HFmrEF (Heart Failure with mildly reduced Ejection Fraction)",
+            "valore_fe": "41-49%",
+            "descrizione": "Zona grigia con disfunzione sistolica lieve."
+          },
+          {
+            "categoria": "HFpEF (Heart Failure with preserved Ejection Fraction)",
+            "valore_fe": "≥ 50%",
+            "descrizione": "La funzione contrattile è normale, ma il ventricolo è rigido e non si riempie correttamente (disfunzione diastolica)."
+          }
+        ]
+      },
+      "funzione_diastolica": "Valutazione dei pattern di riempimento transmitralico (onde E, A) e del Doppler tissutale (e'). Essenziale per la diagnosi di HFpEF."
+    },
+    "valutazione_ventricolo_destro": {
+      "dimensioni_e_funzione": "Valutazione del diametro basale e della funzione sistolica (es. TAPSE, S'). Una disfunzione ventricolare destra è un importante fattore prognostico."
+    },
+    "valutazione_valvolare": {
+      "insufficienza_mitralica_secondaria": "Comune nello scompenso cardiaco dilatativo, dovuta all'allargamento dell'anello mitralico.",
+      "insufficienza_tricuspidalica": "Spesso presente in caso di ipertensione polmonare e disfunzione ventricolare destra."
+    },
+    "valutazione_atriale_e_pericardio": {
+      "atrio_sinistro": "La dilatazione dell'atrio sinistro è un segno cronico di elevate pressioni di riempimento.",
+      "versamento_pericardico": "Può essere presente, specialmente in quadri di scompenso acuto scompensato."
+    },
+    "pressioni_polmonari": {
+      "stima_paps": "Stima della Pressione Arteriosa Polmonare Sistolica (PAPs) dal rigurgito tricuspidalico. Un valore elevato (>35 mmHg) indica ipertensione polmonare, comune nello scompenso cardiaco."
+    }
+  }
+}

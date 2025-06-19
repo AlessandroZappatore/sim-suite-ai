@@ -1,0 +1,50 @@
+{
+  "nome_esame": "Radiografia del Torace (RX Torace)",
+  "patologia_sospetta": "Polmonite / Infezione delle basse vie respiratorie",
+  "reperti": {
+    "pattern_radiologici": [
+      {
+        "tipo": "Polmonite Lobare (o Alveolare)",
+        "descrizione": "Pattern classico causato da patogeni come Streptococcus pneumoniae. Interessa tipicamente un intero lobo polmonare.",
+        "caratteristiche": [
+          "Opacità omogenea, consolidativa, a limiti netti, che rispetta le scissure interlobari.",
+          "Presenza del 'broncogramma aereo': visualizzazione delle vie aeree pervie (piene d'aria, quindi scure) all'interno dell'area di consolidamento (piena di essudato, quindi bianca).",
+          "Assenza di una significativa perdita di volume del lobo interessato."
+        ]
+      },
+      {
+        "tipo": "Broncopolmonite",
+        "descrizione": "Infiammazione che origina dai bronchioli e si estende al parenchima circostante. Tipica di patogeni come Staphylococcus aureus o batteri Gram-negativi.",
+        "caratteristiche": [
+          "Opacità a chiazze, disomogenee, mal definite e spesso bilaterali e basali.",
+          "Aspetto 'cotonoso' o 'a fiocchi'.",
+          "Il broncogramma aereo è meno comune."
+        ]
+      },
+      {
+        "tipo": "Polmonite Interstiziale ('Atipica')",
+        "descrizione": "Infiammazione dell'interstizio polmonare, spesso causata da virus (es. Influenza, SARS-CoV-2) o batteri atipici (es. Mycoplasma pneumoniae).",
+        "caratteristiche": [
+          "Aumento della trama interstiziale con un pattern reticolare o reticolo-nodulare.",
+          "Può essere diffusa o localizzata.",
+          "L'aspetto può essere simile a quello dell'edema polmonare o della fibrosi."
+        ]
+      }
+    ],
+    "reperti_associati_e_complicanze": [
+      {
+        "reperto": "Versamento Pleurico Parapneumonico",
+        "descrizione": "Raccolta di liquido nello spazio pleurico associata alla polmonite. Si manifesta come un'opacità con menisco a concavità superiore che oblitera il seno costo-frenico."
+      },
+      {
+        "reperto": "Empiema",
+        "descrizione": "Infezione del versamento pleurico, che può apparire come una raccolta saccata e lenticolare."
+      },
+      {
+        "reperto": "Ascesso Polmonare",
+        "descrizione": "Area di necrosi del parenchima che appare come una cavità a pareti spesse, spesso con un livello idro-aereo al suo interno."
+      }
+    ],
+    "note_interpretative": "La localizzazione dell'opacità è fondamentale (es. lobo superiore destro, lingula, lobo inferiore sinistro). La proiezione laterale è cruciale per una corretta localizzazione anatomica."
+  }
+}

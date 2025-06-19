@@ -1,0 +1,38 @@
+{
+  "nome_esame": "Ecografia Addome Superiore",
+  "patologia_sospetta": "Colelitiasi / Colecistite Acuta",
+  "reperti": {
+    "colecisti": {
+      "descrizione": "Organo primario da valutare per questa patologia.",
+      "reperti_colelitiasi_semplice": {
+        "descrizione": "Presenza di calcoli non associata a segni di infiammazione acuta.",
+        "segni_tipici": [
+          "Presenza di immagini iperecogene (brillanti) mobili all'interno del lume colecistico.",
+          "Presenza di un cono d'ombra acustico posteriore netto al di sotto del calcolo.",
+          "Fango biliare (sludge): materiale ecogeno, a volte stratificato, senza un chiaro cono d'ombra."
+        ]
+      },
+      "reperti_colecistite_acuta_litiasica": {
+        "descrizione": "Segni di infiammazione della parete della colecisti, quasi sempre in presenza di calcoli.",
+        "criteri_diagnostici_maggiori": [
+          "Ispessimento della parete colecistica (> 3-4 mm).",
+          "Presenza di liquido pericolecistico.",
+          "Segno di Murphy ecografico positivo (massimo dolore evocato dalla pressione della sonda sulla colecisti)."
+        ],
+        "criteri_diagnostici_minori": [
+          "Distensione della colecisti (diametro trasverso > 4 cm).",
+          "Iperemia della parete al Color Doppler."
+        ]
+      }
+    },
+    "vie_biliari": {
+      "valutazione": "Ricerca di dilatazione delle vie biliari, che può indicare un calcolo migrato nel coledoco.",
+      "reperti_normali": "Coledoco di calibro non dilatato (generalmente < 6-7 mm).",
+      "reperti_patologici": "Dilatazione delle vie biliari intra-epatiche e/o extra-epatiche."
+    },
+    "note_tecniche": {
+      "preparazione_paziente": "Il paziente dovrebbe essere a digiuno da almeno 6-8 ore per garantire una colecisti distesa e ridurre il gas intestinale.",
+      "limitazioni": "L'esame può essere limitato da un marcato meteorismo intestinale o dall'habitus del paziente (obesità)."
+    }
+  }
+}

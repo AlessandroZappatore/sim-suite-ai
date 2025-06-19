@@ -1,0 +1,54 @@
+{
+  "patologia": "Iponatremia",
+  "descrizione_generale": "Disturbo elettrolitico definito da una concentrazione di sodio sierico (Na+) inferiore a 135 mEq/L. È il disturbo elettrolitico più comune nei pazienti ospedalizzati.",
+  "sintomi": {
+    "dipendenza": "I sintomi dipendono principalmente dalla severità e dalla rapidità di insorgenza dell'iponatremia.",
+    "sintomi_lievi_moderati": "Nausea, malessere, cefalea, letargia, disorientamento.",
+    "sintomi_severi": "Crisi epilettiche, coma, arresto respiratorio, erniazione cerebrale. Si verificano a causa dell'edema cerebrale.",
+    "iponatremia_cronica": "Può essere asintomatica o presentare sintomi lievi e subdoli come instabilità nella deambulazione e deficit di attenzione."
+  },
+  "classificazione_diagnostica_basata_sulla_volemia": [
+    {
+      "tipo": "Iponatremia Ipovolemica",
+      "meccanismo": "Perdita sia di acqua che di sodio, ma con un deficit maggiore di sodio. La perdita di volume stimola il rilascio di ormone antidiuretico (ADH), che causa ritenzione di acqua libera e peggiora l'iponatremia.",
+      "reperti_clinici": "Segni di disidratazione: ipotensione ortostatica, tachicardia, mucose secche, ridotto turgore cutaneo.",
+      "cause_comuni": {
+        "perdite_renali": "Uso di diuretici (tiazidici), nefropatie, deficit di mineralcorticoidi. (Sodio Urinario > 20 mEq/L)",
+        "perdite_extra_renali": "Vomito, diarrea, sudorazione profusa, emorragie. (Sodio Urinario < 20 mEq/L)"
+      }
+    },
+    {
+      "tipo": "Iponatremia Euvolemica",
+      "meccanismo": "Aumento dell'acqua corporea totale con un sodio corporeo totale normale. È un'iponatremia da diluizione.",
+      "reperti_clinici": "Paziente clinicamente euvolemico, senza edemi o segni di disidratazione.",
+      "cause_comuni": [
+        "SIADH (Sindrome da Inappropriata Secrezione di ADH) - la causa più comune.",
+        "Ipotiroidismo severo.",
+        "Insufficienza surrenalica.",
+        "Polidipsia psicogena (eccessiva assunzione di acqua)."
+      ]
+    },
+    {
+      "tipo": "Iponatremia Ipervolemica",
+      "meccanismo": "Aumento sia del sodio corporeo totale che, in misura maggiore, dell'acqua corporea totale.",
+      "reperti_clinici": "Paziente con edemi, ascite, versamenti pleurici (segni di sovraccarico di volume).",
+      "cause_comuni": [
+        "Scompenso cardiaco congestizio.",
+        "Cirrosi epatica.",
+        "Sindrome nefrosica.",
+        "Insufficienza renale acuta o cronica."
+      ]
+    }
+  ],
+  "diagnostica_di_laboratorio_essenziale": [
+    "Sodio sierico",
+    "Osmolalità sierica",
+    "Sodio urinario",
+    "Osmolalità urinaria"
+  ],
+  "rischio_terapeutico": {
+    "nome_complicanza": "Sindrome da Demielinizzazione Osmotica (ODS)",
+    "meccanismo": "Una correzione troppo rapida dell'iponatremia cronica può causare un danno neurologico grave e spesso irreversibile. Il cervello, adattatosi a un ambiente ipotonico, non riesce a gestire il rapido aumento dell'osmolalità esterna.",
+    "limiti_di_correzione": "La correzione del sodio sierico non dovrebbe superare gli 8-10 mEq/L nelle prime 24 ore e i 18 mEq/L nelle prime 48 ore."
+  }
+}

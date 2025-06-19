@@ -1,0 +1,59 @@
+{
+  "patologia": "BPCO (Broncopneumopatia Cronica Ostruttiva) Riacutizzata",
+  "descrizione_generale": "Un peggioramento acuto dei sintomi respiratori in un paziente con BPCO, che va oltre la normale variabilità giornaliera e richiede un cambiamento nella terapia.",
+  "fattori_scatenanti": [
+    "Infezioni virali o batteriche del tratto respiratorio (causa più comune, ~70-80% dei casi).",
+    "Esposizione a inquinanti ambientali o professionali.",
+    "Mancata aderenza alla terapia di base.",
+    "Embolia polmonare (da considerare sempre nella diagnosi differenziale)."
+  ],
+  "segni_sintomi_chiave": [
+    "Aumento della dispnea (fame d'aria).",
+    "Aumento del volume dell'espettorato (catarro).",
+    "Aumento della purulenza dell'espettorato (da chiaro/bianco a giallo/verde).",
+    "Tosse più intensa e frequente.",
+    "Sensazione di costrizione toracica."
+  ],
+  "reperti_esame_obiettivo": [
+    "Uso dei muscoli respiratori accessori (es. muscoli del collo).",
+    "Tachipnea (aumento della frequenza respiratoria).",
+    "Tachicardia.",
+    "Sibilo espiratorio prolungato all'auscultazione polmonare.",
+    "Possibile presenza di ronchi o rantoli.",
+    "Nei casi gravi: cianosi, alterazione dello stato di coscienza (encefalopatia ipercapnica)."
+  ],
+  "esami_laboratorio_tipici": [
+    {
+      "categoria": "Emogasanalisi Arteriosa (EGA)",
+      "nome_test": "pH",
+      "valore_tipico": "7.32",
+      "unita_misura": "",
+      "range_riferimento": "7.35 - 7.45",
+      "interpretazione_clinica": "Acidosi respiratoria acuta su cronica. Il pH è solo lievemente ridotto perché il rene ha parzialmente compensato l'ipercapnia cronica."
+    },
+    {
+      "categoria": "Emogasanalisi Arteriosa (EGA)",
+      "nome_test": "pCO2",
+      "valore_tipico": "68",
+      "unita_misura": "mmHg",
+      "range_riferimento": "35 - 45",
+      "interpretazione_clinica": "Ipercapnia severa, indicativa di insufficienza ventilatoria."
+    },
+    {
+      "categoria": "Emogasanalisi Arteriosa (EGA)",
+      "nome_test": "pO2",
+      "valore_tipico": "58",
+      "unita_misura": "mmHg",
+      "range_riferimento": "80 - 100",
+      "interpretazione_clinica": "Ipossiemia, comune durante le riacutizzazioni."
+    },
+    {
+      "categoria": "Emogasanalisi Arteriosa (EGA)",
+      "nome_test": "Bicarbonati (HCO3-)",
+      "valore_tipico": "34",
+      "unita_misura": "mEq/L",
+      "range_riferimento": "22 - 28",
+      "interpretazione_clinica": "Valore elevato, segno del compenso metabolico renale all'ipercapnia cronica preesistente."
+    }
+  ]
+}

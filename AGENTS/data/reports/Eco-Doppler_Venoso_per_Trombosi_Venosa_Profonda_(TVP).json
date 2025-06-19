@@ -1,0 +1,49 @@
+{
+  "nome_esame": "Ecografia con Eco-Doppler Venoso degli Arti Inferiori",
+  "patologia_sospetta": "Trombosi Venosa Profonda (TVP)",
+  "reperti": {
+    "tecnica_di_esame": {
+      "metodica_principale": "CUS (Compression UltraSonography)",
+      "descrizione": "Si applica una pressione graduale con la sonda ecografica sulle vene a intervalli regolari, dal femore comune fino alle vene della gamba. La valutazione viene integrata con l'analisi del segnale flussimetrico tramite Color e Power Doppler."
+    },
+    "reperto_normale_di_pervieta": {
+      "descrizione": "Assenza di trombosi.",
+      "segni": [
+        "Completa comprimibilità della vena: le pareti del vaso venoso collabiscono completamente sotto la pressione della sonda.",
+        "Lume vasale anecogeno (completamente nero), senza materiale ecogeno al suo interno.",
+        "Segnale Doppler fasico con gli atti del respiro e aumentato dalle manovre di compressione distale (augmentazione)."
+      ]
+    },
+    "reperti_diretti_di_tvp_acuta": {
+      "descrizione": "Segni inequivocabili di una trombosi venosa profonda in fase acuta.",
+      "criterio_diagnostico_primario": "Incomprimibilità, parziale o totale, del segmento venoso esaminato.",
+      "altri_segni_diretti": [
+        {
+          "segno": "Visualizzazione di materiale trombico endoluminale",
+          "caratteristiche": "Il trombo acuto è tipicamente ipoecogeno o anecogeno (scuro) e causa una distensione della vena, che appare di calibro aumentato."
+        },
+        {
+          "segno": "Assenza di segnale al Color e Power Doppler",
+          "spiegazione": "Il lume venoso non si 'colora' perché è occupato dal trombo che impedisce il passaggio del flusso sanguigno."
+        }
+      ]
+    },
+    "reperti_indicativi_di_tvp_cronica_post_trombotica": {
+      "descrizione": "Esiti di una pregressa TVP. È importante distinguerli da un evento acuto.",
+      "segni": [
+        "Trombo iperecogeno (brillante), retratto e adeso alla parete venosa.",
+        "Vena di calibro normale o ridotto, non più distesa.",
+        "Pareti venose ispessite e irregolari.",
+        "Presenza di circoli collaterali.",
+        "Ricanalizzazione parziale: il segnale Doppler è presente ma alterato, indicando che il flusso ha parzialmente eroso il vecchio trombo."
+      ]
+    },
+    "localizzazione_piu_comune": [
+      "Vena femorale comune",
+      "Vena femorale (precedentemente femorale superficiale)",
+      "Vena poplitea",
+      "Vene tibiali posteriori e peroneali"
+    ],
+    "diagnosi_differenziale_clinica": "Cause di dolore e gonfiore all'arto inferiore che possono mimare una TVP: ematoma muscolare, rottura di cisti di Baker, cellulite infettiva, linfedema, insufficienza venosa cronica."
+  }
+}

@@ -1,0 +1,90 @@
+{
+  "patologia": "Insufficienza Renale Cronica (IRC)",
+  "descrizione_generale": "Una progressiva e irreversibile perdita della funzione renale che si sviluppa nell'arco di mesi o anni. È definita da anomalie della struttura o della funzione del rene presenti per > 3 mesi.",
+  "stadiazione_kdigo_basata_su_gfr": [
+    {
+      "stadio": "G1",
+      "gfr_ml_min_1_73m2": "≥ 90",
+      "descrizione": "Normale o aumentato. Danno renale presente (es. proteinuria)."
+    },
+    {
+      "stadio": "G2",
+      "gfr_ml_min_1_73m2": "60-89",
+      "descrizione": "Lievemente ridotto."
+    },
+    {
+      "stadio": "G3a",
+      "gfr_ml_min_1_73m2": "45-59",
+      "descrizione": "Lievemente-moderatamente ridotto."
+    },
+    {
+      "stadio": "G3b",
+      "gfr_ml_min_1_73m2": "30-44",
+      "descrizione": "Moderatamente-severamente ridotto."
+    },
+    {
+      "stadio": "G4",
+      "gfr_ml_min_1_73m2": "15-29",
+      "descrizione": "Severamente ridotto."
+    },
+    {
+      "stadio": "G5",
+      "gfr_ml_min_1_73m2": "< 15",
+      "descrizione": "Insufficienza renale terminale (richiede dialisi o trapianto)."
+    }
+  ],
+  "principali_complicanze_sistemiche": [
+    "Anemia (da deficit di eritropoietina).",
+    "Malattia minerale e ossea (iperparatiroidismo secondario, osteodistrofia renale).",
+    "Acidosi metabolica.",
+    "Iperkaliemia.",
+    "Sovraccarico di volume e ipertensione.",
+    "Aumento del rischio cardiovascolare."
+  ],
+  "esami_laboratorio_tipici_stadio_avanzato_g4_g5": [
+    {
+      "categoria": "Funzionalità Renale",
+      "nome_test": "Creatinina sierica",
+      "valore_tipico": "4.5",
+      "unita_misura": "mg/dL",
+      "interpretazione_clinica": "Marcatamente aumentata, riflette una severa riduzione della capacità di filtrazione renale."
+    },
+    {
+      "categoria": "Funzionalità Renale",
+      "nome_test": "eGFR (Filtrato Glomerulare Stimato)",
+      "valore_tipico": "18",
+      "unita_misura": "mL/min/1.73m²",
+      "interpretazione_clinica": "Indica insufficienza renale di stadio G4, vicina alla fase terminale."
+    },
+    {
+      "categoria": "Elettroliti",
+      "nome_test": "Potassio (K+)",
+      "valore_tipico": "5.9",
+      "unita_misura": "mEq/L",
+      "interpretazione_clinica": "Iperkaliemia moderata-severa, rischio di aritmie cardiache."
+    },
+    {
+      "categoria": "Equilibrio Acido-Base",
+      "nome_test": "Bicarbonati (HCO3-)",
+      "valore_tipico": "16",
+      "unita_misura": "mEq/L",
+      "interpretazione_clinica": "Acidosi metabolica cronica da ridotta escrezione di acidi."
+    },
+    {
+      "categoria": "Metabolismo Minerale",
+      "nome_test": "Fosforo",
+      "valore_tipico": "6.2",
+      "unita_misura": "mg/dL",
+      "range_riferimento": "2.5-4.5",
+      "interpretazione_clinica": "Iperfosfatemia dovuta a ridotta escrezione renale."
+    },
+    {
+      "categoria": "Metabolismo Minerale",
+      "nome_test": "Paratormone (PTH) intatto",
+      "valore_tipico": "450",
+      "unita_misura": "pg/mL",
+      "range_riferimento": "15-65",
+      "interpretazione_clinica": "Iperparatiroidismo secondario severo, in risposta all'ipocalcemia e iperfosfatemia."
+    }
+  ]
+}

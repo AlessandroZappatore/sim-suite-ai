@@ -1,0 +1,42 @@
+{
+  "nome_esame": "Angio-Tomografia Computerizzata (Angio-TC) del Torace",
+  "patologia_sospetta": "Embolia Polmonare (EP)",
+  "reperti": {
+    "protocollo_tecnico": "Acquisizione volumetrica dopo iniezione di mezzo di contrasto iodato, sincronizzata sulla fase arteriosa polmonare per massimizzare l'opacizzazione delle arterie polmonari.",
+    "reperti_diretti": {
+      "descrizione": "Visualizzazione diretta del trombo-embolo all'interno del circolo arterioso polmonare.",
+      "segni": [
+        {
+          "segno": "Difetto di riempimento endoluminale centrale",
+          "spiegazione": "L'embolo appare come un'area scura (ipodensa) centrale circondata da mezzo di contrasto."
+        },
+        {
+          "segno": "Difetto di riempimento endoluminale eccentrico",
+          "spiegazione": "L'embolo è adeso alla parete dell'arteria, formando un angolo acuto con essa."
+        },
+        {
+          "segno": "Occlusione completa del vaso",
+          "spiegazione": "Mancata opacizzazione di un'arteria e dei suoi rami distali."
+        },
+        {
+          "segno": "Embolo 'a cavaliere' (saddle embolus)",
+          "spiegazione": "Grosso embolo che si posiziona a cavallo della biforcazione del tronco polmonare, estendendosi alle arterie polmonari principali destra e sinistra. Spesso associato a instabilità emodinamica."
+        }
+      ]
+    },
+    "reperti_indiretti": {
+      "descrizione": "Segni che indicano l'impatto dell'embolia sul cuore e sul parenchima polmonare.",
+      "segni_di_sovraccarico_ventricolare_destro": [
+        "Dilatazione del ventricolo destro (rapporto diametro VD/VS > 1 in visione 4 camere).",
+        "Rettilinizzazione o bombatura a sinistra del setto interventricolare.",
+        "Rigurgito di mezzo di contrasto nella vena cava inferiore e nelle vene sovraepatiche."
+      ],
+      "segni_parenchimali": [
+        "Atelettasie discoidi o lineari.",
+        "Versamento pleurico, solitamente di modesta entità.",
+        "Infarti polmonari: aree di consolidamento a base pleurica, a forma di cuneo (gobba di Hampton)."
+      ]
+    },
+    "classificazione_di_gravita": "La presenza di segni di sovraccarico ventricolare destro in Angio-TC identifica una EP sub-massiva, associata a una prognosi peggiore rispetto a una EP non-massiva."
+  }
+}

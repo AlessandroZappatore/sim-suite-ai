@@ -1,0 +1,50 @@
+{
+  "patologia": "Meningite Batterica Acuta",
+  "descrizione_generale": "Una grave infezione batterica delle meningi, le membrane che rivestono il cervello e il midollo spinale. Rappresenta un'emergenza medica.",
+  "triade_classica_sintomi": "Febbre, rigidità nucale (dolore e resistenza alla flessione del collo), e alterazione dello stato di coscienza.",
+  "altri_segni_sintomi": [
+    "Cefalea severa",
+    "Fotofobia (intolleranza alla luce)",
+    "Nausea e vomito",
+    "Crisi epilettiche",
+    "Rash petecchiale o purpurico (caratteristico della meningite da Meningococco)."
+  ],
+  "reperti_esame_obiettivo": [
+    "Segno di Kernig positivo: dolore alla schiena e resistenza quando si tenta di estendere passivamente il ginocchio con l'anca flessa a 90 gradi.",
+    "Segno di Brudzinski positivo: flessione involontaria delle ginocchia e delle anche quando si flette passivamente il collo del paziente.",
+    "Stato soporoso, confusionale o comatoso."
+  ],
+  "esami_laboratorio_tipici": {
+    "analisi_del_liquido_cefalorachidiano_lcr": {
+      "descrizione": "L'esame fondamentale per la diagnosi, ottenuto tramite puntura lombare.",
+      "reperti_caratteristici": [
+        {
+          "parametro": "Pressione di Apertura",
+          "valore_tipico": "> 200 mmH2O",
+          "interpretazione_clinica": "Aumentata a causa dell'infiammazione e dell'edema."
+        },
+        {
+          "parametro": "Aspetto",
+          "valore_tipico": "Torbidio o purulento",
+          "interpretazione_clinica": "Dovuto all'elevato numero di globuli bianchi."
+        },
+        {
+          "parametro": "Conteggio Leucociti",
+          "valore_tipico": "1000 - 5000 /µL",
+          "interpretazione_clinica": "Marcata pleocitosi con predominanza di neutrofili (>80%)."
+        },
+        {
+          "parametro": "Proteine (Proteinorrachia)",
+          "valore_tipico": "> 150 mg/dL",
+          "interpretazione_clinica": "Aumentate a causa della rottura della barriera emato-encefalica."
+        },
+        {
+          "parametro": "Glucosio (Glicorrachia)",
+          "valore_tipico": "< 40 mg/dL",
+          "interpretazione_clinica": "Ipoglicorrachia marcata, poiché i batteri consumano glucosio. Il rapporto glicorrachia/glicemia è tipicamente < 0.4."
+        }
+      ]
+    },
+    "altri_esami": ["Colorazione di Gram e coltura del LCR per identificare il batterio.", "Emocolture."]
+  }
+}

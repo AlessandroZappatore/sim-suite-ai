@@ -1,0 +1,49 @@
+{
+  "nome_esame": "Tomografia Computerizzata (TC) Encefalo senza mezzo di contrasto",
+  "patologia_sospetta": "Ictus Ischemico Acuto",
+  "reperti": {
+    "obiettivo_primario": "Escludere la presenza di emorragia intracranica, che rappresenta una controindicazione assoluta alla terapia trombolitica.",
+    "fase_iperacuta": {
+      "descrizione": "Reperti visibili nelle prime ore dall'esordio dei sintomi. Possono essere molto sottili o assenti.",
+      "segni_precoci": [
+        {
+          "segno": "Segno dell'arteria cerebrale media (ACM) iperdensa",
+          "spiegazione": "Visualizzazione diretta del trombo all'interno dell'arteria. Presente in circa il 30% dei casi di occlusione dell'ACM."
+        },
+        {
+          "segno": "Perdita della differenziazione tra sostanza grigia e bianca",
+          "spiegazione": "Edema citotossico precoce che causa una riduzione del contrasto tra il nucleo lenticolare, la corteccia insulare e le strutture circostanti."
+        },
+        {
+          "segno": "Appiattimento dei solchi corticali (sulcal effacement)",
+          "spiegazione": "Edema localizzato che causa la cancellazione degli spazi subaracnoidei superficiali."
+        }
+      ]
+    },
+    "fase_acuta_subacuta": {
+      "descrizione": "Reperti che diventano evidenti dopo 6-24 ore.",
+      "segni_classici": [
+        {
+          "segno": "Area di ipodensità a distribuzione vascolare",
+          "spiegazione": "L'infarto maturo appare come un'area scura (ipodensa) ben definita nel territorio dell'arteria occlusa."
+        },
+        {
+          "segno": "Effetto massa",
+          "spiegazione": "L'edema può causare compressione sui ventricoli cerebrali adiacenti e deviazione della linea mediana."
+        }
+      ]
+    },
+    "diagnosi_differenziale_ipodensita": [
+      "Infarto venoso",
+      "Neoplasia (es. glioma a basso grado)",
+      "Infezione (es. encefalite, ascesso)",
+      "Edema post-critico (dopo una crisi epilettica)"
+    ],
+    "sistemi_di_scoring_associati": [
+      {
+        "nome": "ASPECTS (Alberta Stroke Program Early CT Score)",
+        "descrizione": "Punteggio quantitativo su una scala di 10 punti per valutare l'estensione dell'ischemia precoce nel territorio dell'ACM. Un punteggio più basso indica un'ischemia più estesa e una prognosi peggiore."
+      }
+    ]
+  }
+}

@@ -1,0 +1,42 @@
+{
+  "nome_esame": "Risonanza Magnetica (RM) del Ginocchio",
+  "patologia_sospetta": "Lesione menisco-legamentosa / Gonalgia",
+  "reperti": {
+    "menischi": {
+      "descrizione": "Valutazione del menisco mediale e laterale per la presenza di lesioni.",
+      "reperti_normali": "Segnale omogeneamente ipointenso (nero) in tutte le sequenze, con morfologia a triangolo nelle sezioni coronali.",
+      "classificazione_lesioni": [
+        {
+          "grado": "Grado 1 (Intrasostanza)",
+          "descrizione": "Focolaio di iperintensità di segnale puntiforme o globosa che non raggiunge le superfici articolari. Degenerazione."
+        },
+        {
+          "grado": "Grado 2 (Intrasostanza)",
+          "descrizione": "Iperintensità di segnale lineare che non raggiunge le superfici articolari. Degenerazione più marcata."
+        },
+        {
+          "grado": "Grado 3 (Rottura Vera)",
+          "descrizione": "Linea di iperintensità di segnale che contatta almeno una superficie articolare (superiore, inferiore o margine libero)."
+        }
+      ],
+      "tipi_di_rottura": "Orizzontale, verticale/longitudinale, radiale, a 'manico di secchio' (bucket handle), a 'flap'."
+    },
+    "legamenti_crociati": {
+      "lca": "Lesione del Legamento Crociato Anteriore (LCA): i segni di rottura includono discontinuità delle fibre, decorso orizzontale del legamento, edema intrasostanziale, e segni indiretti come la contusione ossea 'kissing contusion' sul condilo femorale laterale e sul piatto tibiale postero-laterale.",
+      "lcp": "Lesione del Legamento Crociato Posteriore (LCP): meno comune, si manifesta con ispessimento e alterato segnale o completa discontinuità del legamento."
+    },
+    "legamenti_collaterali": {
+      "lcm": "Lesione del Legamento Collaterale Mediale (LCM): si classifica in gradi (I: stiramento con edema perilegamentoso; II: rottura parziale; III: rottura completa).",
+      "lcl": "Lesione del Legamento Collaterale Laterale (LCL): spesso associata a lesioni del punto d'angolo postero-laterale."
+    },
+    "componente_osteo-cartilaginea": {
+      "edema_osseo": "Presenza di aree di iperintensità di segnale nelle sequenze sensibili ai fluidi (T2-FS, STIR), indicative di contusione ossea ('bone bruise').",
+      "condropatia": "Assottigliamento o fissurazioni della cartilagine articolare, con classificazione (es. Outerbridge) in base alla profondità del difetto.",
+      "osteonecrosi": "Aree focali di alterato segnale osseo subcondrale, a volte con linea di demarcazione ipointensa."
+    },
+    "altri_reperti": {
+      "versamento_articolare": "Presenza di liquido in eccesso nella cavità articolare.",
+      "cisti_di_baker": "Raccolta fluida localizzata nella borsa del gastrocnemio-semimembranoso, posteriormente."
+    }
+  }
+}
