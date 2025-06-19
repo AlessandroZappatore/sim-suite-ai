@@ -143,12 +143,6 @@ public class EsamefisicoView extends Composite<VerticalLayout> implements HasUrl
         Button nextButton = StyleApp.getNextButton();
         HorizontalLayout footerLayout = StyleApp.getFooterLayout(nextButton);
 
-        // Pulsanti di scroll rapido per pagine lunghe
-        Button scrollToTopButton = StyleApp.getScrollButton();
-        Button scrollDownButton = StyleApp.getScrollDownButton();
-        VerticalLayout scrollLayout = new VerticalLayout(scrollToTopButton, scrollDownButton);
-        mainLayout.add(scrollLayout);
-
         // Aggiunge i componenti principali al layout radice
         mainLayout.add(customHeader, contentLayout, footerLayout);
 

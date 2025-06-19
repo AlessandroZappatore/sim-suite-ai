@@ -1,17 +1,13 @@
 package it.uniupo.simnova.views.ui.helper;
 
+import com.google.gson.Gson;
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.button.ButtonVariant;
 import com.vaadin.flow.component.combobox.ComboBox;
-import com.vaadin.flow.component.html.Div;
-import com.vaadin.flow.component.html.H3;
-import com.vaadin.flow.component.html.H4;
-import com.vaadin.flow.component.html.Image;
-import com.vaadin.flow.component.html.IFrame;
-import com.vaadin.flow.component.html.Paragraph;
-import com.vaadin.flow.component.html.Span;
+import com.vaadin.flow.component.dialog.Dialog;
+import com.vaadin.flow.component.html.*;
 import com.vaadin.flow.component.icon.Icon;
 import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.component.notification.Notification;
@@ -24,11 +20,9 @@ import com.vaadin.flow.component.textfield.TextArea;
 import com.vaadin.flow.component.upload.Upload;
 import com.vaadin.flow.component.upload.receivers.MemoryBuffer;
 import com.vaadin.flow.dom.Element;
-import com.vaadin.flow.component.dialog.Dialog;
+import it.uniupo.simnova.domain.paziente.EsameReferto;
 import it.uniupo.simnova.domain.respons_model.LabExamSet;
 import it.uniupo.simnova.domain.respons_model.ReportSet;
-import it.uniupo.simnova.domain.paziente.EsameReferto;
-import static it.uniupo.simnova.views.constant.ExamConst.ALLINSTREXAMS;
 import it.uniupo.simnova.domain.scenario.Scenario;
 import it.uniupo.simnova.service.ActiveNotifierManager;
 import it.uniupo.simnova.service.NotifierService;
@@ -42,42 +36,55 @@ import it.uniupo.simnova.service.storage.FileStorageService;
 import it.uniupo.simnova.views.common.utils.StyleApp;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.web.client.HttpClientErrorException;
 
 import java.io.InputStream;
-import java.util.List;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.ExecutorService;
 
+import static it.uniupo.simnova.views.constant.ExamConst.ALLINSTREXAMS;
+import static it.uniupo.simnova.views.ui.helper.support.ErrorExtractor.extractErrorReasonFromJson;
+
 /**
- * Classe di utility per la gestione e visualizzazione degli esami e referti.
- * Fornisce metodi per creare card riassuntive, visualizzare anteprime media,
- * e consentire la modifica di referti e media associati.
+ * Classe di supporto per la gestione degli esami e referti nella UI.
+ * Fornisce metodi per creare contenuti dinamici relativi agli esami e gestire le interazioni con l'utente.
  *
  * @author Alessandro Zappatore
  * @version 1.0
  */
 public class ExamSupport {
     /**
-     * Logger per la classe ExamSupport.
+     * Logger per la registrazione delle operazioni e degli errori.
      */
     private static final Logger logger = LoggerFactory.getLogger(ExamSupport.class);
+    /**
+     * Istanza di Gson per la serializzazione/deserializzazione JSON.
+     */
+    private static final Gson gson = new Gson();
 
     /**
-     * Costruttore privato per evitare l'istanza della classe, dato che contiene solo metodi statici.
+     * Costruttore privato per evitare l'istanza della classe.
      */
     private ExamSupport() {
-        // Costruttore privato per evitare l'istanza della classe, dato che contiene solo metodi statici.
+
     }
 
     /**
-     * Crea un layout verticale contenente le card di tutti gli esami e referti associati a uno scenario.
-     * Include funzionalità di visualizzazione, modifica del media/referto ed eliminazione.
+     * Crea il contenuto della sezione Esami e Referti per uno scenario specifico.
      *
-     * @param esameRefertoService Il servizio per la gestione degli esami e referti.
-     * @param fileStorageService  Il servizio per la gestione dei file.
-     * @param scenarioId          L'ID dello scenario.
-     * @return Un {@link VerticalLayout} con le card degli esami.
+     * @param esameRefertoService   servizio per la gestione degli esami e referti
+     * @param fileStorageService    servizio per la gestione dei file
+     * @param scenarioId            ID dello scenario corrente
+     * @param scenario              scenario corrente
+     * @param externalApiService    servizio per le API esterne
+     * @param labExamService        servizio per la gestione degli esami di laboratorio
+     * @param executorService       servizio per l'esecuzione di task in background
+     * @param notifierService       servizio per la gestione delle notifiche
+     * @param esameFisicoService    servizio per la gestione degli esami fisici
+     * @param activeNotifierManager gestore delle notifiche attive
+     * @return VerticalLayout contenente gli esami e referti dello scenario
      */
     public static VerticalLayout createExamsContent(EsameRefertoService esameRefertoService,
                                                     FileStorageService fileStorageService,
@@ -149,7 +156,7 @@ public class ExamSupport {
                         boolean deleted = esameRefertoService.deleteEsameReferto(esame.getIdEsame(), scenarioId);
                         if (deleted) {
                             Notification.show("Esame '" + esame.getTipo() + "' eliminato con successo.", 3000, Notification.Position.BOTTOM_CENTER).addThemeVariants(NotificationVariant.LUMO_SUCCESS);
-                            layout.remove(examCard); // Rimuove la card dalla UI
+                            layout.remove(examCard);
                         } else {
                             Notification.show("Errore durante l'eliminazione dell'esame.", 3000, Notification.Position.BOTTOM_CENTER).addThemeVariants(NotificationVariant.LUMO_ERROR);
                         }
@@ -169,7 +176,6 @@ public class ExamSupport {
                 cardHeader.add(titleAndEditMedia, deleteButton);
                 examCard.add(cardHeader);
 
-                // Sezione per l'anteprima e la modifica del media
                 VerticalLayout mediaSectionContainer = new VerticalLayout();
                 mediaSectionContainer.setPadding(false);
                 mediaSectionContainer.setSpacing(true);
@@ -185,7 +191,7 @@ public class ExamSupport {
                 VerticalLayout mediaEditLayout = new VerticalLayout();
                 mediaEditLayout.setPadding(false);
                 mediaEditLayout.setSpacing(true);
-                mediaEditLayout.setVisible(false); // Nascosto di default
+                mediaEditLayout.setVisible(false);
                 mediaEditLayout.getStyle().set("border", "1px dashed var(--lumo-contrast-20pct)").set("padding", "var(--lumo-space-s)");
 
                 RadioButtonGroup<String> mediaSourceGroupEdit = new RadioButtonGroup<>();
@@ -196,11 +202,11 @@ public class ExamSupport {
                 Upload uploadMediaEdit = new Upload(bufferEdit);
                 uploadMediaEdit.setAcceptedFileTypes("image/*", "video/*", "audio/*", ".pdf");
                 uploadMediaEdit.setMaxFiles(1);
-                uploadMediaEdit.setVisible(false); // Nascosto di default
+                uploadMediaEdit.setVisible(false);
 
                 ComboBox<String> selectExistingMediaEdit = new ComboBox<>("Seleziona Media Esistente");
                 selectExistingMediaEdit.setWidthFull();
-                // Popola il ComboBox con i file esistenti
+
                 try {
                     List<String> availableFiles = fileStorageService.getAllFiles();
                     if (availableFiles != null) {
@@ -213,16 +219,14 @@ public class ExamSupport {
                     logger.error("Error fetching available files for media editing", ex);
                     selectExistingMediaEdit.setItems(new ArrayList<>());
                 }
-                selectExistingMediaEdit.setVisible(false); // Nascosto di default
+                selectExistingMediaEdit.setVisible(false);
 
-                // Listener per la scelta della sorgente media
                 mediaSourceGroupEdit.addValueChangeListener(event -> {
                     String value = event.getValue();
                     uploadMediaEdit.setVisible("Carica nuovo file".equals(value));
                     selectExistingMediaEdit.setVisible("Seleziona da esistenti".equals(value));
                 });
 
-                // Imposta la selezione iniziale del gruppo di radio button e del ComboBox
                 if (esame.getMedia() != null && !esame.getMedia().isEmpty()) {
                     mediaSourceGroupEdit.setValue("Seleziona da esistenti");
                     selectExistingMediaEdit.setValue(esame.getMedia());
@@ -239,13 +243,11 @@ public class ExamSupport {
                 mediaEditLayout.add(mediaSourceGroupEdit, uploadMediaEdit, selectExistingMediaEdit, mediaEditActions);
                 mediaSectionContainer.add(mediaEditLayout);
 
-                // Listener per il pulsante "Modifica Media"
                 editMediaButton.addClickListener(ev -> {
                     mediaPreviewWrapper.setVisible(false);
                     editMediaButton.setVisible(false);
                     mediaEditLayout.setVisible(true);
 
-                    // Ricarica i file disponibili e reimposta la selezione
                     try {
                         List<String> availableFiles = fileStorageService.getAllFiles();
                         if (availableFiles != null) {
@@ -256,7 +258,7 @@ public class ExamSupport {
                             } else if (esame.getMedia() != null && !esame.getMedia().isEmpty()) {
                                 logger.warn("Current media '{}' for exam '{}' not in available files list. Defaulting to upload.", esame.getMedia(), esame.getTipo());
                                 mediaSourceGroupEdit.setValue("Carica nuovo file");
-                                selectExistingMediaEdit.clear(); // Pulisce la selezione precedente se il file non è più disponibile
+                                selectExistingMediaEdit.clear();
                             } else {
                                 mediaSourceGroupEdit.setValue("Carica nuovo file");
                             }
@@ -269,13 +271,13 @@ public class ExamSupport {
                         selectExistingMediaEdit.setItems(new ArrayList<>());
                         mediaSourceGroupEdit.setValue("Carica nuovo file");
                     }
-                    // Assicura che i campi di upload/selezione siano visibili correttamente dopo il ripristino
+
                     mediaSourceGroupEdit.getOptionalValue().ifPresentOrElse(
                             currentValue -> {
                                 uploadMediaEdit.setVisible("Carica nuovo file".equals(currentValue));
                                 selectExistingMediaEdit.setVisible("Seleziona da esistenti".equals(currentValue));
                             },
-                            () -> { // Default se non c'è valore (es. all'inizializzazione)
+                            () -> {
                                 mediaSourceGroupEdit.setValue("Carica nuovo file");
                                 uploadMediaEdit.setVisible(true);
                                 selectExistingMediaEdit.setVisible(false);
@@ -283,20 +285,17 @@ public class ExamSupport {
                     );
                 });
 
-                // Listener per il pulsante "Annulla" la modifica del media
                 cancelMediaButton.addClickListener(ev -> {
                     mediaEditLayout.setVisible(false);
                     mediaPreviewWrapper.setVisible(true);
                     editMediaButton.setVisible(true);
-                    uploadMediaEdit.getElement().executeJs("this.files=[]"); // Resetta il campo di upload
+                    uploadMediaEdit.getElement().executeJs("this.files=[]");
                 });
 
-                // Listener per il pulsante "Salva Media"
                 saveMediaButton.addClickListener(ev -> {
                     String newMediaFileName;
                     boolean success = false;
 
-                    // Logica di salvataggio basata sulla sorgente selezionata
                     if ("Carica nuovo file".equals(mediaSourceGroupEdit.getValue())) {
                         if (bufferEdit.getFileName() != null && !bufferEdit.getFileName().isEmpty()) {
                             try (InputStream fileData = bufferEdit.getInputStream()) {
@@ -311,7 +310,7 @@ public class ExamSupport {
                             Notification.show("Nessun file selezionato per il caricamento.", 3000, Notification.Position.BOTTOM_CENTER).addThemeVariants(NotificationVariant.LUMO_WARNING);
                             return;
                         }
-                    } else { // Seleziona da esistenti
+                    } else {
                         newMediaFileName = selectExistingMediaEdit.getValue();
                         if (newMediaFileName == null || newMediaFileName.trim().isEmpty()) {
                             Notification.show("Nessun file esistente selezionato.", 3000, Notification.Position.BOTTOM_CENTER).addThemeVariants(NotificationVariant.LUMO_WARNING);
@@ -320,39 +319,36 @@ public class ExamSupport {
                         logger.info("File esistente selezionato: {}", newMediaFileName);
                     }
 
-                    // Aggiorna il media nello scenario
                     if (newMediaFileName != null && !newMediaFileName.isEmpty()) {
                         success = esameRefertoService.updateMedia(esame.getIdEsame(), scenarioId, newMediaFileName);
                         if (success) {
-                            esame.setMedia(newMediaFileName); // Aggiorna l'oggetto EsameReferto in memoria
+                            esame.setMedia(newMediaFileName);
                             mediaPreviewWrapper.removeAll();
-                            mediaPreviewWrapper.add(createMediaPreview(newMediaFileName)); // Aggiorna l'anteprima
+                            mediaPreviewWrapper.add(createMediaPreview(newMediaFileName));
                             Notification.show("Media aggiornato con successo.", 3000, Notification.Position.BOTTOM_CENTER).addThemeVariants(NotificationVariant.LUMO_SUCCESS);
                         } else {
                             Notification.show("Errore durante l'aggiornamento del media.", 3000, Notification.Position.BOTTOM_CENTER).addThemeVariants(NotificationVariant.LUMO_ERROR);
                         }
                     } else if (!"Carica nuovo file".equals(mediaSourceGroupEdit.getValue()) && esame.getMedia() != null && !esame.getMedia().isEmpty()) {
-                        // Se l'utente ha deselezionato un media esistente, rimuovilo
+
                         success = esameRefertoService.updateMedia(esame.getIdEsame(), scenarioId, null);
                         if (success) {
                             esame.setMedia(null);
-                            mediaPreviewWrapper.removeAll(); // Rimuove l'anteprima
+                            mediaPreviewWrapper.removeAll();
                             Notification.show("Media rimosso con successo.", 3000, Notification.Position.BOTTOM_CENTER).addThemeVariants(NotificationVariant.LUMO_SUCCESS);
                         } else {
                             Notification.show("Errore durante la rimozione del media.", 3000, Notification.Position.BOTTOM_CENTER).addThemeVariants(NotificationVariant.LUMO_ERROR);
                         }
                     }
 
-                    // Nasconde il form di modifica media e mostra l'anteprima/bottone di modifica
                     if (success || (newMediaFileName == null && !"Carica nuovo file".equals(mediaSourceGroupEdit.getValue()))) {
                         mediaEditLayout.setVisible(false);
                         mediaPreviewWrapper.setVisible(true);
                         editMediaButton.setVisible(true);
-                        uploadMediaEdit.getElement().executeJs("this.files=[]"); // Resetta il campo di upload
+                        uploadMediaEdit.getElement().executeJs("this.files=[]");
                     }
                 });
 
-                // Sezione per il referto testuale
                 VerticalLayout examContent = new VerticalLayout();
                 examContent.setPadding(false);
                 examContent.setSpacing(true);
@@ -402,7 +398,7 @@ public class ExamSupport {
                 refertoText.getStyle()
                         .set("margin", "var(--lumo-space-s) 0 0 0")
                         .set("color", "var(--lumo-body-text-color)")
-                        .set("white-space", "pre-wrap") // Mantiene la formattazione del testo (es. a capo)
+                        .set("white-space", "pre-wrap")
                         .set("box-sizing", "border-box");
 
                 refertoContainer.add(refertoHeader, refertoText);
@@ -416,7 +412,7 @@ public class ExamSupport {
                         .set("margin-top", "var(--lumo-space-m)");
                 refertoEditLayout.setPadding(false);
                 refertoEditLayout.setSpacing(true);
-                refertoEditLayout.setVisible(false); // Nascosto di default
+                refertoEditLayout.setVisible(false);
 
                 TextArea editRefertoArea = new TextArea("Modifica Referto");
                 editRefertoArea.setWidthFull();
@@ -430,27 +426,24 @@ public class ExamSupport {
 
                 refertoEditLayout.add(editRefertoArea, refertoEditActions);
 
-                // Listener per il pulsante "Modifica Referto"
                 editRefertoButton.addClickListener(ev -> {
-                    refertoDisplayContainer.setVisible(false); // Nasconde il display del referto
-                    refertoEditLayout.setVisible(true); // Mostra il form di modifica
-                    editRefertoArea.setValue(esame.getRefertoTestuale()); // Popola l'area di testo con il referto attuale
+                    refertoDisplayContainer.setVisible(false);
+                    refertoEditLayout.setVisible(true);
+                    editRefertoArea.setValue(esame.getRefertoTestuale());
                 });
 
-                // Listener per il pulsante "Annulla" la modifica del referto
                 cancelRefertoButton.addClickListener(ev -> {
-                    refertoEditLayout.setVisible(false); // Nasconde il form di modifica
-                    refertoDisplayContainer.setVisible(true); // Mostra il display del referto
+                    refertoEditLayout.setVisible(false);
+                    refertoDisplayContainer.setVisible(true);
                 });
 
-                // Listener per il pulsante "Salva Referto"
                 saveRefertoButton.addClickListener(ev -> {
                     String nuovoReferto = editRefertoArea.getValue();
 
                     boolean updated = esameRefertoService.updateRefertoTestuale(esame.getIdEsame(), scenarioId, nuovoReferto);
                     if (updated) {
-                        esame.setRefertoTestuale(nuovoReferto); // Aggiorna l'oggetto in memoria
-                        refertoText.setText(nuovoReferto); // Aggiorna il testo visualizzato
+                        esame.setRefertoTestuale(nuovoReferto);
+                        refertoText.setText(nuovoReferto);
                         Notification.show("Referto aggiornato con successo.", 3000, Notification.Position.BOTTOM_CENTER).addThemeVariants(NotificationVariant.LUMO_SUCCESS);
                         refertoEditLayout.setVisible(false);
                         refertoDisplayContainer.setVisible(true);
@@ -466,19 +459,17 @@ public class ExamSupport {
                 layout.add(examCard);
             }
         } else {
-            // Messaggio di contenuto vuoto se non ci sono esami
             Div errorDiv = EmptySupport.createErrorContent("Nessun esame disponibile");
             layout.add(errorDiv);
         }
-        // Pulsante per aggiungere un nuovo esame
+
         HorizontalLayout buttonContainer = new HorizontalLayout();
         buttonContainer.setWidthFull();
         buttonContainer.setJustifyContentMode(FlexComponent.JustifyContentMode.CENTER);
 
         Button addNewExamButton = StyleApp.getButton("Aggiungi Nuovo Esame", VaadinIcon.PLUS, ButtonVariant.LUMO_PRIMARY, "var(--lumo-base-color)");
         addNewExamButton.addThemeVariants(ButtonVariant.LUMO_LARGE);
-        addNewExamButton.getStyle().set("background-color", "var(--lumo-success-color"); // Colore del pulsante
-        // Naviga alla pagina di creazione di un nuovo esame
+        addNewExamButton.getStyle().set("background-color", "var(--lumo-success-color");
         addNewExamButton.addClickListener(ev -> UI.getCurrent().navigate("esamiReferti/" + scenarioId + "/edit"));
         buttonContainer.add(addNewExamButton);
 
@@ -486,24 +477,14 @@ public class ExamSupport {
         buttonContainer2.setWidthFull();
         buttonContainer2.setJustifyContentMode(FlexComponent.JustifyContentMode.CENTER);
 
-        Button createExamButton = StyleApp.getButton("Crea Esami di laboratorio",
-                VaadinIcon.CLIPBOARD_TEXT,
-                ButtonVariant.LUMO_PRIMARY,
-                "var(--lumo-base-color)");
 
+        Button createExamButton = StyleApp.getButton("Crea Esami di laboratorio", VaadinIcon.CLIPBOARD_TEXT, ButtonVariant.LUMO_PRIMARY, "var(--lumo-base-color)");
         createExamButton.addClickListener(event -> {
-            // 1. MOSTRA LA NOTIFICA FISSA e ottieni il suo ID univoco.
             final String notificationId = activeNotifierManager.show("Generazione esami di laboratorio in corso...");
-
-            // Cattura la UI corrente per poter comunicare con essa dal thread in background.
             final UI ui = UI.getCurrent();
 
-            // 2. AVVIA IL TASK IN BACKGROUND.
             executorService.submit(() -> {
-                String finalMessage; // Messaggio di risultato da mostrare all'utente.
-
                 try {
-                    // Prepara e invia la richiesta all'API esterna.
                     LabExamGenerationRequest request = new LabExamGenerationRequest(
                             scenario.getDescrizione(),
                             scenario.getTipologia(),
@@ -513,36 +494,56 @@ public class ExamSupport {
                     Optional<LabExamSet> labExamSetOptional = externalApiService.generateLabExamsFromScenario(request);
 
                     if (labExamSetOptional.isPresent()) {
-                        // Se l'API risponde, salva i dati e genera il PDF.
                         boolean success = labExamService.saveLabExamsAndGeneratePdf(scenarioId, labExamSetOptional.get());
                         if (success) {
-                            finalMessage = "Esami di laboratorio creati con successo!";
+
+                            notifierService.notify(ui, new NotifierService.NotificationPayload(
+                                    NotifierService.Status.SUCCESS,
+                                    "Generazione Completata",
+                                    "Esami di laboratorio creati con successo!",
+                                    notificationId
+                            ));
                         } else {
-                            finalMessage = "Errore: fallimento durante il salvataggio degli esami di laboratorio.";
+
+                            notifierService.notify(ui, new NotifierService.NotificationPayload(
+                                    NotifierService.Status.ERROR,
+                                    "Errore di Salvataggio",
+                                    "Fallimento durante il salvataggio degli esami di laboratorio.",
+                                    notificationId
+                            ));
                         }
                     } else {
-                        finalMessage = "Errore: Il servizio AI per gli esami non ha risposto.";
+
+                        notifierService.notify(ui, new NotifierService.NotificationPayload(
+                                NotifierService.Status.ERROR,
+                                "Errore Servizio AI",
+                                "Il servizio AI per gli esami non ha risposto.",
+                                notificationId
+                        ));
                     }
                 } catch (Exception e) {
-                    // Gestisce qualsiasi errore imprevisto.
                     logger.error("Fallimento nel task di generazione esami in background.", e);
-                    finalMessage = "Errore critico durante la generazione degli esami.";
+                    String errorTitle = "Errore Critico";
+                    String errorDetails;
+                    if (e instanceof HttpClientErrorException hcee) {
+                        errorTitle = "Errore nella Richiesta";
+                        errorDetails = extractErrorReasonFromJson(hcee.getResponseBodyAsString(), gson);
+                    } else {
+                        errorDetails = "Si è verificato un problema tecnico. Controllare i log per maggiori dettagli.";
+                    }
+
+                    notifierService.notify(ui, new NotifierService.NotificationPayload(
+                            NotifierService.Status.ERROR,
+                            errorTitle,
+                            errorDetails,
+                            notificationId
+                    ));
                 }
-
-                // 3. INVIA IL RISULTATO ALLA UI ALLA FINE DEL TASK.
-                // Crea il payload con il messaggio finale e l'ID della notifica da chiudere.
-                NotifierService.NotificationPayload payload = new NotifierService.NotificationPayload(finalMessage, notificationId);
-
-                // Invia in modo sicuro il payload al MainLayout.
-                notifierService.notify(ui, payload);
             });
         });
 
-        Button createRefertoButton = StyleApp.getButton("Crea Referti per esami",
-                VaadinIcon.CLIPBOARD_PULSE,
-                ButtonVariant.LUMO_PRIMARY,
-                "var(--lumo-base-color)");
 
+        Button createRefertoButton = StyleApp.getButton("Crea Referti per esami", VaadinIcon.CLIPBOARD_PULSE, ButtonVariant.LUMO_PRIMARY, "var(--lumo-base-color)");
         createRefertoButton.addClickListener(event -> {
             Dialog selectExamTypeDialog = new Dialog();
             selectExamTypeDialog.setCloseOnEsc(true);
@@ -557,81 +558,87 @@ public class ExamSupport {
             Button generateButton = new Button("Genera Referto", VaadinIcon.CHECK.create());
             generateButton.addThemeVariants(ButtonVariant.LUMO_PRIMARY);
             generateButton.setEnabled(false);
-
             examTypeComboBox.addValueChangeListener(e -> generateButton.setEnabled(e.getValue() != null && !e.getValue().isEmpty()));
 
-            // Le modifiche sono all'interno di questo listener
             generateButton.addClickListener(e -> {
                 final String selectedExamType = examTypeComboBox.getValue();
-
-                // Chiudi subito il dialog per una migliore esperienza utente
                 selectExamTypeDialog.close();
-
-                // 1. NUOVO: Mostra la notifica fissa e ottieni il suo ID
                 final String notificationId = activeNotifierManager.show("Generazione referto per '" + selectedExamType + "' in corso...");
-
-                // Cattura la UI corrente per la notifica finale
                 final UI ui = UI.getCurrent();
 
-                // 2. MODIFICATO: Avvia il task in background
                 executorService.submit(() -> {
-                    String finalMessage; // Rinominiamo per coerenza
                     try {
                         ReportGenerationRequest request = new ReportGenerationRequest(
                                 scenario.getDescrizione(),
                                 scenario.getTipologia(),
                                 selectedExamType,
                                 esameFisicoService.getEsameFisicoById(scenarioId).toString());
-
                         Optional<ReportSet> refertoContent = externalApiService.generateReport(request);
 
                         if (refertoContent.isPresent()) {
                             boolean success = esameRefertoService.createRefertoByJSON(scenarioId, refertoContent);
                             if (success) {
-                                finalMessage = "Nuovo referto per '" + selectedExamType + "' creato con successo!";
+
+                                notifierService.notify(ui, new NotifierService.NotificationPayload(
+                                        NotifierService.Status.SUCCESS,
+                                        "Generazione Completata",
+                                        "Nuovo referto per '" + selectedExamType + "' creato con successo!",
+                                        notificationId
+                                ));
                             } else {
-                                finalMessage = "Errore: fallimento durante il salvataggio del referto per '" + selectedExamType + "'.";
+
+                                notifierService.notify(ui, new NotifierService.NotificationPayload(
+                                        NotifierService.Status.ERROR,
+                                        "Errore di Salvataggio",
+                                        "Fallimento durante il salvataggio del referto per '" + selectedExamType + "'.",
+                                        notificationId
+                                ));
                             }
                         } else {
-                            finalMessage = "Errore: Il servizio AI per i referti non ha risposto.";
+
+                            notifierService.notify(ui, new NotifierService.NotificationPayload(
+                                    NotifierService.Status.ERROR,
+                                    "Errore Servizio AI",
+                                    "Il servizio AI per i referti non ha risposto.",
+                                    notificationId
+                            ));
                         }
                     } catch (Exception ex) {
                         logger.error("Errore nel task di generazione referto.", ex);
-                        finalMessage = "Errore critico durante la generazione del referto per '" + selectedExamType + "'.";
-                    }
+                        String errorTitle = "Errore Critico";
+                        String errorDetails;
+                        if (ex instanceof HttpClientErrorException hcee) {
+                            errorTitle = "Errore nella Richiesta";
+                            errorDetails = extractErrorReasonFromJson(hcee.getResponseBodyAsString(), gson);
+                        } else {
+                            errorDetails = "Si è verificato un problema tecnico. Controllare i log per maggiori dettagli.";
+                        }
 
-                    // 3. NUOVO: Invia il payload completo (messaggio + ID) al termine del task
-                    NotifierService.NotificationPayload payload = new NotifierService.NotificationPayload(finalMessage, notificationId);
-                    notifierService.notify(ui, payload);
+                        notifierService.notify(ui, new NotifierService.NotificationPayload(
+                                NotifierService.Status.ERROR,
+                                errorTitle,
+                                errorDetails,
+                                notificationId
+                        ));
+                    }
                 });
             });
 
             Button cancelButton = new Button("Annulla", VaadinIcon.CLOSE.create());
             cancelButton.addClickListener(e -> selectExamTypeDialog.close());
-
             HorizontalLayout dialogActions = new HorizontalLayout(generateButton, cancelButton);
             dialogActions.setJustifyContentMode(FlexComponent.JustifyContentMode.END);
             dialogActions.setWidthFull();
-
             selectExamTypeDialog.add(examTypeComboBox, dialogActions);
             selectExamTypeDialog.setWidth("400px");
             selectExamTypeDialog.open();
         });
 
         buttonContainer2.add(createExamButton, createRefertoButton);
-
         layout.add(buttonContainer, buttonContainer2);
         return layout;
     }
 
-    /**
-     * Crea un componente per l'anteprima di un file multimediale.
-     * Supporta immagini, PDF, video e audio, con un fallback per tipi sconosciuti.
-     * Include un pulsante per aprire il media a schermo intero in una nuova pagina.
-     *
-     * @param fileName Il nome del file multimediale (es. "image.jpg", "document.pdf").
-     * @return Un {@link Component} che rappresenta l'anteprima del media.
-     */
     private static Component createMediaPreview(String fileName) {
         String fileExtension;
         int lastDotIndex = fileName.lastIndexOf(".");
@@ -658,7 +665,7 @@ public class ExamSupport {
                 .set("transition", "transform 0.2s ease, box-shadow 0.2s ease")
                 .set("box-sizing", "border-box");
 
-        // Aggiunge effetti di hover tramite JavaScript per trasformazione e ombra
+
         previewContainer.getElement().executeJs(
                 "this.addEventListener('mouseover', function() { " +
                         " this.style.transform = 'translateY(-2px)'; " +
@@ -712,7 +719,7 @@ public class ExamSupport {
         logger.debug("Percorso media per anteprima: {}", mediaPath);
 
         Component mediaComponent;
-        Icon typeIcon = getIconForFileType(fileExtension); // Icona basata sul tipo di file
+        Icon typeIcon = getIconForFileType(fileExtension);
 
         Button fullscreenButton = new Button("Apri in una nuova pagina", new Icon(VaadinIcon.EXPAND_FULL));
         fullscreenButton.addThemeVariants(ButtonVariant.LUMO_PRIMARY);
@@ -722,7 +729,7 @@ public class ExamSupport {
                 .set("transition", "transform 0.2s ease")
                 .set("cursor", "pointer");
 
-        // Aggiunge effetti di hover per il pulsante fullscreen
+
         fullscreenButton.getElement().executeJs(
                 "this.addEventListener('mouseover', function() { " +
                         "  this.style.transform = 'scale(1.1)'; " +
@@ -733,9 +740,9 @@ public class ExamSupport {
         );
 
         fullscreenButton.addClassName("hover-effect");
-        fullscreenButton.addClickListener(e -> openFullMedia(fileName)); // Listener per aprire il media
+        fullscreenButton.addClickListener(e -> openFullMedia(fileName));
 
-        // Switch per creare il componente media appropriato in base all'estensione
+
         switch (fileExtension) {
             case "jpg", "jpeg", "png", "gif", "webp":
                 Image image = new Image(mediaPath, fileName);
@@ -808,7 +815,7 @@ public class ExamSupport {
                 break;
 
             default:
-                // Contenitore per tipi di file sconosciuti
+
                 Div unknownContainer = new Div();
                 unknownContainer.getStyle()
                         .set("padding", "var(--lumo-space-l)")
@@ -837,20 +844,14 @@ public class ExamSupport {
         fileInfoLayout.setSpacing(true);
 
         mediaHeader.removeAll();
-        mediaHeader.add(fileInfoLayout); // Aggiunge le info sul file all'header
+        mediaHeader.add(fileInfoLayout);
 
-        mediaContentContainer.add(mediaComponent); // Aggiunge il componente media al suo contenitore
+        mediaContentContainer.add(mediaComponent);
 
         previewContainer.add(mediaHeader, mediaContentContainer, fullscreenButton);
         return previewContainer;
     }
 
-    /**
-     * Crea un componente di anteprima per visualizzare un messaggio di errore.
-     *
-     * @param message Il messaggio di errore da visualizzare.
-     * @return Un {@link Component} che mostra l'errore.
-     */
     private static Component createErrorPreview(String message) {
         Div errorContainer = new Div();
         errorContainer.getStyle()
@@ -877,29 +878,16 @@ public class ExamSupport {
         return errorContainer;
     }
 
-    /**
-     * Restituisce una versione abbreviata del nome del file, rimuovendo il percorso e troncando la lunghezza.
-     *
-     * @param fileName Il nome completo del file, inclusi i percorsi.
-     * @return Il nome del file abbreviato.
-     */
     private static String getShortFileName(String fileName) {
         String shortName = fileName;
         int lastSlash = fileName.lastIndexOf('/');
         if (lastSlash > -1 && lastSlash < fileName.length() - 1) {
-            shortName = fileName.substring(lastSlash + 1); // Estrae solo il nome del file
+            shortName = fileName.substring(lastSlash + 1);
         }
-        // Tronca il nome se troppo lungo
+
         return shortName.length() > 30 ? shortName.substring(0, 27) + "..." : shortName;
     }
 
-    /**
-     * Restituisce un'icona {@link VaadinIcon} appropriata in base all'estensione del file.
-     * L'icona ha anche un colore associato al tipo di file.
-     *
-     * @param fileExtension L'estensione del file (es. "jpg", "pdf").
-     * @return Un'icona Vaadin con stile applicato.
-     */
     private static Icon getIconForFileType(String fileExtension) {
         Icon icon;
         switch (fileExtension) {
@@ -927,12 +915,6 @@ public class ExamSupport {
         return icon;
     }
 
-    /**
-     * Restituisce una stringa di colore CSS (variabile Lumo) basata sull'estensione del file.
-     *
-     * @param fileExtension L'estensione del file.
-     * @return Una stringa CSS per il colore.
-     */
     private static String getColorForFileType(String fileExtension) {
         return switch (fileExtension) {
             case "jpg", "jpeg", "png", "gif", "webp" -> "var(--lumo-primary-color)";
@@ -943,92 +925,42 @@ public class ExamSupport {
         };
     }
 
-    /**
-     * Apre il file multimediale completo in una nuova scheda del browser.
-     * La URL viene costruita usando la rotta "media/" e il nome del file.
-     *
-     * @param fileName Il nome del file multimediale da aprire.
-     */
     private static void openFullMedia(String fileName) {
         logger.debug("Opening full media for file: {}", fileName);
-        UI.getCurrent().getPage().open("media/" + fileName, "_blank"); // Apre in una nuova scheda
+        UI.getCurrent().getPage().open("media/" + fileName, "_blank");
     }
 
-    /**
-     * Componente Vaadin personalizzato per la riproduzione di video HTML5.
-     * Incapsula un elemento HTML `video`.
-     */
     private static class NativeVideo extends Component {
-        /**
-         * Costruttore per il componente video nativo.
-         */
         public NativeVideo() {
             super(new Element("video"));
         }
 
-        /**
-         * Imposta l'attributo `src` dell'elemento video HTML.
-         *
-         * @param src Il percorso del file video.
-         */
         public void setSrc(String src) {
             getElement().setAttribute("src", src);
         }
 
-        /**
-         * Imposta l'attributo `controls` dell'elemento video HTML.
-         *
-         * @param controls {@code true} per mostrare i controlli di riproduzione, {@code false} altrimenti.
-         */
         public void setControls(boolean controls) {
             getElement().setAttribute("controls", controls);
         }
 
-        /**
-         * Imposta l'attributo `width` dell'elemento video HTML.
-         *
-         * @param width La larghezza del video (es. "100%", "640px").
-         */
         public void setWidth(String width) {
             getElement().setAttribute("width", width);
         }
     }
 
-    /**
-     * Componente Vaadin personalizzato per la riproduzione di audio HTML5.
-     * Incapsula un elemento HTML `audio`.
-     */
     private static class NativeAudio extends Component {
-        /**
-         * Costruttore per il componente audio nativo.
-         */
         public NativeAudio() {
             super(new Element("audio"));
         }
 
-        /**
-         * Imposta l'attributo `src` dell'elemento audio HTML.
-         *
-         * @param src Il percorso del file audio.
-         */
         public void setSrc(String src) {
             getElement().setAttribute("src", src);
         }
 
-        /**
-         * Imposta l'attributo `controls` dell'elemento audio HTML.
-         *
-         * @param controls {@code true} per mostrare i controlli di riproduzione, {@code false} altrimenti.
-         */
         public void setControls(boolean controls) {
             getElement().setAttribute("controls", controls);
         }
 
-        /**
-         * Imposta la larghezza dell'elemento audio HTML.
-         *
-         * @param width La larghezza dell'audio (es. "100%", "300px").
-         */
         public void setWidth(String width) {
             getElement().getStyle().set("width", width);
         }

@@ -6,6 +6,7 @@ import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.applayout.AppLayout;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.button.ButtonVariant;
+import com.vaadin.flow.component.html.H5;
 import com.vaadin.flow.component.html.Image;
 import com.vaadin.flow.component.html.Span;
 import com.vaadin.flow.component.icon.Icon;
@@ -21,53 +22,77 @@ import it.uniupo.simnova.views.constant.UIConstants;
 import org.slf4j.LoggerFactory;
 
 /**
- * Il layout principale dell'applicazione.
- * Estende AppLayout e funge da contenitore per tutte le altre viste.
- * Gestisce la registrazione e la visualizzazione delle notifiche provenienti da task in background.
+ * Layout principale dell'applicazione che gestisce le notifiche e l'interfaccia utente.
+ * Estende AppLayout per fornire una struttura di layout comune.
+ *
+ * @author Alessandro Zappatore
+ * @version 1.0
  */
 public class MainLayout extends AppLayout {
-
+    /**
+     * Servizio per la gestione delle notifiche.
+     */
     private final NotifierService notifierService;
+    /**
+     * Gestore per le notifiche attive, utilizzato per chiudere notifiche specifiche.
+     */
     private final ActiveNotifierManager activeNotifierManager;
 
+
     /**
-     * Costruttore aggiornato per ricevere entrambi i servizi tramite dependency injection.
+     * Costruttore che inizializza il layout principale con i servizi necessari.
      *
-     * @param notifierService       Servizio per la comunicazione asincrona.
-     * @param activeNotifierManager Servizio per la gestione delle notifiche "fisse".
+     * @param notifierService       il servizio per la gestione delle notifiche
+     * @param activeNotifierManager il gestore delle notifiche attive
      */
     public MainLayout(NotifierService notifierService, ActiveNotifierManager activeNotifierManager) {
         this.notifierService = notifierService;
         this.activeNotifierManager = activeNotifierManager;
+
     }
 
     /**
-     * Chiamato quando il layout viene "attaccato" alla UI.
-     * Registra un ascoltatore che gestisce le notifiche di completamento dei task in background.
+     * Metodo chiamato quando il layout viene allegato all'interfaccia utente.
+     * Registra il servizio di notifica per ricevere aggiornamenti e gestire le notifiche.
+     *
+     * @param attachEvent l'evento di allegamento dell'interfaccia utente
      */
     @Override
     protected void onAttach(AttachEvent attachEvent) {
         super.onAttach(attachEvent);
         final UI ui = attachEvent.getUI();
 
+
         notifierService.register(ui, payload -> {
+
             activeNotifierManager.close(payload.notificationToCloseId());
+            LoggerFactory.getLogger(getClass()).info("Notifica di risultato ricevuta per UI {}: {}", ui.getUIId(), payload);
 
-            String message = payload.message();
-            LoggerFactory.getLogger(getClass()).info("Notifica di risultato ricevuta per UI {}: {}", ui.getUIId(), message);
+            if (payload.status() == NotifierService.Status.ERROR) {
+                H5 errorTitle = new H5(payload.title());
+                errorTitle.getStyle().set("color", "var(--lumo-base-color)").set("margin", "0");
 
-            boolean isError = message.toLowerCase().contains("errore");
+                Span errorDetails = new Span(payload.details());
+                errorDetails.getStyle().set("font-size", "var(--lumo-font-size-s)");
 
-            if (isError) {
-                Notification errorNotification = new Notification(message, 8000, Notification.Position.TOP_CENTER);
+                VerticalLayout notificationLayout = new VerticalLayout(errorTitle, errorDetails);
+                notificationLayout.setPadding(true);
+                notificationLayout.setSpacing(true);
+                notificationLayout.getStyle().set("padding-right", "var(--lumo-space-l)");
+
+                Notification errorNotification = new Notification(notificationLayout);
                 errorNotification.addThemeVariants(NotificationVariant.LUMO_ERROR);
+                errorNotification.setPosition(Notification.Position.TOP_CENTER);
+                errorNotification.setDuration(10000);
                 errorNotification.open();
+
             } else {
-                Span messageLabel = new Span(message);
+
+                Span messageLabel = new Span(payload.details());
                 Button viewButton;
                 Image gif;
 
-                if (message.contains("Scenario")) {
+                if (payload.details().contains("Scenario")) {
                     gif = new Image(UIConstants.AMBULANCE_GIF_PATH, "Animazione ambulanza");
 
                     String currentPath = ui.getInternals().getActiveViewLocation().getPath();
@@ -78,15 +103,15 @@ public class MainLayout extends AppLayout {
                         viewButton = new Button("Vedi Scenari");
                         viewButton.addClickListener(event -> ui.navigate("scenari"));
                     }
-                } else if (message.contains("Esami di laboratorio")) {
+                } else if (payload.details().contains("Esami di laboratorio")) {
                     viewButton = new Button("Ricarica Pagina");
                     gif = new Image(UIConstants.LAB_GIF_PATH, "Animazione esami");
                     viewButton.addClickListener(event -> ui.getPage().reload());
-                } else if (message.contains("Nuovo referto")) {
+                } else if (payload.details().contains("Nuovo referto")) {
                     viewButton = new Button("Ricarica Pagina");
                     gif = new Image(UIConstants.REF_GIF_PATH, "Animazione referti");
                     viewButton.addClickListener(event -> ui.getPage().reload());
-                } else if (message.contains("Materiali necessari")) {
+                } else if (payload.details().contains("Materiali necessari")) {
                     viewButton = new Button("Ricarica Pagina");
                     gif = new Image(UIConstants.MAT_GIF_PATH, "Animazione materiali");
                     viewButton.addClickListener(event -> ui.getPage().reload());
@@ -126,8 +151,9 @@ public class MainLayout extends AppLayout {
     }
 
     /**
-     * Chiamato quando il layout viene "staccato" (es. l'utente chiude la scheda del browser).
-     * Rimuove l'ascoltatore per evitare memory leak.
+     * Metodo chiamato quando il layout viene staccato dall'interfaccia utente.
+     *
+     * @param detachEvent l'evento di distacco dell'interfaccia utente
      */
     @Override
     protected void onDetach(DetachEvent detachEvent) {

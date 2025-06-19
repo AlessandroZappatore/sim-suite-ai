@@ -116,10 +116,25 @@ public class ScenarioDetailsView extends Composite<VerticalLayout> implements Ha
      * Servizio per la gestione dei presidi associati agli scenari.
      */
     private final PresidiService presidiService;
+    /**
+     * Servizio per l'integrazione con API esterne, ad esempio per la generazione di referti o l'analisi dei dati.
+     */
     private final ExternalApiService externalApiService;
+    /**
+     * Servizio per la gestione degli esami di laboratorio, come la generazione di referti e l'analisi dei risultati.
+     */
     private final LabExamService labExamService;
+    /**
+     * Servizio per la gestione dell'esecuzione di task asincroni, utile per operazioni che richiedono tempo come l'elaborazione di dati o la generazione di referti.
+     */
     private final ExecutorService executorService;
+    /**
+     * Servizio per la gestione delle notifiche tra il backend e il frontend, utilizzato per inviare aggiornamenti in tempo reale agli utenti.
+     */
     private final NotifierService notifierService;
+    /**
+     * Gestore per le notifiche attive, che coordina le notifiche tra il backend e il frontend per garantire che gli utenti ricevano aggiornamenti tempestivi.
+     */
     private final ActiveNotifierManager activeNotifierManager;
 
     /**
@@ -173,19 +188,23 @@ public class ScenarioDetailsView extends Composite<VerticalLayout> implements Ha
     private Button editTitleAuthorsButton;
 
     /**
-     * Costruisce una nuova istanza di <code>ScenarioDetailsView</code>.
-     * Inietta tutti i servizi necessari per recuperare e visualizzare i dati dello scenario.
+     * Costruttore della vista {@link ScenarioDetailsView}.
      *
-     * @param scenarioService                 Il servizio per la gestione degli scenari.
-     * @param fileStorageService              Il servizio per la gestione dei file caricati.
-     * @param materialeNecessario             Il servizio per la gestione del materiale necessario.
-     * @param advancedScenarioService         Il servizio per la gestione degli scenari avanzati.
-     * @param patientSimulatedScenarioService Il servizio per la gestione degli scenari simulati con paziente.
-     * @param azionechiaveService             Il servizio per la gestione delle azioni chiave.
-     * @param esameRefertoService             Il servizio per la gestione degli esami e referti.
-     * @param esameFisicoService              Il servizio per la gestione degli esami fisici.
-     * @param pazienteT0Service               Il servizio per la gestione dei pazienti T0.
-     * @param presidiService                  Il servizio per la gestione dei presidi.
+     * @param scenarioService                 servizio per la gestione degli scenari, utilizzato per caricare e modificare gli scenari.
+     * @param fileStorageService              servizio per la gestione dello storage dei file, utilizzato per caricare immagini e altri media.
+     * @param materialeNecessario             servizio per la gestione dei materiali necessari per lo scenario, come dispositivi medici o strumenti.
+     * @param advancedScenarioService         servizio per la gestione delle logiche specifiche degli scenari avanzati, come la gestione dei tempi e delle azioni chiave.
+     * @param patientSimulatedScenarioService servizio per la gestione delle logiche specifiche degli scenari simulati con paziente, come la sceneggiatura e le interazioni.
+     * @param azionechiaveService             servizio per la gestione delle azioni chiave definite nello scenario, come le azioni critiche da eseguire durante la simulazione.
+     * @param esameRefertoService             servizio per la gestione degli esami e referti associati agli scenari, come esami di laboratorio o diagnostici.
+     * @param esameFisicoService              servizio per la gestione dei dati relativi all'esame fisico del paziente, come i parametri vitali e le osservazioni cliniche.
+     * @param pazienteT0Service               servizio per la gestione dei dati del paziente al tempo zero (T0), come le condizioni iniziali del paziente all'inizio della simulazione.
+     * @param presidiService                  servizio per la gestione dei presidi associati agli scenari, come dispositivi medici o strumenti utilizzati durante la simulazione.
+     * @param externalApiService              servizio per l'integrazione con API esterne, ad esempio per la generazione di referti o l'analisi dei dati.
+     * @param labExamService                  servizio per la gestione degli esami di laboratorio, come la generazione di referti e l'analisi dei risultati.
+     * @param executorService                 servizio per la gestione dell'esecuzione di task asincroni, utile per operazioni che richiedono tempo come l'elaborazione di dati o la generazione di referti.
+     * @param notifierService                 servizio per la gestione delle notifiche tra il backend e il frontend, utilizzato per inviare aggiornamenti in tempo reale agli utenti.
+     * @param activeNotifierManager           gestore per le notifiche attive, che coordina le notifiche tra il backend e il frontend per garantire che gli utenti ricevano aggiornamenti tempestivi.
      */
     @Autowired
     public ScenarioDetailsView(ScenarioService scenarioService, FileStorageService fileStorageService,
@@ -537,13 +556,6 @@ public class ScenarioDetailsView extends Composite<VerticalLayout> implements Ha
         // Footer layout (potrebbe essere vuoto o contenere bottoni di navigazione generici).
         HorizontalLayout footerLayout = StyleApp.getFooterLayout(null);
         mainLayout.add(customHeader, contentLayout, footerLayout);
-
-        // Bottoni per lo scorrimento della pagina (Torna su, Scorri giù).
-        Button scrollToTopButton = StyleApp.getScrollButton();
-        Button scrollDownButton = StyleApp.getScrollDownButton();
-
-        UI.getCurrent().add(scrollToTopButton, scrollDownButton);
-
 
         // --- Listener per la modifica del titolo e degli autori ---
 

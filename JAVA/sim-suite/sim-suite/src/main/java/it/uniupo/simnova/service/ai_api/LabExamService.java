@@ -24,16 +24,26 @@ import java.util.stream.Collectors;
  * Fornisce metodi per salvare e recuperare set completi di esami,
  * e orchestra la generazione di report PDF e il loro collegamento allo scenario.
  *
- * @author Tuo Nome
+ * @author Alessandro Zappatore
  * @version 1.1
  */
 @Service
 public class LabExamService {
-
+    /**
+     * Logger per il servizio LabExamService.
+     */
     private static final Logger logger = LoggerFactory.getLogger(LabExamService.class);
-
+    /**
+     * Servizio per generare il PDF degli esami di laboratorio.
+     */
     private final LabExamPdfExportService labExamPdfExportService;
+    /**
+     * Servizio per recuperare i dati dello scenario associato agli esami di laboratorio.
+     */
     private final ScenarioService scenarioService;
+    /**
+     * Servizio per collegare il referto degli esami di laboratorio allo scenario.
+     */
     private final EsameRefertoService esameRefertoService;
 
     /**
@@ -58,28 +68,23 @@ public class LabExamService {
      * @return true se tutte le operazioni (salvataggio DB, generazione PDF, collegamento) vanno a buon fine.
      */
     public boolean saveLabExamsAndGeneratePdf(int scenarioId, LabExamSet labExamSet) {
-        // 1. Salva i dati degli esami nelle tabelle dedicate (`EsamiLaboratorio`, etc.)
         boolean dbSaveSuccess = saveLabExamsToDb(scenarioId, labExamSet);
 
         if (dbSaveSuccess) {
             try {
-                // 2. Recupera l'oggetto Scenario per ottenere i dati necessari per il PDF (es. nome paziente)
                 Scenario scenario = scenarioService.getScenarioById(scenarioId);
                 if (scenario == null) {
                     logger.error("Impossibile generare il PDF: scenario con ID {} non trovato.", scenarioId);
                     return false;
                 }
 
-                // 3. Genera e salva il PDF, ottenendo il nome del file come riferimento
                 String pdfFilename = labExamPdfExportService.generateAndSaveLabExamPdf(labExamSet, scenario);
 
-                // 4. Concatena tutti i referti testuali in un unico blocco di testo
                 String refertoTestualeCompleto = labExamSet.getCategorie().stream()
                         .flatMap(category -> category.getTest().stream())
                         .map(test -> test.getNome() + ": " + test.getReferto())
                         .collect(Collectors.joining("\n"));
 
-                // 5. Crea un nuovo oggetto EsameReferto e lo aggiunge allo scenario
                 EsameReferto nuovoReferto = new EsameReferto(-1, scenarioId);
                 nuovoReferto.setTipo("Esami di Laboratorio");
                 nuovoReferto.setMedia(pdfFilename);
@@ -118,7 +123,7 @@ public class LabExamService {
         Connection conn = null;
         try {
             conn = DBConnect.getInstance().getConnection();
-            conn.setAutoCommit(false); // Inizia la transazione
+            conn.setAutoCommit(false);
 
             int examSetId;
             try (PreparedStatement stmt = conn.prepareStatement(insertExamSetSQL, Statement.RETURN_GENERATED_KEYS)) {
@@ -161,7 +166,7 @@ public class LabExamService {
                 }
             }
 
-            conn.commit(); // Finalizza la transazione se tutto è andato a buon fine
+            conn.commit();
             logger.info("Dati degli esami di laboratorio salvati correttamente su DB per lo scenario ID: {}", scenarioId);
             return true;
 
@@ -178,7 +183,7 @@ public class LabExamService {
         } finally {
             if (conn != null) {
                 try {
-                    conn.setAutoCommit(true); // Ripristina il comportamento di default
+                    conn.setAutoCommit(true);
                     conn.close();
                 } catch (SQLException e) {
                     logger.error("Errore durante la chiusura della connessione al DB.", e);
@@ -250,7 +255,7 @@ public class LabExamService {
 
         } catch (SQLException e) {
             logger.error("Errore SQL durante il recupero degli esami per lo scenario ID {}: {}", scenarioId, e.getMessage(), e);
-            return null; // Ritorna null in caso di errore
+            return null;
         }
 
         return labExamSet;

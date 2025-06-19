@@ -15,10 +15,17 @@ import static it.uniupo.simnova.service.export.helper.pdf.PdfConstant.*;
 // Assicurati che PdfUtils sia nello stesso package e che i metodi siano statici
 import static it.uniupo.simnova.service.export.helper.pdf.PdfUtils.*;
 
+/**
+ * Classe di utilità per la generazione della sezione degli esami di laboratorio in un PDF.
+ *
+ * @author Alessandro Zappatore
+ * @version 1.0
+ */
 public class LabExamPdfHelper {
-
+    /**
+     * Costruttore privato per evitare l'istanza della classe.
+     */
     private LabExamPdfHelper() {
-        // Private constructor for helper class
     }
 
     /**
@@ -64,6 +71,12 @@ public class LabExamPdfHelper {
         }
     }
 
+    /**
+     * Disegna l'intestazione della tabella per gli esami di laboratorio.
+     *
+     * @param columnWidths Le larghezze delle colonne della tabella.
+     * @throws IOException Se si verifica un errore durante la scrittura nel PDF.
+     */
     private static void drawTableHeader(float[] columnWidths) throws IOException {
         PDPageContentStream stream = LabExamPdfExportService.currentContentStream;
         float x = MARGIN;
@@ -81,6 +94,13 @@ public class LabExamPdfHelper {
         LabExamPdfExportService.currentYPosition -= 10;
     }
 
+    /**
+     * Disegna una riga della tabella per un test di laboratorio.
+     *
+     * @param test         Il test da disegnare.
+     * @param columnWidths Le larghezze delle colonne della tabella.
+     * @throws IOException Se si verifica un errore durante la scrittura nel PDF.
+     */
     private static void drawTableRow(LabTest test, float[] columnWidths) throws IOException {
         // Definisce font e dimensione per questa riga
         final float fontSize = 10;

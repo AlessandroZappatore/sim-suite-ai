@@ -14,42 +14,52 @@ import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 
 /**
- * Gestisce le notifiche "fisse" per le operazioni in background.
- * Permette di mostrare una notifica e di chiuderla in un secondo momento tramite un ID univoco.
+ * Gestore delle notifiche attive per mostrare messaggi fissi con una ProgressBar.
+ * Le notifiche possono essere aperte e chiuse tramite ID univoco.
+ *
+ * @author Alessandro Zappatore
+ * @version 1.0
  */
 @Service
 public class ActiveNotifierManager {
-
+    /**
+     * Logger per il gestore delle notifiche attive.
+     */
     private static final Logger logger = LoggerFactory.getLogger(ActiveNotifierManager.class);
+    /**
+     * Mappa per tenere traccia delle notifiche attive, indicizzate per ID.
+     */
     private final Map<String, Notification> activeNotifications = new ConcurrentHashMap<>();
 
     /**
-     * Mostra una notifica fissa (senza auto-chiusura) e ne restituisce l'ID univoco.
+     * Costruttore privato per evitare istanziazioni dirette.
+     */
+    private ActiveNotifierManager() {
+        // Costruttore privato per evitare istanziazioni dirette
+    }
+    /**
+     * Mostra una notifica fissa con un messaggio e una ProgressBar.
      *
-     * @param message Il messaggio da visualizzare (es. "Generazione in corso...").
-     * @return L'ID univoco della notifica creata.
+     * @param message messaggio da visualizzare nella notifica
+     * @return ID univoco della notifica creata, che può essere utilizzato per chiuderla in seguito
      */
     public String show(String message) {
         String notificationId = UUID.randomUUID().toString();
 
-        // Messaggio da visualizzare sopra la barra
         Span messageLabel = new Span(message);
 
-        // Crea una ProgressBar e impostala su "indeterminata"
         ProgressBar progressBar = new ProgressBar();
         progressBar.setIndeterminate(true);
-        progressBar.setWidth("100%"); // Occupa tutta la larghezza della notifica
+        progressBar.setWidth("100%");
 
-        // Usa un VerticalLayout per mettere il testo sopra la barra
         VerticalLayout layout = new VerticalLayout(messageLabel, progressBar);
         layout.setPadding(false);
         layout.setSpacing(true);
 
-        // Stile e configurazione della notifica
         Notification notification = new Notification(layout);
         notification.addThemeVariants(NotificationVariant.LUMO_CONTRAST);
         notification.setPosition(Notification.Position.BOTTOM_START);
-        notification.setDuration(0); // 0 significa che non si chiude da sola
+        notification.setDuration(0);
 
         activeNotifications.put(notificationId, notification);
         notification.open();
@@ -59,9 +69,9 @@ public class ActiveNotifierManager {
     }
 
     /**
-     * Chiude una notifica attiva dato il suo ID.
+     * Chiude una notifica fissa identificata dal suo ID.
      *
-     * @param notificationId L'ID della notifica da chiudere.
+     * @param notificationId ID della notifica da chiudere
      */
     public void close(String notificationId) {
         if (notificationId == null) return;

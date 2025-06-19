@@ -63,6 +63,11 @@ public class Accesso {
         this.misura = misura;
     }
 
+    /**
+     * Imposta il lato dell'accesso.
+     *
+     * @param lato Lato dell'accesso, che deve essere "DX" o "SX".
+     */
     public void setLato(@NonNull String lato) {
         if (!"DX".equals(lato) && !"SX".equals(lato)) {
             throw new IllegalArgumentException("Il lato deve essere 'DX' o 'SX'.");

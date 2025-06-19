@@ -1,5 +1,6 @@
 package it.uniupo.simnova.views.ui.helper;
 
+import com.google.gson.Gson;
 import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.button.ButtonVariant;
@@ -30,6 +31,7 @@ import it.uniupo.simnova.views.common.utils.StyleApp;
 import it.uniupo.simnova.views.common.utils.TinyEditor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.web.client.HttpClientErrorException;
 import org.vaadin.tinymce.TinyMce;
 
 import java.util.ArrayList;
@@ -39,34 +41,47 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
 
+import static it.uniupo.simnova.views.ui.helper.support.ErrorExtractor.extractErrorReasonFromJson;
+
 /**
- * Classe di utility per la creazione di sezioni di overview dello scenario.
- * Gestisce la visualizzazione e la modifica di informazioni generali, azioni chiave e materiale necessario.
+ * Classe di supporto generale per la visualizzazione e modifica delle informazioni di un scenario.
+ * Fornisce metodi per creare contenuti di overview, gestire azioni chiave e materiali necessari.
  *
  * @author Alessandro Zappatore
  * @version 1.0
  */
 public class GeneralSupport extends HorizontalLayout {
+    /**
+     * Logger per il tracciamento delle operazioni e degli errori.
+     */
     private static final Logger logger = LoggerFactory.getLogger(GeneralSupport.class);
     /**
-     * Costruttore privato per evitare istanziazioni dirette.
+     * Gson per la serializzazione e deserializzazione di oggetti JSON.
+     */
+    private static final Gson gson = new Gson();
+
+    /**
+     * Costruttore privato per evitare l'istanza della classe.
+     * Utilizzare i metodi statici per accedere alle funzionalità.
      */
     private GeneralSupport() {
-        // Costruttore privato per evitare istanziazioni dirette
     }
 
     /**
-     * Crea e popola un layout verticale con le informazioni generali di uno scenario.
-     * Include sezioni modificabili per descrizione, briefing, informazioni dai genitori (se pediatriche),
-     * patto d'aula, azioni chiave, obiettivi didattici, moulage, liquidi e farmaci, e materiale necessario.
+     * Crea il layout principale per la visualizzazione delle informazioni di overview di uno scenario.
      *
-     * @param scenario            L'oggetto {@link Scenario} da cui recuperare i dati.
-     * @param isPediatricScenario Flag che indica se lo scenario è di tipo pediatrico, per mostrare info specifiche.
-     * @param infoGenitore        Contenuto delle informazioni dai genitori.
-     * @param scenarioService     Il servizio per la gestione dello scenario.
-     * @param materialeService    Il servizio per la gestione del materiale.
-     * @param azioneChiaveService Il servizio per la gestione delle azioni chiave.
-     * @return Un {@link VerticalLayout} contenente tutte le sezioni di overview.
+     * @param scenario              lo scenario da visualizzare
+     * @param isPediatricScenario   indica se lo scenario è pediatrico
+     * @param infoGenitore          informazioni aggiuntive dai genitori, se disponibili
+     * @param scenarioService       servizio per la gestione degli scenari
+     * @param materialeService      servizio per la gestione dei materiali
+     * @param azioneChiaveService   servizio per la gestione delle azioni chiave
+     * @param executorService       servizio per l'esecuzione di task in background
+     * @param notifierService       servizio per la gestione delle notifiche
+     * @param esameFisicoService    servizio per la gestione degli esami fisici
+     * @param externalApiService    servizio per l'interazione con API esterne
+     * @param activeNotifierManager gestore per le notifiche attive
+     * @return un layout verticale contenente le informazioni di overview dello scenario
      */
     public static VerticalLayout createOverviewContentWithData(
             Scenario scenario,
@@ -99,7 +114,6 @@ public class GeneralSupport extends HorizontalLayout {
                 .set("max-width", "800px")
                 .set("margin", "var(--lumo-space-l) 0");
 
-        // Aggiunge effetti di hover al contenitore della card
         card.getElement().executeJs(
                 "this.addEventListener('mouseover', function() { this.style.boxShadow = 'var(--lumo-box-shadow-l)'; });" +
                         "this.addEventListener('mouseout', function() { this.style.boxShadow = 'var(--lumo-box-shadow-m)'; });"
@@ -110,7 +124,6 @@ public class GeneralSupport extends HorizontalLayout {
         cardContentLayout.setSpacing(false);
         cardContentLayout.setWidthFull();
 
-        // Aggiunge le varie sezioni informative (descrizione, briefing, etc.)
         addInfoItemIfNotEmpty(scenario.getId(), cardContentLayout, "Descrizione", scenario.getDescrizione(), VaadinIcon.PENCIL, true, scenarioService);
         addInfoItemIfNotEmpty(scenario.getId(), cardContentLayout, "Briefing", scenario.getBriefing(), VaadinIcon.GROUP, scenarioService);
 
@@ -119,12 +132,10 @@ public class GeneralSupport extends HorizontalLayout {
         }
 
         addInfoItemIfNotEmpty(scenario.getId(), cardContentLayout, "Patto Aula", scenario.getPattoAula(), VaadinIcon.HANDSHAKE, scenarioService);
-
         addAzioniChiaveItem(scenario.getId(), cardContentLayout, azioneChiaveService);
         addInfoItemIfNotEmpty(scenario.getId(), cardContentLayout, "Obiettivi Didattici", scenario.getObiettivo(), VaadinIcon.BOOK, scenarioService);
         addInfoItemIfNotEmpty(scenario.getId(), cardContentLayout, "Moulage", scenario.getMoulage(), VaadinIcon.EYE, scenarioService);
         addInfoItemIfNotEmpty(scenario.getId(), cardContentLayout, "Liquidi e dosi farmaci", scenario.getLiquidi(), VaadinIcon.DROP, scenarioService);
-
         addMaterialeNecessarioItem(scenario.getId(), cardContentLayout, materialeService, executorService, notifierService, scenario, esameFisicoService, externalApiService, activeNotifierManager);
 
         card.add(cardContentLayout);
@@ -133,19 +144,17 @@ public class GeneralSupport extends HorizontalLayout {
     }
 
     /**
-     * Aggiunge una sezione informativa modificabile al layout, se il contenuto non è vuoto.
-     * Questa versione supporta l'aggiornamento tramite {@link ScenarioService}.
+     * Aggiunge un elemento informativo al layout se il contenuto non è vuoto.
      *
-     * @param scenarioId      L'ID dello scenario.
-     * @param container       Il layout verticale a cui aggiungere la sezione.
-     * @param title           Il titolo della sezione.
-     * @param content         Il contenuto testuale della sezione.
-     * @param iconType        L'icona da visualizzare accanto al titolo.
-     * @param isFirstItem     Indica se è il primo elemento aggiunto per gestire i divisori.
-     * @param scenarioService Il servizio per aggiornare il contenuto.
+     * @param scenarioId      l'ID dello scenario a cui appartiene l'informazione
+     * @param container       il layout in cui aggiungere l'elemento
+     * @param title           il titolo dell'elemento informativo
+     * @param content         il contenuto dell'elemento informativo
+     * @param iconType        il tipo di icona da visualizzare
+     * @param isFirstItem     indica se l'elemento è il primo della lista (per gestire i divider)
+     * @param scenarioService servizio per la gestione degli scenari
      */
     private static void addInfoItemIfNotEmpty(Integer scenarioId, VerticalLayout container, String title, String content, VaadinIcon iconType, boolean isFirstItem, ScenarioService scenarioService) {
-        // Aggiunge un divisore se non è il primo elemento
         if (!isFirstItem && container.getComponentCount() > 0) {
             Hr divider = new Hr();
             divider.getStyle()
@@ -191,7 +200,7 @@ public class GeneralSupport extends HorizontalLayout {
                 .set("font-family", "var(--lumo-font-family)")
                 .set("line-height", "var(--lumo-line-height-m)")
                 .set("color", "var(--lumo-body-text-color)")
-                .set("white-space", "pre-wrap") // Mantiene la formattazione (es. a capo)
+                .set("white-space", "pre-wrap")
                 .set("padding", "var(--lumo-space-xs) 0 var(--lumo-space-s) calc(var(--lumo-icon-size-m) + var(--lumo-space-m))")
                 .set("width", "100%")
                 .set("box-sizing", "border-box");
@@ -199,32 +208,30 @@ public class GeneralSupport extends HorizontalLayout {
             contentDisplay.setText("Sezione vuota");
             contentDisplay.getStyle().set("color", "var(--lumo-secondary-text-color)").set("font-style", "italic");
         } else {
-            contentDisplay.getElement().setProperty("innerHTML", content.replace("\n", "<br />")); // Converte \n in <br /> per HTML
+            contentDisplay.getElement().setProperty("innerHTML", content.replace("\n", "<br />"));
         }
         itemLayout.add(contentDisplay);
 
-        TinyMce contentEditor = TinyEditor.getEditor(); // Editor TinyMCE per la modifica
+        TinyMce contentEditor = TinyEditor.getEditor();
         contentEditor.setValue(content == null ? "" : content);
-        contentEditor.setVisible(false); // Nascosto di default
+        contentEditor.setVisible(false);
 
         Button saveButton = new Button("Salva");
         saveButton.addThemeVariants(ButtonVariant.LUMO_PRIMARY, ButtonVariant.LUMO_SMALL);
         Button cancelButton = new Button("Annulla");
         cancelButton.addThemeVariants(ButtonVariant.LUMO_TERTIARY, ButtonVariant.LUMO_SMALL);
         HorizontalLayout editorActions = new HorizontalLayout(saveButton, cancelButton);
-        editorActions.setVisible(false); // Nascosto di default
+        editorActions.setVisible(false);
         editorActions.getStyle()
                 .set("margin-top", "var(--lumo-space-xs)")
                 .set("padding-left", "calc(var(--lumo-icon-size-m) + var(--lumo-space-m))");
 
         itemLayout.add(contentEditor, editorActions);
 
-        // Listener per il pulsante "Modifica"
         editButton.addClickListener(e -> {
             contentDisplay.setVisible(false);
             String currentHtml = contentDisplay.getElement().getProperty("innerHTML");
             String editorValue;
-            // Prepara il valore per l'editor, convertendo <br /> in \n
             if (content == null || content.trim().isEmpty() || "Sezione vuota".equals(contentDisplay.getText())) {
                 editorValue = "";
             } else {
@@ -236,12 +243,10 @@ public class GeneralSupport extends HorizontalLayout {
             editButton.setVisible(false);
         });
 
-        // Listener per il pulsante "Salva"
         saveButton.addClickListener(e -> {
             String newContent = contentEditor.getValue();
             boolean success;
 
-            // Aggiorna il contenuto tramite il servizio appropriato
             switch (title) {
                 case "Descrizione":
                     success = scenarioService.updateScenarioDescription(scenarioId, newContent);
@@ -267,7 +272,6 @@ public class GeneralSupport extends HorizontalLayout {
                 default:
                     Notification.show("Errore: Titolo sezione non riconosciuto.", 3000, Notification.Position.MIDDLE)
                             .addThemeVariants(NotificationVariant.LUMO_ERROR);
-                    // Ripristina lo stato precedente
                     contentEditor.setVisible(false);
                     editorActions.setVisible(false);
                     contentDisplay.setVisible(true);
@@ -276,7 +280,6 @@ public class GeneralSupport extends HorizontalLayout {
             }
 
             if (success) {
-                // Aggiorna la visualizzazione del contenuto
                 if (newContent == null || newContent.trim().isEmpty()) {
                     contentDisplay.setText("Sezione vuota");
                     contentDisplay.getStyle().set("color", "var(--lumo-secondary-text-color)").set("font-style", "italic");
@@ -291,14 +294,12 @@ public class GeneralSupport extends HorizontalLayout {
                 Notification.show("Errore durante l'aggiornamento della sezione '" + title + "'.", 3000, Notification.Position.BOTTOM_CENTER)
                         .addThemeVariants(NotificationVariant.LUMO_ERROR);
             }
-            // Nasconde l'editor e mostra il display
             contentEditor.setVisible(false);
             editorActions.setVisible(false);
             contentDisplay.setVisible(true);
             editButton.setVisible(true);
         });
 
-        // Listener per il pulsante "Annulla"
         cancelButton.addClickListener(e -> {
             contentEditor.setVisible(false);
             editorActions.setVisible(false);
@@ -310,12 +311,11 @@ public class GeneralSupport extends HorizontalLayout {
     }
 
     /**
-     * Aggiunge una sezione per la gestione delle azioni chiave.
-     * Permette di visualizzare le azioni come lista e di modificarle tramite un editor dinamico.
+     * Aggiunge un elemento per le azioni chiave al layout.
      *
-     * @param scenarioId          L'ID dello scenario.
-     * @param container           Il layout a cui aggiungere la sezione.
-     * @param azioneChiaveService Il servizio per la gestione delle azioni chiave.
+     * @param scenarioId          l'ID dello scenario a cui appartiene l'azione chiave
+     * @param container           il layout in cui aggiungere l'elemento
+     * @param azioneChiaveService servizio per la gestione delle azioni chiave
      */
     private static void addAzioniChiaveItem(
             Integer scenarioId,
@@ -325,7 +325,6 @@ public class GeneralSupport extends HorizontalLayout {
         final String TITLE = "Azioni Chiave";
         final VaadinIcon ICON_TYPE = VaadinIcon.KEY;
 
-        // Aggiunge un divisore se non è il primo elemento
         if (container.getComponentCount() > 0) {
             Hr divider = new Hr();
             divider.getStyle()
@@ -373,7 +372,7 @@ public class GeneralSupport extends HorizontalLayout {
                 .set("white-space", "pre-wrap")
                 .set("padding", "var(--lumo-space-xs) 0 var(--lumo-space-s) calc(var(--lumo-icon-size-m) + var(--lumo-space-m))")
                 .set("width", "100%")
-                .set("box-sizing", "border-sizing"); // Correzione da "border-box" a "border-sizing" se è typo
+                .set("box-sizing", "border-sizing");
 
         VerticalLayout editorLayout = new VerticalLayout();
         editorLayout.setPadding(false);
@@ -387,8 +386,8 @@ public class GeneralSupport extends HorizontalLayout {
         actionFieldsContainer.setPadding(false);
         actionFieldsContainer.setSpacing(true);
 
-        List<TextField> actionFieldsList = new ArrayList<>(); // Lista per tenere traccia dei TextField delle azioni
-        AtomicInteger actionCounter = new AtomicInteger(1); // Contatore per il numero delle azioni
+        List<TextField> actionFieldsList = new ArrayList<>();
+        AtomicInteger actionCounter = new AtomicInteger(1);
 
         Button addActionButton = new Button("Aggiungi azione chiave", new Icon(VaadinIcon.PLUS_CIRCLE));
         addActionButton.addThemeVariants(ButtonVariant.LUMO_PRIMARY, ButtonVariant.LUMO_SMALL);
@@ -407,7 +406,6 @@ public class GeneralSupport extends HorizontalLayout {
         editorActions.setVisible(false);
         editorActions.getStyle().set("margin-top", "var(--lumo-space-s)");
 
-        // Runnable per caricare e visualizzare le azioni chiave
         Runnable loadAndDisplayCurrentAzioni = () -> {
             List<String> currentAzioni = azioneChiaveService.getNomiAzioniChiaveByScenarioId(scenarioId);
             if (currentAzioni == null || currentAzioni.isEmpty()) {
@@ -415,7 +413,7 @@ public class GeneralSupport extends HorizontalLayout {
                 contentDisplay.getStyle().set("color", "var(--lumo-secondary-text-color)").set("font-style", "italic");
             } else {
                 String textContent = currentAzioni.stream()
-                        .map(azione -> "• " + azione) // Formatta come lista puntata
+                        .map(azione -> "• " + azione)
                         .collect(Collectors.joining("\n"));
                 contentDisplay.getElement().setProperty("innerHTML", textContent.replace("\n", "<br />"));
                 contentDisplay.getStyle().remove("color");
@@ -423,17 +421,16 @@ public class GeneralSupport extends HorizontalLayout {
             }
         };
 
-        loadAndDisplayCurrentAzioni.run(); // Esegue al caricamento iniziale
+        loadAndDisplayCurrentAzioni.run();
         itemLayout.add(contentDisplay, editorLayout, editorActions);
 
-        // Listener per il pulsante "Modifica" delle azioni chiave
         editButton.addClickListener(e -> {
             contentDisplay.setVisible(false);
             editButton.setVisible(false);
 
-            actionFieldsContainer.removeAll(); // Pulisce i campi esistenti
-            actionFieldsList.clear(); // Resetta la lista dei campi
-            actionCounter.set(1); // Resetta il contatore
+            actionFieldsContainer.removeAll();
+            actionFieldsList.clear();
+            actionCounter.set(1);
 
             List<String> currentAzioni = azioneChiaveService.getNomiAzioniChiaveByScenarioId(scenarioId);
             if (currentAzioni != null && !currentAzioni.isEmpty()) {
@@ -443,7 +440,6 @@ public class GeneralSupport extends HorizontalLayout {
             }
 
             if (actionFieldsList.isEmpty()) {
-                // Aggiunge almeno un campo vuoto se non ci sono azioni
                 addNewActionFieldToEditorLayout(actionFieldsContainer, actionFieldsList, "", actionCounter, azioneChiaveService, scenarioId);
             }
 
@@ -451,19 +447,18 @@ public class GeneralSupport extends HorizontalLayout {
             editorActions.setVisible(true);
         });
 
-        // Listener per il pulsante "Salva" delle azioni chiave
         saveButton.addClickListener(e -> {
             List<String> newActionValues = actionFieldsList.stream()
                     .map(TextField::getValue)
                     .map(String::trim)
-                    .filter(value -> !value.isEmpty()) // Ignora campi vuoti
-                    .distinct() // Rimuove duplicati
+                    .filter(value -> !value.isEmpty())
+                    .distinct()
                     .collect(Collectors.toList());
 
             boolean success = azioneChiaveService.updateAzioniChiaveForScenario(scenarioId, newActionValues);
 
             if (success) {
-                loadAndDisplayCurrentAzioni.run(); // Ricarica e aggiorna la visualizzazione
+                loadAndDisplayCurrentAzioni.run();
                 Notification.show(TITLE + " aggiornate.", 3000, Notification.Position.BOTTOM_CENTER)
                         .addThemeVariants(NotificationVariant.LUMO_SUCCESS);
             } else {
@@ -471,14 +466,12 @@ public class GeneralSupport extends HorizontalLayout {
                         .addThemeVariants(NotificationVariant.LUMO_ERROR);
             }
 
-            // Nasconde l'editor e mostra il display
             editorLayout.setVisible(false);
             editorActions.setVisible(false);
             contentDisplay.setVisible(true);
             editButton.setVisible(true);
         });
 
-        // Listener per il pulsante "Annulla" delle azioni chiave
         cancelButton.addClickListener(e -> {
             editorLayout.setVisible(false);
             editorActions.setVisible(false);
@@ -490,14 +483,14 @@ public class GeneralSupport extends HorizontalLayout {
     }
 
     /**
-     * Aggiunge un nuovo campo di testo per un'azione chiave all'editor.
+     * Aggiunge un nuovo campo di azione chiave al layout dell'editor.
      *
-     * @param actionFieldsContainer  Il layout verticale che contiene i campi delle azioni.
-     * @param actionFieldsList       La lista dei {@link TextField} per le azioni.
-     * @param initialValue           Il valore iniziale del campo.
-     * @param actionCounterReference Riferimento atomico al contatore delle azioni.
-     * @param azioneChiaveService    Il servizio per la gestione delle azioni chiave.
-     * @param scenarioId             L'ID dello scenario.
+     * @param actionFieldsContainer  il layout in cui aggiungere il campo
+     * @param actionFieldsList       la lista dei campi di azione chiave
+     * @param initialValue           il valore iniziale del campo (può essere null)
+     * @param actionCounterReference riferimento atomico per il conteggio delle azioni
+     * @param azioneChiaveService    servizio per la gestione delle azioni chiave
+     * @param scenarioId             l'ID dello scenario a cui appartiene l'azione chiave
      */
     private static void addNewActionFieldToEditorLayout(
             VerticalLayout actionFieldsContainer,
@@ -526,8 +519,6 @@ public class GeneralSupport extends HorizontalLayout {
         removeButton.addClickListener(ev -> {
             actionFieldsList.remove(actionField);
             actionFieldsContainer.remove(fieldLayout);
-            // La rimozione dal servizio avviene al salvataggio, qui solo rimozione UI per coerenza con save logica.
-            // Se si volesse eliminazione istantanea, sarebbe qui la chiamata al servizio.
             azioneChiaveService.deleteAzioneChiaveByName(scenarioId, actionField.getValue().trim());
         });
 
@@ -537,12 +528,17 @@ public class GeneralSupport extends HorizontalLayout {
     }
 
     /**
-     * Aggiunge una sezione per la gestione del materiale necessario.
-     * Permette di visualizzare il materiale e di aprirlo in un editor esterno (IFrame).
+     * Aggiunge un elemento per i materiali necessari al layout.
      *
-     * @param scenarioId       L'ID dello scenario.
-     * @param container        Il layout a cui aggiungere la sezione.
-     * @param materialeService Il servizio per la gestione del materiale.
+     * @param scenarioId            l'ID dello scenario a cui appartiene il materiale necessario
+     * @param container             il layout in cui aggiungere l'elemento
+     * @param materialeService      servizio per la gestione dei materiali
+     * @param executorService       servizio per l'esecuzione di task in background
+     * @param notifierService       servizio per la gestione delle notifiche
+     * @param scenario              lo scenario a cui appartiene il materiale necessario
+     * @param esameFisicoService    servizio per la gestione degli esami fisici
+     * @param externalApiService    servizio per l'interazione con API esterne
+     * @param activeNotifierManager gestore per le notifiche attive
      */
     private static void addMaterialeNecessarioItem(Integer scenarioId,
                                                    VerticalLayout container,
@@ -555,10 +551,7 @@ public class GeneralSupport extends HorizontalLayout {
                                                    ActiveNotifierManager activeNotifierManager) {
         if (container.getComponentCount() > 0) {
             Hr divider = new Hr();
-            divider.getStyle()
-                    .set("margin-top", "var(--lumo-space-s)")
-                    .set("margin-bottom", "var(--lumo-space-s)")
-                    .set("border-color", "var(--lumo-contrast-10pct)");
+            divider.getStyle().set("margin-top", "var(--lumo-space-s)").set("margin-bottom", "var(--lumo-space-s)").set("border-color", "var(--lumo-contrast-10pct)");
             container.add(divider);
         }
 
@@ -576,13 +569,7 @@ public class GeneralSupport extends HorizontalLayout {
         titleGroup.setAlignItems(FlexComponent.Alignment.CENTER);
         Icon icon = new Icon(VaadinIcon.TOOLS);
         icon.addClassName(LumoUtility.TextColor.PRIMARY);
-        icon.getStyle()
-                .set("background-color", "var(--lumo-primary-color-10pct)")
-                .set("padding", "var(--lumo-space-s)")
-                .set("border-radius", "var(--lumo-border-radius-l)")
-                .set("font-size", "var(--lumo-icon-size-m)")
-                .set("margin-right", "var(--lumo-space-xs)");
-
+        icon.getStyle().set("background-color", "var(--lumo-primary-color-10pct)").set("padding", "var(--lumo-space-s)").set("border-radius", "var(--lumo-border-radius-l)").set("font-size", "var(--lumo-icon-size-m)").set("margin-right", "var(--lumo-space-xs)");
         H5 titleLabel = new H5("Materiale necessario");
         titleLabel.addClassNames(LumoUtility.Margin.NONE, LumoUtility.TextColor.PRIMARY);
         titleLabel.getStyle().set("font-weight", "600");
@@ -606,17 +593,10 @@ public class GeneralSupport extends HorizontalLayout {
         itemLayout.add(headerRow);
 
         aiMaterialButton.addClickListener(event -> {
-            // 1. MOSTRA LA NOTIFICA FISSA e ottieni il suo ID univoco.
-            // Questa notifica rimarrà visibile fino alla chiusura esplicita.;
             final String notificationId = activeNotifierManager.show("Generazione materiali in corso...");
-
-            // Cattura la UI corrente per poter comunicare con essa dal thread in background.
             final UI ui = UI.getCurrent();
 
-            // 2. AVVIA IL TASK IN BACKGROUND usando l'executorService.
             executorService.submit(() -> {
-                String finalMessage; // Messaggio di risultato da mostrare all'utente.
-
                 try {
                     MatGenerationRequest request = new MatGenerationRequest(
                             scenario.getDescrizione(),
@@ -625,32 +605,54 @@ public class GeneralSupport extends HorizontalLayout {
                             esameFisicoService.getEsameFisicoById(scenarioId).toString()
                     );
 
-                    // La chiamata ora restituisce una lista opzionale
                     Optional<List<MatSet>> materialiOptional = externalApiService.generateMaterial(request);
 
                     if (materialiOptional.isPresent()) {
-                        // Passa l'intera lista al service per il salvataggio
                         boolean success = materialeService.saveAImaterials(scenarioId, materialiOptional.get());
                         if (success) {
-                            finalMessage = "Materiali necessari creati e associati!";
+
+                            notifierService.notify(ui, new NotifierService.NotificationPayload(
+                                    NotifierService.Status.SUCCESS,
+                                    "Generazione Completata",
+                                    "Materiali necessari creati e associati!",
+                                    notificationId
+                            ));
                         } else {
-                            finalMessage = "Errore durante il salvataggio dei materiali.";
+
+                            notifierService.notify(ui, new NotifierService.NotificationPayload(
+                                    NotifierService.Status.ERROR,
+                                    "Errore di Salvataggio",
+                                    "Errore durante il salvataggio dei materiali.",
+                                    notificationId
+                            ));
                         }
                     } else {
-                        finalMessage = "Errore: Il servizio AI per i materiali non ha risposto.";
+
+                        notifierService.notify(ui, new NotifierService.NotificationPayload(
+                                NotifierService.Status.ERROR,
+                                "Errore Servizio AI",
+                                "Il servizio AI per i materiali non ha risposto.",
+                                notificationId
+                        ));
                     }
                 } catch (Exception e) {
-                    // Gestisce qualsiasi errore imprevisto durante l'esecuzione del task.
                     logger.error("Fallimento nel task di generazione materiali in background.", e);
-                    finalMessage = "Errore critico durante la generazione dei materiali.";
+                    String errorTitle = "Errore Critico";
+                    String errorDetails;
+                    if (e instanceof HttpClientErrorException hcee) {
+                        errorTitle = "Errore nella Richiesta";
+                        errorDetails = extractErrorReasonFromJson(hcee.getResponseBodyAsString(), gson);
+                    } else {
+                        errorDetails = "Si è verificato un problema tecnico. Controllare i log per maggiori dettagli.";
+                    }
+
+                    notifierService.notify(ui, new NotifierService.NotificationPayload(
+                            NotifierService.Status.ERROR,
+                            errorTitle,
+                            errorDetails,
+                            notificationId
+                    ));
                 }
-
-                // 3. INVIA IL RISULTATO ALLA UI ALLA FINE DEL TASK.
-                // Crea il payload con il messaggio finale e l'ID della notifica fissa da chiudere.
-                NotifierService.NotificationPayload payload = new NotifierService.NotificationPayload(finalMessage, notificationId);
-
-                // Usa il NotifierService per inviare in modo sicuro il payload al MainLayout.
-                notifierService.notify(ui, payload);
             });
         });
 
@@ -664,7 +666,6 @@ public class GeneralSupport extends HorizontalLayout {
                 .set("width", "100%")
                 .set("box-sizing", "border-box");
 
-        // Runnable per aggiornare il display del materiale
         Runnable updateContentDisplay = () -> {
             String updatedContent = materialeService.toStringAllMaterialsByScenarioId(scenarioId);
             if (updatedContent == null || updatedContent.trim().isEmpty()) {
@@ -677,13 +678,13 @@ public class GeneralSupport extends HorizontalLayout {
             }
         };
 
-        updateContentDisplay.run(); // Esegue al caricamento iniziale
+        updateContentDisplay.run();
         itemLayout.add(contentDisplay);
 
-        IFrame iframe = new IFrame(); // IFrame per l'editor esterno
+        IFrame iframe = new IFrame();
         iframe.setWidth("100%");
         iframe.setHeight("600px");
-        iframe.setVisible(false); // Nascosto di default
+        iframe.setVisible(false);
         iframe.getStyle().set("border", "none");
 
         Button closeIframeButton = StyleApp.getButton("Chiudi Editor", VaadinIcon.CLOSE, ButtonVariant.LUMO_TERTIARY, "var(--lumo-base-color)");
@@ -696,9 +697,8 @@ public class GeneralSupport extends HorizontalLayout {
 
         itemLayout.add(iframe, iframeControls);
 
-        // Listener per il pulsante "Modifica" del materiale
         editButton.addClickListener(e -> {
-            String url = "materialeNecessario/" + scenarioId + "/edit"; // URL dell'editor del materiale
+            String url = "materialeNecessario/" + scenarioId + "/edit";
             iframe.setSrc(url);
             iframe.setVisible(true);
             closeIframeButton.setVisible(true);
@@ -709,14 +709,13 @@ public class GeneralSupport extends HorizontalLayout {
                     .addThemeVariants(NotificationVariant.LUMO_SUCCESS);
         });
 
-        // Listener per il pulsante "Chiudi Editor" dell'IFrame
         closeIframeButton.addClickListener(e -> {
             iframe.setVisible(false);
             closeIframeButton.setVisible(false);
             iframeControls.setVisible(false);
             contentDisplay.setVisible(true);
             editButton.setVisible(true);
-            updateContentDisplay.run(); // Aggiorna il display dopo la chiusura dell'editor
+            updateContentDisplay.run();
             Notification.show("Editor materiali chiuso e contenuto aggiornato.", 3000, Notification.Position.BOTTOM_CENTER)
                     .addThemeVariants(NotificationVariant.LUMO_SUCCESS);
         });
@@ -724,15 +723,14 @@ public class GeneralSupport extends HorizontalLayout {
     }
 
     /**
-     * Overload del metodo {@code addInfoItemIfNotEmpty} che imposta {@code isFirstItem} a {@code false}.
-     * Usato per aggiungere elementi successivi al primo, con divisore.
+     * Aggiunge un elemento informativo al layout se il contenuto non è vuoto.
      *
-     * @param scenarioId      L'ID dello scenario.
-     * @param container       Il layout a cui aggiungere la sezione.
-     * @param title           Il titolo della sezione.
-     * @param content         Il contenuto testuale della sezione.
-     * @param iconType        L'icona da visualizzare accanto al titolo.
-     * @param scenarioService Il servizio per aggiornare il contenuto.
+     * @param scenarioId      l'ID dello scenario a cui appartiene l'informazione
+     * @param container       il layout in cui aggiungere l'elemento
+     * @param title           il titolo dell'elemento informativo
+     * @param content         il contenuto dell'elemento informativo
+     * @param iconType        il tipo di icona da visualizzare
+     * @param scenarioService servizio per la gestione degli scenari
      */
     private static void addInfoItemIfNotEmpty(Integer scenarioId, VerticalLayout container, String title, String content, VaadinIcon iconType, ScenarioService scenarioService) {
         addInfoItemIfNotEmpty(scenarioId, container, title, content, iconType, false, scenarioService);

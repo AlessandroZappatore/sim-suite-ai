@@ -222,7 +222,9 @@ public class ScenariosListView extends Composite<VerticalLayout> {
      * Utilizzata per visualizzare solo gli scenari che soddisfano i filtri applicati.
      */
     private List<Scenario> filteredScenarios = new ArrayList<>();
-
+    /**
+     * Logger per registrare eventi e errori nella vista.
+     */
     private final Logger logger = org.slf4j.LoggerFactory.getLogger(ScenariosListView.class);
 
     /**

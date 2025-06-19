@@ -1,11 +1,11 @@
 package it.uniupo.simnova.domain.common;
 
 /**
- * Record che rappresenta un <strong>materiale</strong> generico utilizzato nel sistema.
- * Ogni materiale ha un identificativo univoco, un nome e una descrizione.
+ * Rappresenta un materiale con un identificativo univoco, un nome e una descrizione.
  *
- * @author Alessandro Zappatore
- * @version 1.0
+ * @param idMateriale l'identificativo univoco del materiale
+ * @param nome il nome del materiale
+ * @param descrizione una descrizione del materiale
  */
 public record Materiale(
         int idMateriale,

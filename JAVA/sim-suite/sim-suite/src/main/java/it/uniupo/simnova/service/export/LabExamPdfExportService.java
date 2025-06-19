@@ -23,24 +23,57 @@ import static it.uniupo.simnova.service.export.helper.pdf.LabExamPdfHelper.creat
 import static it.uniupo.simnova.service.export.helper.pdf.LoadFont.loadFont;
 import static it.uniupo.simnova.service.export.helper.pdf.PdfConstant.*;
 
+/**
+ * Servizio per la generazione e l'esportazione di PDF contenenti i risultati degli esami di laboratorio.
+ *
+ * @author Alessandro Zappatore
+ * @version 1.0
+ */
 @Service
 public class LabExamPdfExportService {
-
+    /**
+     * Logger per la registrazione delle operazioni e degli errori durante la generazione del PDF.
+     */
     private static final Logger logger = LoggerFactory.getLogger(LabExamPdfExportService.class);
-
-    // Variabili statiche per la gestione dello stato del PDF, come nel tuo esempio
+    /**
+     * Posizione corrente in Y per il testo nel PDF.
+     */
     public static float currentYPosition;
+    /**
+     * Flusso di contenuto corrente per la scrittura nel PDF.
+     */
     public static PDPageContentStream currentContentStream;
+    /**
+     * Font utilizzato per il testo in grassetto nel PDF.
+     */
     public static PDFont FONTBOLD;
+    /**
+     * Font utilizzato per il testo normale nel PDF.
+     */
     public static PDFont FONTREGULAR;
+    /**
+     * Documento PDF corrente in cui vengono scritti i dati.
+     */
     private static PDDocument document;
-
+    /**
+     * Servizio per la gestione dello storage dei file.
+     */
     private final FileStorageService fileStorageService;
 
+    /**
+     * Costruttore del servizio per l'esportazione dei PDF degli esami di laboratorio.
+     *
+     * @param fileStorageService Servizio per la gestione dello storage dei file.
+     */
     public LabExamPdfExportService(FileStorageService fileStorageService) {
         this.fileStorageService = fileStorageService;
     }
 
+    /**
+     * Inizializza una nuova pagina nel documento PDF corrente.
+     *
+     * @throws IOException Se si verifica un errore durante la creazione della pagina o del flusso di contenuto.
+     */
     public static void initNewPage() throws IOException {
         if (currentContentStream != null) {
             currentContentStream.close();
@@ -51,6 +84,13 @@ public class LabExamPdfExportService {
         currentYPosition = PDRectangle.A4.getHeight() - MARGIN;
     }
 
+    /**
+     * Controlla se c'è spazio sufficiente nella pagina corrente per aggiungere nuovo contenuto.
+     * Se lo spazio è insufficiente, inizializza una nuova pagina.
+     *
+     * @param neededSpace Lo spazio necessario per il nuovo contenuto in punti.
+     * @throws IOException Se si verifica un errore durante l'inizializzazione della nuova pagina.
+     */
     public static void checkForNewPage(float neededSpace) throws IOException {
         if (currentYPosition - neededSpace < MARGIN) {
             initNewPage();
