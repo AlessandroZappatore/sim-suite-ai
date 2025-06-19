@@ -12,12 +12,6 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 @Configuration
 public class CorsConfig implements WebMvcConfigurer {
     /**
-     * Costruttore privato per prevenire l'istanza della classe.
-     */
-    private CorsConfig() {
-        // Costruttore privato per prevenire l'istanza della classe
-    }
-    /**
      * Configura le regole CORS per le richieste API.
      *
      * @param registry il registro delle configurazioni CORS

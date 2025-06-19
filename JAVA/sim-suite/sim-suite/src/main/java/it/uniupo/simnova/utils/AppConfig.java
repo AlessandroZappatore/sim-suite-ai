@@ -19,13 +19,6 @@ import java.util.concurrent.Executors;
 public class AppConfig {
 
     /**
-     * Costruttore privato per prevenire l'istanza della classe.
-     */
-    private AppConfig() {
-
-    }
-
-    /**
      * Crea un bean RestTemplate per effettuare chiamate HTTP.
      *
      * @return Un'istanza di RestTemplate configurata per l'applicazione.
