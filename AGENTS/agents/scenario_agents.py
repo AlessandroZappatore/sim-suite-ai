@@ -25,7 +25,7 @@ from models import (
     ValidationResult
 )
 from config import PRESIDI_MEDICI
-from utils import get_big_model, get_knowledge_base, get_small_model
+from utils import get_big_model, get_knowledge_base, get_new_model
 
 logger = logging.getLogger(__name__)
 
@@ -33,7 +33,7 @@ logger = logging.getLogger(__name__)
 validation_agent = Agent(
     name="Medical Request Validator",
     role="An expert in classifying user requests to determine if they are suitable for generating a medical simulation scenario.",
-    model=get_small_model(),
+    model=get_new_model(),
     response_model=ValidationResult,
     instructions=[
         "Your task is to analyze a user's request for a medical scenario.",

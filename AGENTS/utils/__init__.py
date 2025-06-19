@@ -9,10 +9,12 @@ from .common import (
     get_big_model, 
     get_small_model, 
     get_knowledge_base, 
-    get_report_knowledge_base
+    get_report_knowledge_base,
+    get_new_model
 )
 
 __all__ = [
+    "get_new_model",
     "get_big_model", 
     "get_small_model",
     "get_knowledge_base",

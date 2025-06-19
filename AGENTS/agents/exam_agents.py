@@ -12,7 +12,7 @@ from agno.agent import Agent, RunResponse
 from fastapi import HTTPException
 
 from models import LabExamRequest, LabExamResponse
-from utils import get_small_model, get_knowledge_base
+from utils import get_knowledge_base, get_small_model
 
 logger = logging.getLogger(__name__)
 

@@ -2291,3 +2291,106 @@ body {
         grid-template-columns: repeat(2, 1fr);
     }
 }
+
+/* Options Container Styles for Installation Section */
+.options-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: var(--spacing-6);
+    margin-top: var(--spacing-6);
+}
+
+.option-card {
+    background: var(--white);
+    border-radius: var(--radius-xl);
+    padding: var(--spacing-6);
+    box-shadow: var(--shadow-lg);
+    border: 1px solid rgba(0, 82, 204, 0.1);
+    transition: var(--transition-normal);
+    position: relative;
+    overflow: hidden;
+}
+
+.option-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 4px;
+    background: var(--gradient-primary);
+}
+
+.option-card:hover {
+    transform: translateY(-4px);
+    box-shadow: var(--shadow-xl);
+    border-color: var(--primary-blue);
+}
+
+.option-header {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-3);
+    margin-bottom: var(--spacing-4);
+    padding-bottom: var(--spacing-3);
+    border-bottom: 1px solid rgba(0, 82, 204, 0.1);
+}
+
+.option-header i {
+    font-size: var(--font-size-2xl);
+    color: var(--primary-blue);
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(0, 82, 204, 0.1);
+    border-radius: var(--radius-lg);
+}
+
+.option-header h4 {
+    color: var(--dark-blue);
+    font-size: var(--font-size-xl);
+    font-weight: 600;
+    margin: 0;
+}
+
+.option-card p {
+    color: var(--gray);
+    margin-bottom: var(--spacing-4);
+    line-height: 1.6;
+}
+
+.option-card .btn {
+    margin-top: var(--spacing-4);
+    width: 100%;
+    justify-content: center;
+}
+
+/* Responsive adjustments for options */
+@media (max-width: 768px) {
+    .options-container {
+        grid-template-columns: 1fr;
+        gap: var(--spacing-4);
+    }
+    
+    .option-card {
+        padding: var(--spacing-4);
+    }
+    
+    .option-header {
+        flex-direction: column;
+        text-align: center;
+        gap: var(--spacing-2);
+    }
+    
+    .option-header i {
+        font-size: var(--font-size-xl);
+        width: 35px;
+        height: 35px;
+    }
+    
+    .option-header h4 {
+        font-size: var(--font-size-lg);
+    }
+}

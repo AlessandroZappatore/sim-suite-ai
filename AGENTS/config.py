@@ -20,6 +20,7 @@ API_CONFIG: Dict[str, Any] = {
 }
 
 MODEL_CONFIG: Dict[str, Any] = {
+    "gemini_new": "gemini-2.5-flash",
     "gemini_big": "gemini-2.0-flash", 
     "gemini_small": "gemini-1.5-flash-latest",
     "claude_big": "claude-3-7-sonnet-20250219", 

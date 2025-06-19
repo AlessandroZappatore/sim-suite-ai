@@ -67,6 +67,20 @@ def get_small_model() -> Union[Gemini, Claude]:
         logger.info(f"Initializing SMALL model: Gemini ('{model_name}')")
         return Gemini(model_name)
 
+def get_new_model() -> Union[Gemini, Claude]:
+    """
+    Initializes and returns the latest model based on the
+    centralized configuration.
+    """
+    if USE_ANTHROPIC:
+        model_name = MODEL_CONFIG["claude_big"]
+        logger.info(f"Initializing NEW model: Claude ('{model_name}')")
+        return Claude(model_name)
+    else:
+        model_name = MODEL_CONFIG["gemini_new"]
+        logger.info(f"Initializing NEW model: Gemini ('{model_name}')")
+        return Gemini(model_name)
+    
 def get_knowledge_base() -> JSONKnowledgeBase:
     """Provides access to the knowledge base."""
     return knowledge_base
