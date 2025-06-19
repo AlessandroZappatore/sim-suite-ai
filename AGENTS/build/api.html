@@ -285,34 +285,19 @@ and patient type.</p>
 <p>This module defines the API routes for generating necessary materials
 for a given medical simulation scenario. It includes an endpoint for
 generating a list of materials and another for retrieving available
-patient and target audience types.</p>
+patient types.</p>
 <dl class="py function">
 <dt class="sig sig-object py" id="api.mat_api.generate_materials_endpoint">
 <span class="sig-prename descclassname"><span class="pre">api.mat_api.</span></span><span class="sig-name descname"><span class="pre">generate_materials_endpoint</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">request</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="models.html#models.mat_model.MATModelRequest" title="models.mat_model.MATModelRequest"><span class="pre">MATModelRequest</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="models.html#models.mat_model.MATModelResponse" title="models.mat_model.MATModelResponse"><span class="pre">MATModelResponse</span></a><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="_modules/api/mat_api.html#generate_materials_endpoint"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#api.mat_api.generate_materials_endpoint" title="Link to this definition">¶</a></dt>
 <dd><p>Generates a list of necessary materials for a medical simulation.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>request</strong> – A request object containing the scenario description,
-patient type, target audience, and objective exam findings.</p>
-</dd>
-<dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>A list of generated materials, each with a name and description.</p>
-</dd>
-</dl>
 </dd></dl>
 
 <dl class="py function">
-<dt class="sig sig-object py" id="api.mat_api.get_patient_types">
-<span class="sig-prename descclassname"><span class="pre">api.mat_api.</span></span><span class="sig-name descname"><span class="pre">get_patient_types</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="_modules/api/mat_api.html#get_patient_types"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#api.mat_api.get_patient_types" title="Link to this definition">¶</a></dt>
-<dd><p>Retrieves the lists of available patient types and target audiences.</p>
-<p>This endpoint provides supported values for creating material generation
-requests, which can be used to populate frontend selection inputs.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Returns<span class="colon">:</span></dt>
-<dd class="field-odd"><p>A dictionary containing lists of supported ‘patient_types’ and
-‘target_audiences’.</p>
-</dd>
-</dl>
+<dt class="sig sig-object py" id="api.mat_api.get_form_options">
+<span class="sig-prename descclassname"><span class="pre">api.mat_api.</span></span><span class="sig-name descname"><span class="pre">get_form_options</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="_modules/api/mat_api.html#get_form_options"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#api.mat_api.get_form_options" title="Link to this definition">¶</a></dt>
+<dd><p>Retrieves the lists of available patient types dynamically from the
+request model to populate frontend selection inputs. The ‘target’
+field is a free-text string and is not included here.</p>
 </dd></dl>
 
 </section>
@@ -343,15 +328,8 @@ type, and the type of examination to report on.</p>
 <dl class="py function">
 <dt class="sig sig-object py" id="api.medical_report_api.get_exam_types">
 <span class="sig-prename descclassname"><span class="pre">api.medical_report_api.</span></span><span class="sig-name descname"><span class="pre">get_exam_types</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="_modules/api/medical_report_api.html#get_exam_types"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#api.medical_report_api.get_exam_types" title="Link to this definition">¶</a></dt>
-<dd><p>Retrieves the lists of available examination and patient types.</p>
-<p>This endpoint provides the supported values for creating medical report
-requests, which can be used to populate frontend selection inputs.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Returns<span class="colon">:</span></dt>
-<dd class="field-odd"><p>A dictionary containing a list of supported ‘exam_types’ and
-‘patient_types’.</p>
-</dd>
-</dl>
+<dd><p>Retrieves the lists of available examination and patient types
+dynamically from the request model.</p>
 </dd></dl>
 
 </section>
@@ -384,14 +362,6 @@ and difficulty level for the scenario.</p>
 <dt class="sig sig-object py" id="api.scenario_api.get_difficulty_levels">
 <span class="sig-prename descclassname"><span class="pre">api.scenario_api.</span></span><span class="sig-name descname"><span class="pre">get_difficulty_levels</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Any</span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="_modules/api/scenario_api.html#get_difficulty_levels"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#api.scenario_api.get_difficulty_levels" title="Link to this definition">¶</a></dt>
 <dd><p>Retrieves the available difficulty levels for scenario generation.</p>
-<p>Provides a list of supported difficulty levels, each with a value, label,
-and description in Italian, along with the default level.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Returns<span class="colon">:</span></dt>
-<dd class="field-odd"><p>A dictionary containing a list of difficulty level objects and the
-default value.</p>
-</dd>
-</dl>
 </dd></dl>
 
 </section>
@@ -467,7 +437,7 @@ variable explicitly defines the public API of this package.</p>
 </li>
 <li><a class="reference internal" href="#module-api.mat_api">api.mat_api module</a><ul>
 <li><a class="reference internal" href="#api.mat_api.generate_materials_endpoint"><code class="docutils literal notranslate"><span class="pre">generate_materials_endpoint()</span></code></a></li>
-<li><a class="reference internal" href="#api.mat_api.get_patient_types"><code class="docutils literal notranslate"><span class="pre">get_patient_types()</span></code></a></li>
+<li><a class="reference internal" href="#api.mat_api.get_form_options"><code class="docutils literal notranslate"><span class="pre">get_form_options()</span></code></a></li>
 </ul>
 </li>
 <li><a class="reference internal" href="#module-api.medical_report_api">api.medical_report_api module</a><ul>

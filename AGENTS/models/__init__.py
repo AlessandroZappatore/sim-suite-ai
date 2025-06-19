@@ -21,6 +21,10 @@ from .scenario_models import (
     Sceneggiatura, ScenarioInfo, ScenarioRequest, Tempo, Timeline
 )
 
+from .mat_model import (
+    MATModelRequest, MATModelResponse, MatModelListResponse
+)
+
 __all__ = [
     # Scenario models
     "AccessoArterioso", "AccessoVenosso", "BaseScenario", "EsameFisico",
@@ -29,5 +33,7 @@ __all__ = [
     # Exam models
     "LabCategory", "LabExamRequest", "LabExamResponse", "LabTest",
     # Medical report models
-    "MedicalReportRequest", "MedicalReportResponse"
+    "MedicalReportRequest", "MedicalReportResponse",
+    # MAT models
+    "MATModelRequest", "MATModelResponse", "MatModelListResponse"
 ]

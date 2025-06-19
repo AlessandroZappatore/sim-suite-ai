@@ -12,32 +12,28 @@ from typing import Dict, Any
 from fastapi import FastAPI
 import uvicorn
 
-# Import sub-applications from the api module
 from api.exam_api import router as exam_router
 from api.scenario_api import router as scenario_router
 from api.medical_report_api import router as report_router
 from api.mat_api import router as material_router
-from utils.common import get_knowledge_base, get_report_knowledge_base
+from utils import get_knowledge_base, get_report_knowledge_base
+from config import API_CONFIG, LOGGING_CONFIG 
 
-logging.basicConfig(level=logging.INFO)
+logging.basicConfig(level=LOGGING_CONFIG["level"], format=LOGGING_CONFIG["format"])
 logger = logging.getLogger(__name__)
 
-
-# --- FastAPI Application Initialization ---
 app = FastAPI(
-    title="Medical Simulation Suite AI",
-    description="A complete AI system for generating medical simulation scenarios and laboratory exams.",
-    version="4.2.0"
+    title=API_CONFIG["title"],
+    description=API_CONFIG["description"],
+    version=API_CONFIG["version"]
 )
 
-# --- Include Sub-Applications ---
 app.include_router(scenario_router)
 app.include_router(exam_router)
 app.include_router(report_router)
 app.include_router(material_router)
 
 
-# --- Core Endpoints ---
 @app.get("/", summary="Main Health Check", tags=["Health"])
 def root() -> Dict[str, Any]:
     """Provides a detailed health check of the main application.
@@ -48,8 +44,8 @@ def root() -> Dict[str, Any]:
     """
     return {
         "status": "healthy",
-        "service": "Medical Simulation Suite AI",
-        "version": "4.2.0",
+        "service": API_CONFIG["title"],
+        "version": API_CONFIG["version"],
         "endpoints": {
             "scenarios": "/scenarios/docs",
             "exams": "/exams/docs",
@@ -69,14 +65,13 @@ def health_check() -> Dict[str, str]:
     Returns:
         A dictionary indicating the service status is healthy.
     """
-    return {"status": "healthy", "service": "Medical Simulation Suite AI"}
+    return {"status": "healthy", "service": API_CONFIG["title"]}
 
 
-# --- Main execution block ---
 if __name__ == "__main__":
     logger.info("Starting Medical Simulation Suite AI...")
     knowledge_base = get_knowledge_base()
     knowledge_base.load(recreate=False)
     report_knowledge_base = get_report_knowledge_base()
     report_knowledge_base.load(recreate=False)
-    uvicorn.run("main:app", host="0.0.0.0", port=8001, reload=True)
+    uvicorn.run("main:app", host=API_CONFIG["host"], port=API_CONFIG["port"], reload=True)

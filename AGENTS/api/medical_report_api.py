@@ -11,10 +11,9 @@ import logging
 from typing import Dict, List
 
 from fastapi import APIRouter
-from agents.medical_report import generate_medical_report
-from models.medical_report_models import MedicalReportRequest, MedicalReportResponse
+from agents import generate_medical_report
+from models import MedicalReportRequest, MedicalReportResponse
 
-# Configure logging
 logger = logging.getLogger(__name__)
 
 router = APIRouter(
@@ -43,22 +42,17 @@ def generate_medical_report_endpoint(request: MedicalReportRequest) -> MedicalRe
 
 @router.get("/exam-types", summary="Get Available Examination Types")
 def get_exam_types() -> Dict[str, List[str]]:
-    """Retrieves the lists of available examination and patient types.
-
-    This endpoint provides the supported values for creating medical report
-    requests, which can be used to populate frontend selection inputs.
-
-    Returns:
-        A dictionary containing a list of supported 'exam_types' and
-        'patient_types'.
     """
+    Retrieves the lists of available examination and patient types
+    dynamically from the request model.
+    """
+    exam_type_field = MedicalReportRequest.model_fields['tipologia_esame']
+    patient_type_field = MedicalReportRequest.model_fields['tipologia_paziente']
+
+    allowed_exam_types = list(exam_type_field.annotation.__args__) if exam_type_field.annotation and hasattr(exam_type_field.annotation, '__args__') else []
+    allowed_patient_types = list(patient_type_field.annotation.__args__) if patient_type_field.annotation and hasattr(patient_type_field.annotation, '__args__') else []
+
     return {
-        "exam_types": [
-            "ECG (Elettrocardiogramma)", "RX Torace", "TC Torace (con mdc)", "TC Torace (senza mdc)",
-            "TC Addome (con mdc)", "TC Addome (senza mdc)", "Ecografia addominale", "Ecografia polmonare",
-            "Ecocardio (Transtoracico)", "Ecocardio (Transesofageo)", "Spirometria", "EEG (Elettroencefalogramma)",
-            "RM Encefalo", "TC Cranio (con mdc)", "TC Cranio (senza mdc)", "Doppler TSA (Tronchi Sovraortici)",
-            "Angio-TC Polmonare", "Fundus oculi"
-        ],
-        "patient_types": ["Adulto", "Pediatrico", "Neonatale", "Prematuro"]
+        "exam_types": allowed_exam_types,
+        "patient_types": allowed_patient_types
     }

@@ -257,32 +257,28 @@
 <span class="kn">from</span><span class="w"> </span><span class="nn">fastapi</span><span class="w"> </span><span class="kn">import</span> <span class="n">FastAPI</span>
 <span class="kn">import</span><span class="w"> </span><span class="nn">uvicorn</span>
 
-<span class="c1"># Import sub-applications from the api module</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">api.exam_api</span><span class="w"> </span><span class="kn">import</span> <span class="n">router</span> <span class="k">as</span> <span class="n">exam_router</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">api.scenario_api</span><span class="w"> </span><span class="kn">import</span> <span class="n">router</span> <span class="k">as</span> <span class="n">scenario_router</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">api.medical_report_api</span><span class="w"> </span><span class="kn">import</span> <span class="n">router</span> <span class="k">as</span> <span class="n">report_router</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">api.mat_api</span><span class="w"> </span><span class="kn">import</span> <span class="n">router</span> <span class="k">as</span> <span class="n">material_router</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">utils</span><span class="w"> </span><span class="kn">import</span> <span class="n">get_knowledge_base</span><span class="p">,</span> <span class="n">get_report_knowledge_base</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">config</span><span class="w"> </span><span class="kn">import</span> <span class="n">API_CONFIG</span><span class="p">,</span> <span class="n">LOGGING_CONFIG</span> 
 
-<span class="c1"># --- Basic Configuration ---</span>
-<span class="n">logging</span><span class="o">.</span><span class="n">basicConfig</span><span class="p">(</span><span class="n">level</span><span class="o">=</span><span class="n">logging</span><span class="o">.</span><span class="n">INFO</span><span class="p">)</span>
+<span class="n">logging</span><span class="o">.</span><span class="n">basicConfig</span><span class="p">(</span><span class="n">level</span><span class="o">=</span><span class="n">LOGGING_CONFIG</span><span class="p">[</span><span class="s2">&quot;level&quot;</span><span class="p">],</span> <span class="nb">format</span><span class="o">=</span><span class="n">LOGGING_CONFIG</span><span class="p">[</span><span class="s2">&quot;format&quot;</span><span class="p">])</span>
 <span class="n">logger</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="vm">__name__</span><span class="p">)</span>
 
-
-<span class="c1"># --- FastAPI Application Initialization ---</span>
 <span class="n">app</span> <span class="o">=</span> <span class="n">FastAPI</span><span class="p">(</span>
-    <span class="n">title</span><span class="o">=</span><span class="s2">&quot;Medical Simulation Suite AI&quot;</span><span class="p">,</span>
-    <span class="n">description</span><span class="o">=</span><span class="s2">&quot;A complete AI system for generating medical simulation scenarios and laboratory exams.&quot;</span><span class="p">,</span>
-    <span class="n">version</span><span class="o">=</span><span class="s2">&quot;4.2.0&quot;</span>
+    <span class="n">title</span><span class="o">=</span><span class="n">API_CONFIG</span><span class="p">[</span><span class="s2">&quot;title&quot;</span><span class="p">],</span>
+    <span class="n">description</span><span class="o">=</span><span class="n">API_CONFIG</span><span class="p">[</span><span class="s2">&quot;description&quot;</span><span class="p">],</span>
+    <span class="n">version</span><span class="o">=</span><span class="n">API_CONFIG</span><span class="p">[</span><span class="s2">&quot;version&quot;</span><span class="p">]</span>
 <span class="p">)</span>
 
-<span class="c1"># --- Include Sub-Applications ---</span>
 <span class="n">app</span><span class="o">.</span><span class="n">include_router</span><span class="p">(</span><span class="n">scenario_router</span><span class="p">)</span>
 <span class="n">app</span><span class="o">.</span><span class="n">include_router</span><span class="p">(</span><span class="n">exam_router</span><span class="p">)</span>
 <span class="n">app</span><span class="o">.</span><span class="n">include_router</span><span class="p">(</span><span class="n">report_router</span><span class="p">)</span>
 <span class="n">app</span><span class="o">.</span><span class="n">include_router</span><span class="p">(</span><span class="n">material_router</span><span class="p">)</span>
 
 
-<span class="c1"># --- Core Endpoints ---</span>
 <div class="viewcode-block" id="root">
 <a class="viewcode-back" href="../main.html#main.root">[docs]</a>
 <span class="nd">@app</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;/&quot;</span><span class="p">,</span> <span class="n">summary</span><span class="o">=</span><span class="s2">&quot;Main Health Check&quot;</span><span class="p">,</span> <span class="n">tags</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;Health&quot;</span><span class="p">])</span>
@@ -295,8 +291,8 @@
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">return</span> <span class="p">{</span>
         <span class="s2">&quot;status&quot;</span><span class="p">:</span> <span class="s2">&quot;healthy&quot;</span><span class="p">,</span>
-        <span class="s2">&quot;service&quot;</span><span class="p">:</span> <span class="s2">&quot;Medical Simulation Suite AI&quot;</span><span class="p">,</span>
-        <span class="s2">&quot;version&quot;</span><span class="p">:</span> <span class="s2">&quot;4.2.0&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;service&quot;</span><span class="p">:</span> <span class="n">API_CONFIG</span><span class="p">[</span><span class="s2">&quot;title&quot;</span><span class="p">],</span>
+        <span class="s2">&quot;version&quot;</span><span class="p">:</span> <span class="n">API_CONFIG</span><span class="p">[</span><span class="s2">&quot;version&quot;</span><span class="p">],</span>
         <span class="s2">&quot;endpoints&quot;</span><span class="p">:</span> <span class="p">{</span>
             <span class="s2">&quot;scenarios&quot;</span><span class="p">:</span> <span class="s2">&quot;/scenarios/docs&quot;</span><span class="p">,</span>
             <span class="s2">&quot;exams&quot;</span><span class="p">:</span> <span class="s2">&quot;/exams/docs&quot;</span><span class="p">,</span>
@@ -319,14 +315,17 @@
 <span class="sd">    Returns:</span>
 <span class="sd">        A dictionary indicating the service status is healthy.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="k">return</span> <span class="p">{</span><span class="s2">&quot;status&quot;</span><span class="p">:</span> <span class="s2">&quot;healthy&quot;</span><span class="p">,</span> <span class="s2">&quot;service&quot;</span><span class="p">:</span> <span class="s2">&quot;Medical Simulation Suite AI&quot;</span><span class="p">}</span></div>
+    <span class="k">return</span> <span class="p">{</span><span class="s2">&quot;status&quot;</span><span class="p">:</span> <span class="s2">&quot;healthy&quot;</span><span class="p">,</span> <span class="s2">&quot;service&quot;</span><span class="p">:</span> <span class="n">API_CONFIG</span><span class="p">[</span><span class="s2">&quot;title&quot;</span><span class="p">]}</span></div>
 
 
 
-<span class="c1"># --- Main execution block ---</span>
 <span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
     <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Starting Medical Simulation Suite AI...&quot;</span><span class="p">)</span>
-    <span class="n">uvicorn</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="s2">&quot;main:app&quot;</span><span class="p">,</span> <span class="n">host</span><span class="o">=</span><span class="s2">&quot;0.0.0.0&quot;</span><span class="p">,</span> <span class="n">port</span><span class="o">=</span><span class="mi">8001</span><span class="p">,</span> <span class="n">reload</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="n">knowledge_base</span> <span class="o">=</span> <span class="n">get_knowledge_base</span><span class="p">()</span>
+    <span class="n">knowledge_base</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">recreate</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+    <span class="n">report_knowledge_base</span> <span class="o">=</span> <span class="n">get_report_knowledge_base</span><span class="p">()</span>
+    <span class="n">report_knowledge_base</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">recreate</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+    <span class="n">uvicorn</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="s2">&quot;main:app&quot;</span><span class="p">,</span> <span class="n">host</span><span class="o">=</span><span class="n">API_CONFIG</span><span class="p">[</span><span class="s2">&quot;host&quot;</span><span class="p">],</span> <span class="n">port</span><span class="o">=</span><span class="n">API_CONFIG</span><span class="p">[</span><span class="s2">&quot;port&quot;</span><span class="p">],</span> <span class="n">reload</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 </pre></div>
         </article>
       </div>

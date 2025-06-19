@@ -246,49 +246,41 @@
 <span></span><span class="sd">&quot;&quot;&quot;Defines the AI agent and logic for medical materials generation.</span>
 
 <span class="sd">This module contains the core components for generating lists of necessary</span>
-<span class="sd">materials for medical simulations. It defines a specialist agent, functions</span>
-<span class="sd">for creating detailed prompts that incorporate existing database materials,</span>
-<span class="sd">and the main orchestration logic that interacts with a SQLite database to</span>
-<span class="sd">ensure data consistency and avoid duplication.</span>
+<span class="sd">materials for medical simulations. It leverages agno&#39;s structured output</span>
+<span class="sd">to ensure the generated list of materials is correctly formatted and validated.</span>
 
-<span class="sd">Version: 2.0</span>
+<span class="sd">Version: 3.2</span>
 <span class="sd">&quot;&quot;&quot;</span>
 
-<span class="kn">import</span><span class="w"> </span><span class="nn">json</span>
-<span class="kn">import</span><span class="w"> </span><span class="nn">logging</span>
 <span class="kn">import</span><span class="w"> </span><span class="nn">os</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">logging</span>
 <span class="kn">import</span><span class="w"> </span><span class="nn">sqlite3</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">List</span><span class="p">,</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">Any</span>
 
-<span class="kn">from</span><span class="w"> </span><span class="nn">agno.agent</span><span class="w"> </span><span class="kn">import</span> <span class="n">Agent</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">agno.agent</span><span class="w"> </span><span class="kn">import</span> <span class="n">Agent</span><span class="p">,</span> <span class="n">RunResponse</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">fastapi</span><span class="w"> </span><span class="kn">import</span> <span class="n">HTTPException</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">pydantic</span><span class="w"> </span><span class="kn">import</span> <span class="n">ValidationError</span>
 
-<span class="kn">from</span><span class="w"> </span><span class="nn">models.mat_model</span><span class="w"> </span><span class="kn">import</span> <span class="n">MATModelRequest</span><span class="p">,</span> <span class="n">MATModelResponse</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">utils.common</span><span class="w"> </span><span class="kn">import</span> <span class="n">extract_json_from_response</span><span class="p">,</span> <span class="n">get_exam_model</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">models</span><span class="w"> </span><span class="kn">import</span> <span class="n">MATModelRequest</span><span class="p">,</span> <span class="n">MATModelResponse</span><span class="p">,</span> <span class="n">MatModelListResponse</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">utils</span><span class="w"> </span><span class="kn">import</span> <span class="n">get_small_model</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">config</span><span class="w"> </span><span class="kn">import</span> <span class="n">DATABASE_PATH</span>
 
-<span class="c1"># Configure logging</span>
 <span class="n">logger</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="vm">__name__</span><span class="p">)</span>
 
 
-<span class="c1"># --- Agent Definition ---</span>
 <span class="n">materials_agent</span> <span class="o">=</span> <span class="n">Agent</span><span class="p">(</span>
     <span class="n">name</span><span class="o">=</span><span class="s2">&quot;Medical Materials Generator&quot;</span><span class="p">,</span>
     <span class="n">role</span><span class="o">=</span><span class="s2">&quot;An expert medical educator and simulation specialist who generates comprehensive lists of necessary materials for medical simulation scenarios, with general-purpose descriptions.&quot;</span><span class="p">,</span>
-    <span class="n">model</span><span class="o">=</span><span class="n">get_exam_model</span><span class="p">(),</span>
+    <span class="n">model</span><span class="o">=</span><span class="n">get_small_model</span><span class="p">(),</span>
+    <span class="n">response_model</span><span class="o">=</span><span class="n">MatModelListResponse</span><span class="p">,</span>
     <span class="n">instructions</span><span class="o">=</span><span class="p">[</span>
         <span class="s2">&quot;Your task is to generate a comprehensive list of necessary materials for a medical simulation scenario.&quot;</span><span class="p">,</span>
-        <span class="s2">&quot;The final JSON output&#39;s text content (both &#39;nome&#39; and &#39;descrizione&#39;) must be in **Italian**.&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;All text content for &#39;nome&#39; and &#39;descrizione&#39; must be in **Italian**.&quot;</span><span class="p">,</span>
         <span class="s2">&quot;The materials must be realistic and appropriate for the described scenario, patient type, and target audience.&quot;</span><span class="p">,</span>
-        <span class="s2">&quot;PRIORITY: If a material from the database is suitable for the scenario, you MUST use the EXACT name from the database.&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;PRIORITY: If a material from the provided database list is suitable for the scenario, you MUST use its EXACT name.&quot;</span><span class="p">,</span>
         <span class="s2">&quot;For any NEW material you create, provide a clear, specific Italian name and a GENERAL-PURPOSE description.&quot;</span><span class="p">,</span>
         <span class="s2">&quot;The description should explain the material&#39;s main function in a way that is reusable for other scenarios. It must NOT be specific to the current scenario.&quot;</span><span class="p">,</span>
-        <span class="s2">&quot;Pay particular attention to the objective examination findings (esame_obiettivo) to determine WHICH materials are needed, but do not make their descriptions specific to the exam.&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;Pay attention to the objective examination findings (esame_obiettivo) to determine WHICH materials are needed, but keep their descriptions generic.&quot;</span><span class="p">,</span>
         <span class="s2">&quot;Consider the target audience (students, nurses, specialists) to adjust the complexity and type of materials selected.&quot;</span><span class="p">,</span>
-        <span class="s2">&quot;Avoid creating duplicate materials - if a material exists in the database, use its exact name.&quot;</span><span class="p">,</span>
-        <span class="s2">&quot;You MUST respond with a valid JSON array enclosed in ```json code blocks.&quot;</span><span class="p">,</span>
-        <span class="s2">&quot;The JSON must follow this exact structure: [{</span><span class="se">\&quot;</span><span class="s2">nome</span><span class="se">\&quot;</span><span class="s2">: </span><span class="se">\&quot;</span><span class="s2">Material Name</span><span class="se">\&quot;</span><span class="s2">, </span><span class="se">\&quot;</span><span class="s2">descrizione</span><span class="se">\&quot;</span><span class="s2">: </span><span class="se">\&quot;</span><span class="s2">General Description</span><span class="se">\&quot;</span><span class="s2">}]&quot;</span><span class="p">,</span>
-        <span class="s2">&quot;ALWAYS wrap your JSON response in ```json and ``` code blocks.&quot;</span><span class="p">,</span>
     <span class="p">]</span>
 <span class="p">)</span>
 
@@ -296,93 +288,37 @@
 <div class="viewcode-block" id="create_materials_prompt">
 <a class="viewcode-back" href="../../agents.html#agents.mat_agents.create_materials_prompt">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">create_materials_prompt</span><span class="p">(</span><span class="n">request</span><span class="p">:</span> <span class="n">MATModelRequest</span><span class="p">,</span> <span class="n">existing_materials</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]])</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Creates the detailed prompt for the materials generation agent.</span>
-
-<span class="sd">    This function constructs a comprehensive prompt that includes the scenario</span>
-<span class="sd">    context and a list of existing materials from the database to guide the</span>
-<span class="sd">    agent in its generation task.</span>
-
-<span class="sd">    Args:</span>
-<span class="sd">        request: The user&#39;s request containing the scenario details.</span>
-<span class="sd">        existing_materials: A list of materials already present in the database.</span>
-
-<span class="sd">    Returns:</span>
-<span class="sd">        A fully formatted prompt string for the materials_agent.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Creates the simplified prompt for the materials generation agent.&quot;&quot;&quot;</span>
     <span class="n">existing_materials_text</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
     <span class="k">if</span> <span class="n">existing_materials</span><span class="p">:</span>
-        <span class="n">existing_materials_text</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">    EXISTING MATERIALS IN THE DATABASE:</span><span class="se">\n</span><span class="s2">&quot;</span>
+        <span class="n">existing_materials_text</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="se">\n\n</span><span class="s2">## DATABASE MATERIALS</span><span class="se">\n</span><span class="s2">&quot;</span>
+        <span class="n">existing_materials_text</span> <span class="o">+=</span> <span class="s2">&quot;Here is a list of materials already available in the database. If any of these are appropriate, you MUST use their exact &#39;nome&#39;.</span><span class="se">\n</span><span class="s2">&quot;</span>
         <span class="k">for</span> <span class="n">material</span> <span class="ow">in</span> <span class="n">existing_materials</span><span class="p">:</span>
-            <span class="n">existing_materials_text</span> <span class="o">+=</span> <span class="sa">f</span><span class="s2">&quot;    - </span><span class="si">{</span><span class="n">material</span><span class="p">[</span><span class="s1">&#39;nome&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2">: </span><span class="si">{</span><span class="n">material</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;descrizione&#39;</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;Existing material&#39;</span><span class="p">)</span><span class="si">}</span><span class="se">\n</span><span class="s2">&quot;</span>
-        <span class="n">existing_materials_text</span> <span class="o">+=</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">    IMPORTANT: If any of these existing materials are appropriate for the scenario, use the EXACT name from the database.</span><span class="se">\n</span><span class="s2">&quot;</span>
+            <span class="n">existing_materials_text</span> <span class="o">+=</span> <span class="sa">f</span><span class="s2">&quot;- </span><span class="si">{</span><span class="n">material</span><span class="p">[</span><span class="s1">&#39;nome&#39;</span><span class="p">]</span><span class="si">}</span><span class="se">\n</span><span class="s2">&quot;</span>
 
     <span class="k">return</span> <span class="sa">f</span><span class="s2">&quot;&quot;&quot;</span>
-<span class="s2">    Generate a comprehensive list of necessary materials in JSON format for a medical simulation scenario.</span>
+<span class="s2">    Generate a comprehensive list of necessary materials for the following medical simulation.</span>
 
-<span class="s2">    SCENARIO CONTEXT:</span>
+<span class="s2">    ## SCENARIO CONTEXT</span>
 <span class="s2">    - Patient Type: </span><span class="si">{</span><span class="n">request</span><span class="o">.</span><span class="n">tipologia_paziente</span><span class="si">}</span>
 <span class="s2">    - Scenario Description: </span><span class="si">{</span><span class="n">request</span><span class="o">.</span><span class="n">descrizione_scenario</span><span class="si">}</span>
 <span class="s2">    - Target Audience: </span><span class="si">{</span><span class="n">request</span><span class="o">.</span><span class="n">target</span><span class="si">}</span>
-<span class="s2">    - Objective Examination (Esame obiettivo): </span><span class="si">{</span><span class="n">request</span><span class="o">.</span><span class="n">esame_obiettivo</span><span class="si">}</span>
-<span class="s2">    - Existing materials: </span><span class="si">{</span><span class="n">existing_materials_text</span><span class="si">}</span>
+<span class="s2">    - Objective Examination: </span><span class="si">{</span><span class="n">request</span><span class="o">.</span><span class="n">esame_obiettivo</span><span class="si">}</span>
+<span class="s2">    </span><span class="si">{</span><span class="n">existing_materials_text</span><span class="si">}</span>
 
-<span class="s2">    INSTRUCTIONS:</span>
-<span class="s2">    1.  Generate a realistic and comprehensive list of materials needed for this medical simulation.</span>
-<span class="s2">    2.  All text content in the final JSON output (names and descriptions) MUST be in ITALIAN.</span>
-<span class="s2">    3.  PRIORITY: If you need a material that already exists in the database, use the EXACT name provided.</span>
-<span class="s2">    4.  For new materials, create a clear and specific name in Italian.</span>
-<span class="s2">    5.  CRITICAL: The description for EACH material must be GENERAL and REUSABLE. It should describe the material&#39;s general purpose, not its specific use in this one scenario. This description will be stored in a database for reuse.</span>
-<span class="s2">    6.  DO NOT include details from the scenario context in the description.</span>
-<span class="s2">    7.  Based on the objective examination, include the specific materials needed for that type of examination, but keep their descriptions generic.</span>
-<span class="s2">    8.  Include various categories of materials: Diagnostic, Monitoring, Safety (PPE), Therapeutic, Educational, etc.</span>
-<span class="s2">    9.  For each material, provide:</span>
-<span class="s2">        - &quot;nome&quot;: A clear and specific name in Italian (use existing names when available).</span>
-<span class="s2">        - &quot;descrizione&quot;: A general, reusable description in Italian explaining its purpose.</span>
-<span class="s2">    10. Ensure materials are appropriate for the clinical scenario and realistic for the setting.</span>
-<span class="s2">    11. Think about materials needed for different phases: assessment, intervention, monitoring, documentation.</span>
-
-<span class="s2">    JSON SCHEMA TO FOLLOW:</span>
-<span class="s2">    The response must be a JSON array of objects. Each object represents a material with &quot;nome&quot; and &quot;descrizione&quot; fields.</span>
-
-<span class="s2">    IMPORTANT: You MUST wrap your response in ```json code blocks. The JSON should be the only content in your response.</span>
-
-<span class="s2">    EXAMPLE:</span>
-<span class="s2">    ```json</span>
-<span class="s2">    [</span>
-<span class="s2">        </span><span class="se">{{</span><span class="s2">&quot;nome&quot;: &quot;Stetoscopio&quot;, &quot;descrizione&quot;: &quot;Strumento acustico utilizzato per l&#39;auscultazione dei suoni interni del corpo, come il battito cardiaco e i suoni respiratori.&quot;</span><span class="se">}}</span><span class="s2">,</span>
-<span class="s2">        </span><span class="se">{{</span><span class="s2">&quot;nome&quot;: &quot;Sfigmomanometro aneroide&quot;, &quot;descrizione&quot;: &quot;Dispositivo per la misurazione non invasiva della pressione arteriosa, composto da un bracciale gonfiabile e un manometro.&quot;</span><span class="se">}}</span><span class="s2">,</span>
-<span class="s2">        </span><span class="se">{{</span><span class="s2">&quot;nome&quot;: &quot;Guanti monouso non sterili&quot;, &quot;descrizione&quot;: &quot;Dispositivi di protezione individuale per le mani, utilizzati per prevenire la contaminazione durante l&#39;esame del paziente o la manipolazione di materiali.&quot;</span><span class="se">}}</span>
-<span class="s2">    ]</span>
-<span class="s2">    ```</span>
-
-<span class="s2">    Remember:</span>
-<span class="s2">    - Start with ```json</span>
-<span class="s2">    - End with ```</span>
-<span class="s2">    - The content of &#39;nome&#39; and &#39;descrizione&#39; must be in Italian.</span>
-<span class="s2">    - The &#39;descrizione&#39; must be generic and reusable.</span>
+<span class="s2">    ## INSTRUCTIONS</span>
+<span class="s2">    1.  Generate a list of materials needed for this simulation.</span>
+<span class="s2">    2.  All names (&#39;nome&#39;) and descriptions (&#39;descrizione&#39;) must be in Italian.</span>
+<span class="s2">    3.  If a material from the database list fits, use its exact name.</span>
+<span class="s2">    4.  For new materials, create a specific Italian name.</span>
+<span class="s2">    5.  CRITICAL: The description for EACH material must be GENERAL and REUSABLE for a database. Do not mention the specifics of this scenario in the description.</span>
 <span class="s2">    &quot;&quot;&quot;</span></div>
-
 
 
 <div class="viewcode-block" id="generate_materials">
 <a class="viewcode-back" href="../../agents.html#agents.mat_agents.generate_materials">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">generate_materials</span><span class="p">(</span><span class="n">request</span><span class="p">:</span> <span class="n">MATModelRequest</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">MATModelResponse</span><span class="p">]:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Generates a list of materials for a medical simulation scenario.</span>
-
-<span class="sd">    This function orchestrates the generation process by retrieving existing</span>
-<span class="sd">    materials from a database, creating a detailed prompt, running an AI agent,</span>
-<span class="sd">    and validating the final output.</span>
-
-<span class="sd">    Args:</span>
-<span class="sd">        request: The request containing the scenario, patient type, target</span>
-<span class="sd">            audience, and objective exam findings.</span>
-
-<span class="sd">    Returns:</span>
-<span class="sd">        A list of generated and validated materials.</span>
-
-<span class="sd">    Raises:</span>
-<span class="sd">        HTTPException: If the generation, parsing, or validation process fails.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Generates a list of materials for a medical simulation scenario.&quot;&quot;&quot;</span>
     <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Received request to generate materials for: </span><span class="si">{</span><span class="n">request</span><span class="o">.</span><span class="n">tipologia_paziente</span><span class="si">}</span><span class="s2"> - Target: </span><span class="si">{</span><span class="n">request</span><span class="o">.</span><span class="n">target</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
 
     <span class="k">try</span><span class="p">:</span>
@@ -390,56 +326,30 @@
         <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Retrieved </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">existing_materials</span><span class="p">)</span><span class="si">}</span><span class="s2"> existing materials from database&quot;</span><span class="p">)</span>
 
         <span class="n">prompt</span> <span class="o">=</span> <span class="n">create_materials_prompt</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="n">existing_materials</span><span class="p">)</span>
-        <span class="n">agent_response</span> <span class="o">=</span> <span class="n">materials_agent</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">prompt</span><span class="p">)</span> <span class="c1"># type: ignore</span>
-        <span class="n">materials_list</span> <span class="o">=</span> <span class="n">extract_json_from_response</span><span class="p">(</span><span class="n">agent_response</span><span class="o">.</span><span class="n">content</span><span class="p">)</span>
+        
+        <span class="n">run_response</span><span class="p">:</span> <span class="n">RunResponse</span> <span class="o">=</span> <span class="n">materials_agent</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">prompt</span><span class="p">)</span> <span class="c1"># type: ignore</span>
 
-        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">materials_list</span><span class="p">,</span> <span class="nb">list</span><span class="p">):</span>
-            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Expected a list of materials from the agent.&quot;</span><span class="p">)</span>
+        <span class="n">validated_response</span> <span class="o">=</span> <span class="n">run_response</span><span class="o">.</span><span class="n">content</span>
+        
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">validated_response</span><span class="p">,</span> <span class="n">MatModelListResponse</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Agent returned unexpected type: </span><span class="si">{</span><span class="nb">type</span><span class="p">(</span><span class="n">validated_response</span><span class="p">)</span><span class="si">}</span><span class="s2">. Expected MatModelListResponse.&quot;</span><span class="p">)</span>
 
-        <span class="n">validated_materials</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">MATModelResponse</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span>
-            <span class="n">MATModelResponse</span><span class="o">.</span><span class="n">model_validate</span><span class="p">(</span><span class="n">material</span><span class="p">)</span> <span class="k">for</span> <span class="n">material</span> <span class="ow">in</span> <span class="n">materials_list</span>
-        <span class="p">]</span>
+        <span class="n">validated_materials</span> <span class="o">=</span> <span class="n">validated_response</span><span class="o">.</span><span class="n">materials</span>
 
         <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Successfully generated </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">validated_materials</span><span class="p">)</span><span class="si">}</span><span class="s2"> materials&quot;</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">validated_materials</span>
 
-    <span class="k">except</span> <span class="p">(</span><span class="n">ValidationError</span><span class="p">,</span> <span class="ne">ValueError</span><span class="p">,</span> <span class="n">json</span><span class="o">.</span><span class="n">JSONDecodeError</span><span class="p">)</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
-        <span class="n">logger</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Data validation or extraction error: </span><span class="si">{</span><span class="n">e</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">exc_info</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-        <span class="k">raise</span> <span class="n">HTTPException</span><span class="p">(</span><span class="n">status_code</span><span class="o">=</span><span class="mi">422</span><span class="p">,</span> <span class="n">detail</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;error&quot;</span><span class="p">:</span> <span class="s2">&quot;Generated content failed validation or parsing.&quot;</span><span class="p">,</span> <span class="s2">&quot;details&quot;</span><span class="p">:</span> <span class="nb">str</span><span class="p">(</span><span class="n">e</span><span class="p">)})</span>
     <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
         <span class="n">logger</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;An unexpected error occurred during material generation: </span><span class="si">{</span><span class="n">e</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">exc_info</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-        <span class="k">raise</span> <span class="n">HTTPException</span><span class="p">(</span><span class="n">status_code</span><span class="o">=</span><span class="mi">500</span><span class="p">,</span> <span class="n">detail</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;error&quot;</span><span class="p">:</span> <span class="s2">&quot;Failed to generate materials&quot;</span><span class="p">,</span> <span class="s2">&quot;message&quot;</span><span class="p">:</span> <span class="nb">str</span><span class="p">(</span><span class="n">e</span><span class="p">)})</span></div>
-
-
-
-<div class="viewcode-block" id="get_database_path">
-<a class="viewcode-back" href="../../agents.html#agents.mat_agents.get_database_path">[docs]</a>
-<span class="k">def</span><span class="w"> </span><span class="nf">get_database_path</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Constructs and returns the absolute path to the SQLite database file.</span>
-
-<span class="sd">    Returns:</span>
-<span class="sd">        The absolute path to the &#39;database.db&#39; file.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
-    <span class="n">current_dir</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">abspath</span><span class="p">(</span><span class="vm">__file__</span><span class="p">))</span>
-    <span class="c1"># Assumes the database is in the project root, three levels up from agents/</span>
-    <span class="n">root_dir</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="n">current_dir</span><span class="p">)))</span>
-    <span class="k">return</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">root_dir</span><span class="p">,</span> <span class="s2">&quot;database.db&quot;</span><span class="p">)</span></div>
+        <span class="k">raise</span> <span class="n">HTTPException</span><span class="p">(</span><span class="n">status_code</span><span class="o">=</span><span class="mi">500</span><span class="p">,</span> <span class="n">detail</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;error&quot;</span><span class="p">:</span> <span class="s2">&quot;Failed to generate valid materials&quot;</span><span class="p">,</span> <span class="s2">&quot;message&quot;</span><span class="p">:</span> <span class="nb">str</span><span class="p">(</span><span class="n">e</span><span class="p">)})</span></div>
 
 
 
 <div class="viewcode-block" id="get_existing_materials">
 <a class="viewcode-back" href="../../agents.html#agents.mat_agents.get_existing_materials">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">get_existing_materials</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]]:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Retrieves all existing materials from the SQLite database.</span>
-
-<span class="sd">    Connects to the database, queries the &#39;Materiale&#39; table, and returns a</span>
-<span class="sd">    list of all materials.</span>
-
-<span class="sd">    Returns:</span>
-<span class="sd">        A list of dictionaries, where each dictionary represents a material</span>
-<span class="sd">        with its ID, name, and description. Returns an empty list on failure.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
-    <span class="n">db_path</span> <span class="o">=</span> <span class="n">get_database_path</span><span class="p">()</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Retrieves all existing materials from the SQLite database.&quot;&quot;&quot;</span>
+    <span class="n">db_path</span> <span class="o">=</span> <span class="n">DATABASE_PATH</span>
     <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">db_path</span><span class="p">):</span>
         <span class="n">logger</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Database not found at </span><span class="si">{</span><span class="n">db_path</span><span class="si">}</span><span class="s2">, returning no existing materials.&quot;</span><span class="p">)</span>
         <span class="k">return</span> <span class="p">[]</span>
@@ -451,7 +361,7 @@
         <span class="n">cursor</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="s2">&quot;SELECT id_materiale, nome, descrizione FROM Materiale&quot;</span><span class="p">)</span>
         <span class="n">materials</span> <span class="o">=</span> <span class="p">[</span><span class="nb">dict</span><span class="p">(</span><span class="n">row</span><span class="p">)</span> <span class="k">for</span> <span class="n">row</span> <span class="ow">in</span> <span class="n">cursor</span><span class="o">.</span><span class="n">fetchall</span><span class="p">()]</span>
         <span class="n">conn</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
-        <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Found </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">materials</span><span class="p">)</span><span class="si">}</span><span class="s2"> materials in the database.&quot;</span><span class="p">)</span>
+        <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Found </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">materials</span><span class="p">)</span><span class="si">}</span><span class="s2"> materials in the database.&quot;</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">materials</span>
     <span class="k">except</span> <span class="n">sqlite3</span><span class="o">.</span><span class="n">Error</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
         <span class="n">logger</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Database error while querying materials: </span><span class="si">{</span><span class="n">e</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">exc_info</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>

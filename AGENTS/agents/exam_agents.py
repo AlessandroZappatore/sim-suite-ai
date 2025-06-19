@@ -4,21 +4,18 @@ This module contains the core components for the AI-driven lab exam
 creation process. It leverages agno's structured output capabilities
 to generate and validate lab results directly against Pydantic models.
 
-Version: 2.1 (Fixed return type from agent run)
+Version: 2.1
 """
 
 import logging
 from agno.agent import Agent, RunResponse
 from fastapi import HTTPException
 
-# Assumiamo che questi import funzionino come prima
-from models.exam_models import LabExamRequest, LabExamResponse
-from utils.common import get_small_model, get_knowledge_base
+from models import LabExamRequest, LabExamResponse
+from utils import get_small_model, get_knowledge_base
 
-# Configure logging
 logger = logging.getLogger(__name__)
 
-# --- Agent Definition (Refactored) ---
 exam_agent = Agent(
     name="Lab Exam Generator",
     role="An expert clinical pathologist who generates realistic lab results for medical simulations.",

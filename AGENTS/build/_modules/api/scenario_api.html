@@ -256,8 +256,10 @@
 <span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">Any</span>
 
 <span class="kn">from</span><span class="w"> </span><span class="nn">fastapi</span><span class="w"> </span><span class="kn">import</span> <span class="n">APIRouter</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">agents.scenario_agents</span><span class="w"> </span><span class="kn">import</span> <span class="n">generate_medical_scenario</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">models.scenario_models</span><span class="w"> </span><span class="kn">import</span> <span class="n">FullScenario</span><span class="p">,</span> <span class="n">ScenarioRequest</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">agents</span><span class="w"> </span><span class="kn">import</span> <span class="n">generate_medical_scenario</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">models</span><span class="w"> </span><span class="kn">import</span> <span class="n">FullScenario</span><span class="p">,</span> <span class="n">ScenarioRequest</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">config</span><span class="w"> </span><span class="kn">import</span> <span class="n">DIFFICULTY_LEVELS_CONFIG</span>
 
 <span class="c1"># Configure logging</span>
 <span class="n">logger</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="vm">__name__</span><span class="p">)</span>
@@ -294,35 +296,8 @@
 <a class="viewcode-back" href="../../api.html#api.scenario_api.get_difficulty_levels">[docs]</a>
 <span class="nd">@router</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;/difficulty-levels&quot;</span><span class="p">,</span> <span class="n">summary</span><span class="o">=</span><span class="s2">&quot;Get Available Difficulty Levels&quot;</span><span class="p">)</span>
 <span class="k">def</span><span class="w"> </span><span class="nf">get_difficulty_levels</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Retrieves the available difficulty levels for scenario generation.</span>
-
-<span class="sd">    Provides a list of supported difficulty levels, each with a value, label,</span>
-<span class="sd">    and description in Italian, along with the default level.</span>
-
-<span class="sd">    Returns:</span>
-<span class="sd">        A dictionary containing a list of difficulty level objects and the</span>
-<span class="sd">        default value.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
-    <span class="k">return</span> <span class="p">{</span>
-        <span class="s2">&quot;difficulty_levels&quot;</span><span class="p">:</span> <span class="p">[</span>
-            <span class="p">{</span>
-                <span class="s2">&quot;value&quot;</span><span class="p">:</span> <span class="s2">&quot;Facile&quot;</span><span class="p">,</span>
-                <span class="s2">&quot;label&quot;</span><span class="p">:</span> <span class="s2">&quot;Facile&quot;</span><span class="p">,</span>
-                <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;Scenario semplice con poche complicazioni, parametri stabili, evoluzione prevedibile&quot;</span>
-            <span class="p">},</span>
-            <span class="p">{</span>
-                <span class="s2">&quot;value&quot;</span><span class="p">:</span> <span class="s2">&quot;Medio&quot;</span><span class="p">,</span>
-                <span class="s2">&quot;label&quot;</span><span class="p">:</span> <span class="s2">&quot;Medio&quot;</span><span class="p">,</span>
-                <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;Scenario con complessità moderata, 1-2 complicazioni gestibili, richiede pensiero critico&quot;</span>
-            <span class="p">},</span>
-            <span class="p">{</span>
-                <span class="s2">&quot;value&quot;</span><span class="p">:</span> <span class="s2">&quot;Difficile&quot;</span><span class="p">,</span>
-                <span class="s2">&quot;label&quot;</span><span class="p">:</span> <span class="s2">&quot;Difficile&quot;</span><span class="p">,</span>
-                <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;Scenario complesso con multiple complicazioni, parametri critici, evoluzione rapida&quot;</span>
-            <span class="p">}</span>
-        <span class="p">],</span>
-        <span class="s2">&quot;default&quot;</span><span class="p">:</span> <span class="s2">&quot;Facile&quot;</span>
-    <span class="p">}</span></div>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Retrieves the available difficulty levels for scenario generation.&quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="n">DIFFICULTY_LEVELS_CONFIG</span></div>
 
 </pre></div>
         </article>

@@ -3,17 +3,16 @@
 This module defines the API routes for generating necessary materials
 for a given medical simulation scenario. It includes an endpoint for
 generating a list of materials and another for retrieving available
-patient and target audience types.
+patient types.
 """
 
 import logging
 from typing import List, Dict
 
 from fastapi import APIRouter
-from agents.mat_agents import generate_materials
-from models.mat_model import MATModelRequest, MATModelResponse
+from agents import generate_materials
+from models import MATModelRequest, MATModelResponse
 
-# Configure logging
 logger = logging.getLogger(__name__)
 
 router = APIRouter(
@@ -24,38 +23,21 @@ router = APIRouter(
 
 @router.post("/generate-materials", response_model=List[MATModelResponse], summary="Generate Necessary Materials for Scenario")
 def generate_materials_endpoint(request: MATModelRequest) -> List[MATModelResponse]:
-    """Generates a list of necessary materials for a medical simulation.
-
-    Args:
-        request: A request object containing the scenario description,
-            patient type, target audience, and objective exam findings.
-
-    Returns:
-        A list of generated materials, each with a name and description.
-    """
+    """Generates a list of necessary materials for a medical simulation."""
     logger.info(f"Received request to generate materials: {request.model_dump()}")
     return generate_materials(request)
 
 
-@router.get("/patient-types", summary="Get Available Patient Types")
-def get_patient_types() -> Dict[str, List[str]]:
-    """Retrieves the lists of available patient types and target audiences.
-
-    This endpoint provides supported values for creating material generation
-    requests, which can be used to populate frontend selection inputs.
-
-    Returns:
-        A dictionary containing lists of supported 'patient_types' and
-        'target_audiences'.
+@router.get("/form-options", summary="Get Available Options for Forms")
+def get_form_options() -> Dict[str, List[str]]:
     """
+    Retrieves the lists of available patient types dynamically from the
+    request model to populate frontend selection inputs. The 'target'
+    field is a free-text string and is not included here.
+    """
+    patient_type_field = MATModelRequest.model_fields['tipologia_paziente']
+    allowed_patient_types = list(patient_type_field.annotation.__args__) if patient_type_field.annotation and hasattr(patient_type_field.annotation, '__args__') else []
+    
     return {
-        "patient_types": ["Adulto", "Pediatrico", "Neonatale", "Prematuro"],
-        "target_audiences": [
-            "Studenti di Medicina",
-            "Infermieri",
-            "Medici Specialisti",
-            "Medici di Base",
-            "Studenti di Infermieristica",
-            "Operatori Sanitari"
-        ]
+        "patient_types": allowed_patient_types,
     }

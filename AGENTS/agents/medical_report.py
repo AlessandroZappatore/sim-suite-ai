@@ -11,14 +11,12 @@ import logging
 from agno.agent import Agent, RunResponse
 from fastapi import HTTPException
 
-from models.medical_report_models import MedicalReportRequest, MedicalReportResponse
-from utils.common import get_small_model, get_report_knowledge_base
+from models import MedicalReportRequest, MedicalReportResponse
+from utils import get_small_model, get_report_knowledge_base
 
-# Configure logging
 logger = logging.getLogger(__name__)
 
 
-# --- Agent Definition ---
 medical_report_agent = Agent(
     name="Medical Report Generator",
     role="An expert radiologist and clinician who generates detailed medical reports for various diagnostic examinations.",

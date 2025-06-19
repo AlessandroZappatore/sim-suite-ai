@@ -248,17 +248,16 @@
 <span class="sd">This module defines the API routes for generating necessary materials</span>
 <span class="sd">for a given medical simulation scenario. It includes an endpoint for</span>
 <span class="sd">generating a list of materials and another for retrieving available</span>
-<span class="sd">patient and target audience types.</span>
+<span class="sd">patient types.</span>
 <span class="sd">&quot;&quot;&quot;</span>
 
 <span class="kn">import</span><span class="w"> </span><span class="nn">logging</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">List</span><span class="p">,</span> <span class="n">Dict</span>
 
 <span class="kn">from</span><span class="w"> </span><span class="nn">fastapi</span><span class="w"> </span><span class="kn">import</span> <span class="n">APIRouter</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">agents.mat_agents</span><span class="w"> </span><span class="kn">import</span> <span class="n">generate_materials</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">models.mat_model</span><span class="w"> </span><span class="kn">import</span> <span class="n">MATModelRequest</span><span class="p">,</span> <span class="n">MATModelResponse</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">agents</span><span class="w"> </span><span class="kn">import</span> <span class="n">generate_materials</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">models</span><span class="w"> </span><span class="kn">import</span> <span class="n">MATModelRequest</span><span class="p">,</span> <span class="n">MATModelResponse</span>
 
-<span class="c1"># Configure logging</span>
 <span class="n">logger</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="vm">__name__</span><span class="p">)</span>
 
 <span class="n">router</span> <span class="o">=</span> <span class="n">APIRouter</span><span class="p">(</span>
@@ -271,43 +270,26 @@
 <a class="viewcode-back" href="../../api.html#api.mat_api.generate_materials_endpoint">[docs]</a>
 <span class="nd">@router</span><span class="o">.</span><span class="n">post</span><span class="p">(</span><span class="s2">&quot;/generate-materials&quot;</span><span class="p">,</span> <span class="n">response_model</span><span class="o">=</span><span class="n">List</span><span class="p">[</span><span class="n">MATModelResponse</span><span class="p">],</span> <span class="n">summary</span><span class="o">=</span><span class="s2">&quot;Generate Necessary Materials for Scenario&quot;</span><span class="p">)</span>
 <span class="k">def</span><span class="w"> </span><span class="nf">generate_materials_endpoint</span><span class="p">(</span><span class="n">request</span><span class="p">:</span> <span class="n">MATModelRequest</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">MATModelResponse</span><span class="p">]:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Generates a list of necessary materials for a medical simulation.</span>
-
-<span class="sd">    Args:</span>
-<span class="sd">        request: A request object containing the scenario description,</span>
-<span class="sd">            patient type, target audience, and objective exam findings.</span>
-
-<span class="sd">    Returns:</span>
-<span class="sd">        A list of generated materials, each with a name and description.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Generates a list of necessary materials for a medical simulation.&quot;&quot;&quot;</span>
     <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Received request to generate materials: </span><span class="si">{</span><span class="n">request</span><span class="o">.</span><span class="n">model_dump</span><span class="p">()</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">generate_materials</span><span class="p">(</span><span class="n">request</span><span class="p">)</span></div>
 
 
 
-<div class="viewcode-block" id="get_patient_types">
-<a class="viewcode-back" href="../../api.html#api.mat_api.get_patient_types">[docs]</a>
-<span class="nd">@router</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;/patient-types&quot;</span><span class="p">,</span> <span class="n">summary</span><span class="o">=</span><span class="s2">&quot;Get Available Patient Types&quot;</span><span class="p">)</span>
-<span class="k">def</span><span class="w"> </span><span class="nf">get_patient_types</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]]:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Retrieves the lists of available patient types and target audiences.</span>
-
-<span class="sd">    This endpoint provides supported values for creating material generation</span>
-<span class="sd">    requests, which can be used to populate frontend selection inputs.</span>
-
-<span class="sd">    Returns:</span>
-<span class="sd">        A dictionary containing lists of supported &#39;patient_types&#39; and</span>
-<span class="sd">        &#39;target_audiences&#39;.</span>
+<div class="viewcode-block" id="get_form_options">
+<a class="viewcode-back" href="../../api.html#api.mat_api.get_form_options">[docs]</a>
+<span class="nd">@router</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;/form-options&quot;</span><span class="p">,</span> <span class="n">summary</span><span class="o">=</span><span class="s2">&quot;Get Available Options for Forms&quot;</span><span class="p">)</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">get_form_options</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]]:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Retrieves the lists of available patient types dynamically from the</span>
+<span class="sd">    request model to populate frontend selection inputs. The &#39;target&#39;</span>
+<span class="sd">    field is a free-text string and is not included here.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">patient_type_field</span> <span class="o">=</span> <span class="n">MATModelRequest</span><span class="o">.</span><span class="n">model_fields</span><span class="p">[</span><span class="s1">&#39;tipologia_paziente&#39;</span><span class="p">]</span>
+    <span class="n">allowed_patient_types</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">patient_type_field</span><span class="o">.</span><span class="n">annotation</span><span class="o">.</span><span class="n">__args__</span><span class="p">)</span> <span class="k">if</span> <span class="n">patient_type_field</span><span class="o">.</span><span class="n">annotation</span> <span class="ow">and</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">patient_type_field</span><span class="o">.</span><span class="n">annotation</span><span class="p">,</span> <span class="s1">&#39;__args__&#39;</span><span class="p">)</span> <span class="k">else</span> <span class="p">[]</span>
+    
     <span class="k">return</span> <span class="p">{</span>
-        <span class="s2">&quot;patient_types&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;Adulto&quot;</span><span class="p">,</span> <span class="s2">&quot;Pediatrico&quot;</span><span class="p">,</span> <span class="s2">&quot;Neonatale&quot;</span><span class="p">,</span> <span class="s2">&quot;Prematuro&quot;</span><span class="p">],</span>
-        <span class="s2">&quot;target_audiences&quot;</span><span class="p">:</span> <span class="p">[</span>
-            <span class="s2">&quot;Studenti di Medicina&quot;</span><span class="p">,</span>
-            <span class="s2">&quot;Infermieri&quot;</span><span class="p">,</span>
-            <span class="s2">&quot;Medici Specialisti&quot;</span><span class="p">,</span>
-            <span class="s2">&quot;Medici di Base&quot;</span><span class="p">,</span>
-            <span class="s2">&quot;Studenti di Infermieristica&quot;</span><span class="p">,</span>
-            <span class="s2">&quot;Operatori Sanitari&quot;</span>
-        <span class="p">]</span>
+        <span class="s2">&quot;patient_types&quot;</span><span class="p">:</span> <span class="n">allowed_patient_types</span><span class="p">,</span>
     <span class="p">}</span></div>
 
 </pre></div>

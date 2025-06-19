@@ -298,6 +298,19 @@
         <span class="n">description</span><span class="o">=</span><span class="s2">&quot;Description of the material.&quot;</span>
     <span class="p">)</span></div>
 
+
+<div class="viewcode-block" id="MatModelListResponse">
+<a class="viewcode-back" href="../../models.html#models.mat_model.MatModelListResponse">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">MatModelListResponse</span><span class="p">(</span><span class="n">BaseModel</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Defines the response model for a list of generated Medical Assessment Tools (MAT).</span>
+
+<span class="sd">    Attributes:</span>
+<span class="sd">        materials: A list of generated materials or tools.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">materials</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="n">MATModelResponse</span><span class="p">]</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span>
+        <span class="n">description</span><span class="o">=</span><span class="s2">&quot;List of generated materials or tools.&quot;</span>
+    <span class="p">)</span></div>
+
 </pre></div>
         </article>
       </div>

@@ -253,7 +253,7 @@
 <span class="sd">&quot;&quot;&quot;</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">__future__</span><span class="w"> </span><span class="kn">import</span> <span class="n">annotations</span>
 
-<span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">List</span><span class="p">,</span> <span class="n">Optional</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">List</span><span class="p">,</span> <span class="n">Optional</span><span class="p">,</span> <span class="n">Literal</span>
 
 <span class="kn">from</span><span class="w"> </span><span class="nn">pydantic</span><span class="w"> </span><span class="kn">import</span> <span class="n">BaseModel</span><span class="p">,</span> <span class="n">Field</span>
 
@@ -315,8 +315,9 @@
 <span class="sd">        esame_obiettivo: The objective physical examination findings.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">descrizione_scenario</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span><span class="n">description</span><span class="o">=</span><span class="s2">&quot;A detailed description of the clinical scenario, including patient status and pathology.&quot;</span><span class="p">)</span>
-    <span class="n">tipologia_paziente</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span><span class="n">default</span><span class="o">=</span><span class="s2">&quot;Adulto&quot;</span><span class="p">,</span> <span class="n">description</span><span class="o">=</span><span class="s2">&quot;Type of patient to adjust reference ranges (e.g., &#39;Adulto&#39;, &#39;Pediatrico&#39;).&quot;</span><span class="p">)</span>
-    <span class="n">esame_obiettivo</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span><span class="n">description</span><span class="o">=</span><span class="s2">&quot;Objective exam like eyes, neck, chest, abdomen, etc.&quot;</span><span class="p">)</span></div>
+    <span class="n">tipologia_paziente</span><span class="p">:</span> <span class="n">Literal</span><span class="p">[</span><span class="s2">&quot;Adulto&quot;</span><span class="p">,</span> <span class="s2">&quot;Pediatrico&quot;</span><span class="p">,</span> <span class="s2">&quot;Neonatale&quot;</span><span class="p">,</span> <span class="s2">&quot;Prematuro&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span><span class="n">description</span><span class="o">=</span><span class="s2">&quot;Type of patient (Adult, Pediatric, Neonatal, Premature).&quot;</span><span class="p">)</span>
+    <span class="n">esame_obiettivo</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span><span class="n">description</span><span class="o">=</span><span class="s2">&quot;Objective exam like eyes, neck, chest, abdomen, etc.&quot;</span><span class="p">)</span>
+    <span class="n">patologia</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span><span class="n">default</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">description</span><span class="o">=</span><span class="s2">&quot;Optional pathology to focus the lab tests on (e.g., &#39;Anemia&#39;, &#39;Diabete&#39;).&quot;</span><span class="p">)</span></div>
 
 </pre></div>
         </article>

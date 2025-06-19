@@ -9,13 +9,16 @@ The `__all__` variable explicitly defines the public API of this package.
 
 from .exam_agents import exam_agent, generate_lab_exams
 from .medical_report import medical_report_agent, generate_medical_report
-from .scenario_agents import medical_team, info_agent, timeline_agent, script_agent
+from .scenario_agents import medical_team, info_agent, timeline_agent, script_agent, generate_medical_scenario
+from .mat_agents import materials_agent, generate_materials
 
 __all__ = [
     # Scenario agents
-    "medical_team", "info_agent", "timeline_agent", "script_agent",
+    "medical_team", "info_agent", "timeline_agent", "script_agent", "generate_medical_scenario",
     # Exam agents
     "exam_agent", "generate_lab_exams",
     # Medical report agents
-    "medical_report_agent", "generate_medical_report"
+    "medical_report_agent", "generate_medical_report",
+    # MAT agents
+    "materials_agent", "generate_materials"
 ]

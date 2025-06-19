@@ -258,21 +258,19 @@
 <span id="agents-exam-agents-module"></span><h2>agents.exam_agents module<a class="headerlink" href="#module-agents.exam_agents" title="Link to this heading">¶</a></h2>
 <p>Defines the AI agent and logic for medical exam generation.</p>
 <p>This module contains the core components for the AI-driven lab exam
-creation process. It defines a specialist agent for generating lab results,
-a function to create a detailed prompt, and the main function that
-orchestrates the generation and validation pipeline.</p>
-<p>Version: 1.1</p>
+creation process. It leverages agno’s structured output capabilities
+to generate and validate lab results directly against Pydantic models.</p>
+<p>Version: 2.1</p>
 <dl class="py function">
 <dt class="sig sig-object py" id="agents.exam_agents.create_exam_prompt">
 <span class="sig-prename descclassname"><span class="pre">agents.exam_agents.</span></span><span class="sig-name descname"><span class="pre">create_exam_prompt</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">request</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="models.html#models.exam_models.LabExamRequest" title="models.exam_models.LabExamRequest"><span class="pre">LabExamRequest</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">str</span></span></span><a class="reference internal" href="_modules/agents/exam_agents.html#create_exam_prompt"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#agents.exam_agents.create_exam_prompt" title="Link to this definition">¶</a></dt>
-<dd><p>Creates the detailed prompt for the lab exam generation agent.</p>
+<dd><p>Creates the simplified prompt for the lab exam generation agent.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>request</strong> – The user’s request containing the clinical scenario,
-patient type, and objective exam findings.</p>
+<dd class="field-odd"><p><strong>request</strong> – The user’s request containing the clinical scenario.</p>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>A fully formatted prompt string to be sent to the exam_agent.</p>
+<dd class="field-even"><p>A formatted prompt string containing the essential clinical information.</p>
 </dd>
 </dl>
 </dd></dl>
@@ -280,19 +278,18 @@ patient type, and objective exam findings.</p>
 <dl class="py function">
 <dt class="sig sig-object py" id="agents.exam_agents.generate_lab_exams">
 <span class="sig-prename descclassname"><span class="pre">agents.exam_agents.</span></span><span class="sig-name descname"><span class="pre">generate_lab_exams</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">request</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="models.html#models.exam_models.LabExamRequest" title="models.exam_models.LabExamRequest"><span class="pre">LabExamRequest</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="models.html#models.exam_models.LabExamResponse" title="models.exam_models.LabExamResponse"><span class="pre">LabExamResponse</span></a></span></span><a class="reference internal" href="_modules/agents/exam_agents.html#generate_lab_exams"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#agents.exam_agents.generate_lab_exams" title="Link to this definition">¶</a></dt>
-<dd><p>Generates laboratory exams for a medical scenario.</p>
-<p>This function orchestrates the exam generation process by creating a
-prompt, running the agent, and validating the final output.</p>
+<dd><p>Generates and validates laboratory exams for a medical scenario.</p>
+<p>This function uses an agno agent with a specified <cite>response_model</cite>
+to directly generate a validated Pydantic object.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>request</strong> – The lab exam request containing the scenario description
-and patient type.</p>
+<dd class="field-odd"><p><strong>request</strong> – The lab exam request.</p>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>The generated and validated laboratory exams.</p>
+<dd class="field-even"><p>The generated and validated laboratory exams as a LabExamResponse object.</p>
 </dd>
 <dt class="field-odd">Raises<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>HTTPException</strong> – If the generation, parsing, or validation fails.</p>
+<dd class="field-odd"><p><strong>HTTPException</strong> – If the generation or validation by the agent fails.</p>
 </dd>
 </dl>
 </dd></dl>
@@ -302,75 +299,25 @@ and patient type.</p>
 <span id="agents-mat-agents-module"></span><h2>agents.mat_agents module<a class="headerlink" href="#module-agents.mat_agents" title="Link to this heading">¶</a></h2>
 <p>Defines the AI agent and logic for medical materials generation.</p>
 <p>This module contains the core components for generating lists of necessary
-materials for medical simulations. It defines a specialist agent, functions
-for creating detailed prompts that incorporate existing database materials,
-and the main orchestration logic that interacts with a SQLite database to
-ensure data consistency and avoid duplication.</p>
-<p>Version: 2.0</p>
+materials for medical simulations. It leverages agno’s structured output
+to ensure the generated list of materials is correctly formatted and validated.</p>
+<p>Version: 3.2</p>
 <dl class="py function">
 <dt class="sig sig-object py" id="agents.mat_agents.create_materials_prompt">
 <span class="sig-prename descclassname"><span class="pre">agents.mat_agents.</span></span><span class="sig-name descname"><span class="pre">create_materials_prompt</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">request</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="models.html#models.mat_model.MATModelRequest" title="models.mat_model.MATModelRequest"><span class="pre">MATModelRequest</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">existing_materials</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Any</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">str</span></span></span><a class="reference internal" href="_modules/agents/mat_agents.html#create_materials_prompt"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#agents.mat_agents.create_materials_prompt" title="Link to this definition">¶</a></dt>
-<dd><p>Creates the detailed prompt for the materials generation agent.</p>
-<p>This function constructs a comprehensive prompt that includes the scenario
-context and a list of existing materials from the database to guide the
-agent in its generation task.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>request</strong> – The user’s request containing the scenario details.</p></li>
-<li><p><strong>existing_materials</strong> – A list of materials already present in the database.</p></li>
-</ul>
-</dd>
-<dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>A fully formatted prompt string for the materials_agent.</p>
-</dd>
-</dl>
+<dd><p>Creates the simplified prompt for the materials generation agent.</p>
 </dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="agents.mat_agents.generate_materials">
 <span class="sig-prename descclassname"><span class="pre">agents.mat_agents.</span></span><span class="sig-name descname"><span class="pre">generate_materials</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">request</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="models.html#models.mat_model.MATModelRequest" title="models.mat_model.MATModelRequest"><span class="pre">MATModelRequest</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="models.html#models.mat_model.MATModelResponse" title="models.mat_model.MATModelResponse"><span class="pre">MATModelResponse</span></a><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="_modules/agents/mat_agents.html#generate_materials"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#agents.mat_agents.generate_materials" title="Link to this definition">¶</a></dt>
 <dd><p>Generates a list of materials for a medical simulation scenario.</p>
-<p>This function orchestrates the generation process by retrieving existing
-materials from a database, creating a detailed prompt, running an AI agent,
-and validating the final output.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>request</strong> – The request containing the scenario, patient type, target
-audience, and objective exam findings.</p>
-</dd>
-<dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>A list of generated and validated materials.</p>
-</dd>
-<dt class="field-odd">Raises<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>HTTPException</strong> – If the generation, parsing, or validation process fails.</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py function">
-<dt class="sig sig-object py" id="agents.mat_agents.get_database_path">
-<span class="sig-prename descclassname"><span class="pre">agents.mat_agents.</span></span><span class="sig-name descname"><span class="pre">get_database_path</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">str</span></span></span><a class="reference internal" href="_modules/agents/mat_agents.html#get_database_path"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#agents.mat_agents.get_database_path" title="Link to this definition">¶</a></dt>
-<dd><p>Constructs and returns the absolute path to the SQLite database file.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Returns<span class="colon">:</span></dt>
-<dd class="field-odd"><p>The absolute path to the ‘database.db’ file.</p>
-</dd>
-</dl>
 </dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="agents.mat_agents.get_existing_materials">
 <span class="sig-prename descclassname"><span class="pre">agents.mat_agents.</span></span><span class="sig-name descname"><span class="pre">get_existing_materials</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Any</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="_modules/agents/mat_agents.html#get_existing_materials"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#agents.mat_agents.get_existing_materials" title="Link to this definition">¶</a></dt>
 <dd><p>Retrieves all existing materials from the SQLite database.</p>
-<p>Connects to the database, queries the ‘Materiale’ table, and returns a
-list of all materials.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Returns<span class="colon">:</span></dt>
-<dd class="field-odd"><p>A list of dictionaries, where each dictionary represents a material
-with its ID, name, and description. Returns an empty list on failure.</p>
-</dd>
-</dl>
 </dd></dl>
 
 </section>
@@ -378,21 +325,19 @@ with its ID, name, and description. Returns an empty list on failure.</p>
 <span id="agents-medical-report-module"></span><h2>agents.medical_report module<a class="headerlink" href="#module-agents.medical_report" title="Link to this heading">¶</a></h2>
 <p>Defines the AI agent and logic for medical report generation.</p>
 <p>This module contains the core components for the AI-driven medical report
-creation process. It defines a specialist agent for generating reports, a
-function to create a detailed prompt for the agent, and the main function
-that orchestrates the generation and validation pipeline.</p>
-<p>Version: 1.0</p>
+creation process. It leverages agno’s structured output to ensure the
+generated report is correctly formatted and validated against a Pydantic model.</p>
+<p>Version: 2.0 (Refactored to use agno’s response_model)</p>
 <dl class="py function">
 <dt class="sig sig-object py" id="agents.medical_report.create_medical_report_prompt">
 <span class="sig-prename descclassname"><span class="pre">agents.medical_report.</span></span><span class="sig-name descname"><span class="pre">create_medical_report_prompt</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">request</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="models.html#models.medical_report_models.MedicalReportRequest" title="models.medical_report_models.MedicalReportRequest"><span class="pre">MedicalReportRequest</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">str</span></span></span><a class="reference internal" href="_modules/agents/medical_report.html#create_medical_report_prompt"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#agents.medical_report.create_medical_report_prompt" title="Link to this definition">¶</a></dt>
-<dd><p>Creates the detailed prompt for the medical report generation agent.</p>
+<dd><p>Creates the simplified prompt for the medical report generation agent.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>request</strong> – The user’s request containing clinical context, patient type,
-and examination type.</p>
+<dd class="field-odd"><p><strong>request</strong> – The user’s request containing the clinical context.</p>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>A fully formatted prompt string to be sent to the medical_report_agent.</p>
+<dd class="field-even"><p>A fully formatted prompt string for the medical_report_agent.</p>
 </dd>
 </dl>
 </dd></dl>
@@ -400,19 +345,18 @@ and examination type.</p>
 <dl class="py function">
 <dt class="sig sig-object py" id="agents.medical_report.generate_medical_report">
 <span class="sig-prename descclassname"><span class="pre">agents.medical_report.</span></span><span class="sig-name descname"><span class="pre">generate_medical_report</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">request</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="models.html#models.medical_report_models.MedicalReportRequest" title="models.medical_report_models.MedicalReportRequest"><span class="pre">MedicalReportRequest</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="models.html#models.medical_report_models.MedicalReportResponse" title="models.medical_report_models.MedicalReportResponse"><span class="pre">MedicalReportResponse</span></a></span></span><a class="reference internal" href="_modules/agents/medical_report.html#generate_medical_report"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#agents.medical_report.generate_medical_report" title="Link to this definition">¶</a></dt>
-<dd><p>Generates a medical report for a diagnostic examination.</p>
-<p>This function orchestrates the report generation process by creating a
-prompt, running the agent, and validating the final output.</p>
+<dd><p>Generates and validates a medical report for a diagnostic examination.</p>
+<p>This function uses an agno agent with a specified <cite>response_model</cite>
+to directly generate a validated Pydantic object.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>request</strong> – The medical report request containing the scenario, patient
-type, and exam type.</p>
+<dd class="field-odd"><p><strong>request</strong> – The medical report request.</p>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>The generated and validated medical report.</p>
 </dd>
 <dt class="field-odd">Raises<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>HTTPException</strong> – If the generation, parsing, or validation fails.</p>
+<dd class="field-odd"><p><strong>HTTPException</strong> – If the generation or validation by the agent fails.</p>
 </dd>
 </dl>
 </dd></dl>
@@ -424,43 +368,18 @@ type, and exam type.</p>
 <p>This module contains the core components for the AI-driven scenario creation
 process. It defines specialist agents for different parts of a scenario
 (initial info, timeline, script), functions to generate detailed prompts, and
-a MedicalScenarioTeam class to orchestrate the generation pipeline.</p>
-<p>Version: 4.2.0</p>
+a MedicalScenarioTeam class to orchestrate the generation pipeline using
+agno’s structured output capabilities.</p>
+<p>Version: 5.0.1</p>
 <dl class="py class">
 <dt class="sig sig-object py" id="agents.scenario_agents.MedicalScenarioTeam">
 <em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">agents.scenario_agents.</span></span><span class="sig-name descname"><span class="pre">MedicalScenarioTeam</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">members</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">Agent</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/agents/scenario_agents.html#MedicalScenarioTeam"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#agents.scenario_agents.MedicalScenarioTeam" title="Link to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
 <p>Manages a team of agents to generate a complete medical scenario.</p>
-<p>This class orchestrates a multi-step pipeline where each agent contributes
-its specialty in sequence to build a rich, detailed, and validated
-medical simulation scenario.</p>
-<dl class="py attribute">
-<dt class="sig sig-object py" id="agents.scenario_agents.MedicalScenarioTeam.members">
-<span class="sig-name descname"><span class="pre">members</span></span><a class="headerlink" href="#agents.scenario_agents.MedicalScenarioTeam.members" title="Link to this definition">¶</a></dt>
-<dd><p>A dictionary mapping agent names to agent instances.</p>
-</dd></dl>
-
 <dl class="py method">
 <dt class="sig sig-object py" id="agents.scenario_agents.MedicalScenarioTeam.run">
 <span class="sig-name descname"><span class="pre">run</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">request</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="models.html#models.scenario_models.ScenarioRequest" title="models.scenario_models.ScenarioRequest"><span class="pre">ScenarioRequest</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="models.html#models.scenario_models.FullScenario" title="models.scenario_models.FullScenario"><span class="pre">FullScenario</span></a></span></span><a class="reference internal" href="_modules/agents/scenario_agents.html#MedicalScenarioTeam.run"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#agents.scenario_agents.MedicalScenarioTeam.run" title="Link to this definition">¶</a></dt>
-<dd><p>Executes the full scenario generation pipeline.</p>
-<p>The pipeline proceeds in the following order:
-1.  The <cite>Scenario Info Generator</cite> creates the base scenario.
-2.  The <cite>Clinical Timeline Generator</cite> adds the evolving timeline.
-3.  The <cite>Patient Script Writer</cite> creates the patient’s script.
-4.  The final result is validated against the FullScenario model.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>request</strong> – The initial request from the user.</p>
-</dd>
-<dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>The complete and validated medical scenario.</p>
-</dd>
-<dt class="field-odd">Raises<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>HTTPException</strong> – If any step of the generation, validation, or
-    parsing fails.</p>
-</dd>
-</dl>
+<dd><p>Executes the full scenario generation pipeline using validated Pydantic objects.</p>
 </dd></dl>
 
 </dd></dl>
@@ -468,73 +387,25 @@ medical simulation scenario.</p>
 <dl class="py function">
 <dt class="sig sig-object py" id="agents.scenario_agents.create_info_prompt">
 <span class="sig-prename descclassname"><span class="pre">agents.scenario_agents.</span></span><span class="sig-name descname"><span class="pre">create_info_prompt</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">request</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="models.html#models.scenario_models.ScenarioRequest" title="models.scenario_models.ScenarioRequest"><span class="pre">ScenarioRequest</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">str</span></span></span><a class="reference internal" href="_modules/agents/scenario_agents.html#create_info_prompt"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#agents.scenario_agents.create_info_prompt" title="Link to this definition">¶</a></dt>
-<dd><p>Creates the detailed prompt for the Scenario Info Generator agent.</p>
-<p>This function constructs a comprehensive prompt that includes user request
-details, difficulty-specific guidelines, formatting rules, and the exact
-JSON schema the agent must follow.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>request</strong> – The user’s request object containing the base parameters
-for the scenario.</p>
-</dd>
-<dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>A fully formatted prompt string to be sent to the info_agent.</p>
-</dd>
-</dl>
+<dd><p>Creates prompt for the Scenario Info Generator agent.</p>
 </dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="agents.scenario_agents.create_script_prompt">
-<span class="sig-prename descclassname"><span class="pre">agents.scenario_agents.</span></span><span class="sig-name descname"><span class="pre">create_script_prompt</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">context</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Any</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">str</span></span></span><a class="reference internal" href="_modules/agents/scenario_agents.html#create_script_prompt"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#agents.scenario_agents.create_script_prompt" title="Link to this definition">¶</a></dt>
-<dd><p>Creates the detailed prompt for the Patient Script Writer agent.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>context</strong> – A dictionary containing the complete scenario data,
-including the timeline, to inform the script.</p>
-</dd>
-<dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>A fully formatted prompt string for the script_agent.</p>
-</dd>
-</dl>
+<span class="sig-prename descclassname"><span class="pre">agents.scenario_agents.</span></span><span class="sig-name descname"><span class="pre">create_script_prompt</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">full_context</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="models.html#models.scenario_models.FullScenario" title="models.scenario_models.FullScenario"><span class="pre">FullScenario</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">str</span></span></span><a class="reference internal" href="_modules/agents/scenario_agents.html#create_script_prompt"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#agents.scenario_agents.create_script_prompt" title="Link to this definition">¶</a></dt>
+<dd><p>Creates the simplified prompt for the Patient Script Writer agent.</p>
 </dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="agents.scenario_agents.create_timeline_prompt">
-<span class="sig-prename descclassname"><span class="pre">agents.scenario_agents.</span></span><span class="sig-name descname"><span class="pre">create_timeline_prompt</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">context</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Any</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">str</span></span></span><a class="reference internal" href="_modules/agents/scenario_agents.html#create_timeline_prompt"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#agents.scenario_agents.create_timeline_prompt" title="Link to this definition">¶</a></dt>
-<dd><p>Creates the detailed prompt for the Clinical Timeline Generator agent.</p>
-<p>This function uses the initial scenario context to build a prompt asking
-for a realistic clinical evolution that respects the difficulty level.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>context</strong> – A dictionary containing foundational scenario elements,
-such as pathology and initial patient parameters.</p>
-</dd>
-<dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>A fully formatted prompt string for the timeline_agent.</p>
-</dd>
-</dl>
+<span class="sig-prename descclassname"><span class="pre">agents.scenario_agents.</span></span><span class="sig-name descname"><span class="pre">create_timeline_prompt</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">base_scenario</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="models.html#models.scenario_models.BaseScenario" title="models.scenario_models.BaseScenario"><span class="pre">BaseScenario</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">difficulty</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">str</span></span></span><a class="reference internal" href="_modules/agents/scenario_agents.html#create_timeline_prompt"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#agents.scenario_agents.create_timeline_prompt" title="Link to this definition">¶</a></dt>
+<dd><p>Creates the simplified prompt for the Clinical Timeline Generator agent.</p>
 </dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="agents.scenario_agents.generate_medical_scenario">
-<span class="sig-prename descclassname"><span class="pre">agents.scenario_agents.</span></span><span class="sig-name descname"><span class="pre">generate_medical_scenario</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">request</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="models.html#models.scenario_models.ScenarioRequest" title="models.scenario_models.ScenarioRequest"><span class="pre">ScenarioRequest</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="models.html#models.scenario_models.FullScenario" title="models.scenario_models.FullScenario"><span class="pre">FullScenario</span></a></span></span><a class="reference internal" href="_modules/agents/scenario_agents.html#generate_medical_scenario"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#agents.scenario_agents.generate_medical_scenario" title="Link to this definition">¶</a></dt>
+<span class="sig-prename descclassname"><span class="pre">agents.scenario_agents.</span></span><span class="sig-name descname"><span class="pre">generate_medical_scenario</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">_request</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="models.html#models.scenario_models.ScenarioRequest" title="models.scenario_models.ScenarioRequest"><span class="pre">ScenarioRequest</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="models.html#models.scenario_models.FullScenario" title="models.scenario_models.FullScenario"><span class="pre">FullScenario</span></a></span></span><a class="reference internal" href="_modules/agents/scenario_agents.html#generate_medical_scenario"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#agents.scenario_agents.generate_medical_scenario" title="Link to this definition">¶</a></dt>
 <dd><p>Generates a medical scenario by orchestrating a team of agents.</p>
-<p>This function serves as the main public entry point for the scenario
-generation service. It delegates the complex generation logic to the
-<cite>medical_team</cite>.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>request</strong> – The scenario request containing the description, type,
-target audience, and other parameters.</p>
-</dd>
-<dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>The complete, generated medical scenario.</p>
-</dd>
-<dt class="field-odd">Raises<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>HTTPException</strong> – Propagated from the <cite>MedicalScenarioTeam.run</cite> method
-    if the generation or validation process fails.</p>
-</dd>
-</dl>
 </dd></dl>
 
 </section>
@@ -548,41 +419,51 @@ centralized access point for the main application to use these components.</p>
 <dl class="py function">
 <dt class="sig sig-object py" id="agents.generate_lab_exams">
 <span class="sig-prename descclassname"><span class="pre">agents.</span></span><span class="sig-name descname"><span class="pre">generate_lab_exams</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">request</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="models.html#models.exam_models.LabExamRequest" title="models.exam_models.LabExamRequest"><span class="pre">LabExamRequest</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="models.html#models.exam_models.LabExamResponse" title="models.exam_models.LabExamResponse"><span class="pre">LabExamResponse</span></a></span></span><a class="reference internal" href="_modules/agents/exam_agents.html#generate_lab_exams"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#agents.generate_lab_exams" title="Link to this definition">¶</a></dt>
-<dd><p>Generates laboratory exams for a medical scenario.</p>
-<p>This function orchestrates the exam generation process by creating a
-prompt, running the agent, and validating the final output.</p>
+<dd><p>Generates and validates laboratory exams for a medical scenario.</p>
+<p>This function uses an agno agent with a specified <cite>response_model</cite>
+to directly generate a validated Pydantic object.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>request</strong> – The lab exam request containing the scenario description
-and patient type.</p>
+<dd class="field-odd"><p><strong>request</strong> – The lab exam request.</p>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>The generated and validated laboratory exams.</p>
+<dd class="field-even"><p>The generated and validated laboratory exams as a LabExamResponse object.</p>
 </dd>
 <dt class="field-odd">Raises<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>HTTPException</strong> – If the generation, parsing, or validation fails.</p>
+<dd class="field-odd"><p><strong>HTTPException</strong> – If the generation or validation by the agent fails.</p>
 </dd>
 </dl>
 </dd></dl>
 
 <dl class="py function">
+<dt class="sig sig-object py" id="agents.generate_materials">
+<span class="sig-prename descclassname"><span class="pre">agents.</span></span><span class="sig-name descname"><span class="pre">generate_materials</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">request</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="models.html#models.mat_model.MATModelRequest" title="models.mat_model.MATModelRequest"><span class="pre">MATModelRequest</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="models.html#models.mat_model.MATModelResponse" title="models.mat_model.MATModelResponse"><span class="pre">MATModelResponse</span></a><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="_modules/agents/mat_agents.html#generate_materials"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#agents.generate_materials" title="Link to this definition">¶</a></dt>
+<dd><p>Generates a list of materials for a medical simulation scenario.</p>
+</dd></dl>
+
+<dl class="py function">
 <dt class="sig sig-object py" id="agents.generate_medical_report">
 <span class="sig-prename descclassname"><span class="pre">agents.</span></span><span class="sig-name descname"><span class="pre">generate_medical_report</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">request</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="models.html#models.medical_report_models.MedicalReportRequest" title="models.medical_report_models.MedicalReportRequest"><span class="pre">MedicalReportRequest</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="models.html#models.medical_report_models.MedicalReportResponse" title="models.medical_report_models.MedicalReportResponse"><span class="pre">MedicalReportResponse</span></a></span></span><a class="reference internal" href="_modules/agents/medical_report.html#generate_medical_report"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#agents.generate_medical_report" title="Link to this definition">¶</a></dt>
-<dd><p>Generates a medical report for a diagnostic examination.</p>
-<p>This function orchestrates the report generation process by creating a
-prompt, running the agent, and validating the final output.</p>
+<dd><p>Generates and validates a medical report for a diagnostic examination.</p>
+<p>This function uses an agno agent with a specified <cite>response_model</cite>
+to directly generate a validated Pydantic object.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>request</strong> – The medical report request containing the scenario, patient
-type, and exam type.</p>
+<dd class="field-odd"><p><strong>request</strong> – The medical report request.</p>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>The generated and validated medical report.</p>
 </dd>
 <dt class="field-odd">Raises<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>HTTPException</strong> – If the generation, parsing, or validation fails.</p>
+<dd class="field-odd"><p><strong>HTTPException</strong> – If the generation or validation by the agent fails.</p>
 </dd>
 </dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="agents.generate_medical_scenario">
+<span class="sig-prename descclassname"><span class="pre">agents.</span></span><span class="sig-name descname"><span class="pre">generate_medical_scenario</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">_request</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="models.html#models.scenario_models.ScenarioRequest" title="models.scenario_models.ScenarioRequest"><span class="pre">ScenarioRequest</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="models.html#models.scenario_models.FullScenario" title="models.scenario_models.FullScenario"><span class="pre">FullScenario</span></a></span></span><a class="reference internal" href="_modules/agents/scenario_agents.html#generate_medical_scenario"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#agents.generate_medical_scenario" title="Link to this definition">¶</a></dt>
+<dd><p>Generates a medical scenario by orchestrating a team of agents.</p>
 </dd></dl>
 
 </section>
@@ -653,7 +534,6 @@ type, and exam type.</p>
 <li><a class="reference internal" href="#module-agents.mat_agents">agents.mat_agents module</a><ul>
 <li><a class="reference internal" href="#agents.mat_agents.create_materials_prompt"><code class="docutils literal notranslate"><span class="pre">create_materials_prompt()</span></code></a></li>
 <li><a class="reference internal" href="#agents.mat_agents.generate_materials"><code class="docutils literal notranslate"><span class="pre">generate_materials()</span></code></a></li>
-<li><a class="reference internal" href="#agents.mat_agents.get_database_path"><code class="docutils literal notranslate"><span class="pre">get_database_path()</span></code></a></li>
 <li><a class="reference internal" href="#agents.mat_agents.get_existing_materials"><code class="docutils literal notranslate"><span class="pre">get_existing_materials()</span></code></a></li>
 </ul>
 </li>
@@ -664,7 +544,6 @@ type, and exam type.</p>
 </li>
 <li><a class="reference internal" href="#module-agents.scenario_agents">agents.scenario_agents module</a><ul>
 <li><a class="reference internal" href="#agents.scenario_agents.MedicalScenarioTeam"><code class="docutils literal notranslate"><span class="pre">MedicalScenarioTeam</span></code></a><ul>
-<li><a class="reference internal" href="#agents.scenario_agents.MedicalScenarioTeam.members"><code class="docutils literal notranslate"><span class="pre">MedicalScenarioTeam.members</span></code></a></li>
 <li><a class="reference internal" href="#agents.scenario_agents.MedicalScenarioTeam.run"><code class="docutils literal notranslate"><span class="pre">MedicalScenarioTeam.run()</span></code></a></li>
 </ul>
 </li>
@@ -676,7 +555,9 @@ type, and exam type.</p>
 </li>
 <li><a class="reference internal" href="#module-agents">Module contents</a><ul>
 <li><a class="reference internal" href="#agents.generate_lab_exams"><code class="docutils literal notranslate"><span class="pre">generate_lab_exams()</span></code></a></li>
+<li><a class="reference internal" href="#agents.generate_materials"><code class="docutils literal notranslate"><span class="pre">generate_materials()</span></code></a></li>
 <li><a class="reference internal" href="#agents.generate_medical_report"><code class="docutils literal notranslate"><span class="pre">generate_medical_report()</span></code></a></li>
+<li><a class="reference internal" href="#agents.generate_medical_scenario"><code class="docutils literal notranslate"><span class="pre">generate_medical_scenario()</span></code></a></li>
 </ul>
 </li>
 </ul>

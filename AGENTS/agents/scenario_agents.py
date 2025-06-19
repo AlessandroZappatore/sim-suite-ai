@@ -16,15 +16,15 @@ from agno.agent import Agent, RunResponse
 from fastapi import HTTPException
 from pydantic import ValidationError
 
-from models.scenario_models import (
+from models import (
     BaseScenario,
     FullScenario,
     ScenarioRequest,
     Timeline,
     Sceneggiatura,
 )
-from models.presidi_medici import PRESIDI_MEDICI
-from utils.common import get_big_model, get_knowledge_base
+from config import PRESIDI_MEDICI
+from utils import get_big_model, get_knowledge_base
 
 # Logger instance
 logger = logging.getLogger(__name__)
@@ -213,7 +213,6 @@ class MedicalScenarioTeam:
             raise HTTPException(status_code=500, detail={"error": "Failed to generate scenario", "message": str(e)})
 
 
-# --- Team Instantiation ---
 medical_team = MedicalScenarioTeam(members=[info_agent, timeline_agent, script_agent])
 
 

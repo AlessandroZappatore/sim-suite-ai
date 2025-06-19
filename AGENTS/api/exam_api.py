@@ -10,8 +10,8 @@ Version: 1.2
 import logging
 
 from fastapi import APIRouter
-from agents.exam_agents import generate_lab_exams
-from models.exam_models import LabExamRequest, LabExamResponse
+from agents import generate_lab_exams
+from models import LabExamRequest, LabExamResponse
 
 # Configure logging
 logger = logging.getLogger(__name__)

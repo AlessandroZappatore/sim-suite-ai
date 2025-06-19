@@ -7,22 +7,21 @@ to ensure the generated list of materials is correctly formatted and validated.
 Version: 3.2
 """
 
-import logging
 import os
+import logging
 import sqlite3
 from typing import List, Dict, Any
 
 from agno.agent import Agent, RunResponse
 from fastapi import HTTPException
 
-from models.mat_model import MATModelRequest, MATModelResponse, MatModelListResponse
-from utils.common import get_small_model
+from models import MATModelRequest, MATModelResponse, MatModelListResponse
+from utils import get_small_model
+from config import DATABASE_PATH
 
-# Configure logging
 logger = logging.getLogger(__name__)
 
 
-# --- Agent Definition ---
 materials_agent = Agent(
     name="Medical Materials Generator",
     role="An expert medical educator and simulation specialist who generates comprehensive lists of necessary materials for medical simulation scenarios, with general-purpose descriptions.",
@@ -85,7 +84,6 @@ def generate_materials(request: MATModelRequest) -> List[MATModelResponse]:
         if not isinstance(validated_response, MatModelListResponse):
             raise TypeError(f"Agent returned unexpected type: {type(validated_response)}. Expected MatModelListResponse.")
 
-        # Estraiamo la lista vera e propria dal campo .materials
         validated_materials = validated_response.materials
 
         logger.info(f"Successfully generated {len(validated_materials)} materials")
@@ -96,16 +94,9 @@ def generate_materials(request: MATModelRequest) -> List[MATModelResponse]:
         raise HTTPException(status_code=500, detail={"error": "Failed to generate valid materials", "message": str(e)})
 
 
-def get_database_path() -> str:
-    """Constructs and returns the absolute path to the SQLite database file."""
-    current_dir = os.path.dirname(os.path.abspath(__file__))
-    root_dir = os.path.dirname(os.path.dirname(os.path.dirname(current_dir)))
-    return os.path.join(root_dir, "database.db")
-
-
 def get_existing_materials() -> List[Dict[str, Any]]:
     """Retrieves all existing materials from the SQLite database."""
-    db_path = get_database_path()
+    db_path = DATABASE_PATH
     if not os.path.exists(db_path):
         logger.warning(f"Database not found at {db_path}, returning no existing materials.")
         return []

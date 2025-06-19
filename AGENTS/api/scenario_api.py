@@ -11,8 +11,10 @@ import logging
 from typing import Dict, Any
 
 from fastapi import APIRouter
-from agents.scenario_agents import generate_medical_scenario
-from models.scenario_models import FullScenario, ScenarioRequest
+from agents import generate_medical_scenario
+from models import FullScenario, ScenarioRequest
+
+from config import DIFFICULTY_LEVELS_CONFIG
 
 # Configure logging
 logger = logging.getLogger(__name__)
@@ -44,32 +46,5 @@ def generate_scenario_endpoint(request: ScenarioRequest) -> FullScenario:
 
 @router.get("/difficulty-levels", summary="Get Available Difficulty Levels")
 def get_difficulty_levels() -> Dict[str, Any]:
-    """Retrieves the available difficulty levels for scenario generation.
-
-    Provides a list of supported difficulty levels, each with a value, label,
-    and description in Italian, along with the default level.
-
-    Returns:
-        A dictionary containing a list of difficulty level objects and the
-        default value.
-    """
-    return {
-        "difficulty_levels": [
-            {
-                "value": "Facile",
-                "label": "Facile",
-                "description": "Scenario semplice con poche complicazioni, parametri stabili, evoluzione prevedibile"
-            },
-            {
-                "value": "Medio",
-                "label": "Medio",
-                "description": "Scenario con complessità moderata, 1-2 complicazioni gestibili, richiede pensiero critico"
-            },
-            {
-                "value": "Difficile",
-                "label": "Difficile",
-                "description": "Scenario complesso con multiple complicazioni, parametri critici, evoluzione rapida"
-            }
-        ],
-        "default": "Facile"
-    }
+    """Retrieves the available difficulty levels for scenario generation."""
+    return DIFFICULTY_LEVELS_CONFIG

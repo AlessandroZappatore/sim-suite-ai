@@ -245,123 +245,91 @@
           <h1>Source code for utils.common</h1><div class="highlight"><pre>
 <span></span><span class="sd">&quot;&quot;&quot;Common utility functions for the Medical Simulation Suite AI.</span>
 
-<span class="sd">This module provides a collection of helper functions designed to support various</span>
-<span class="sd">tasks within the application. These utilities include model initialization for</span>
-<span class="sd">different generation tasks and robust JSON parsing from model responses.</span>
-
-<span class="sd">Version: 4.2</span>
+<span class="sd">This module provides helper functions for initializing models and knowledge bases,</span>
+<span class="sd">reading all configurations from the central config file.</span>
 <span class="sd">&quot;&quot;&quot;</span>
 
-<span class="kn">import</span><span class="w"> </span><span class="nn">json</span>
 <span class="kn">import</span><span class="w"> </span><span class="nn">logging</span>
-<span class="kn">import</span><span class="w"> </span><span class="nn">os</span>
-<span class="kn">import</span><span class="w"> </span><span class="nn">re</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Any</span><span class="p">,</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">Optional</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Union</span>
 
+<span class="kn">from</span><span class="w"> </span><span class="nn">agno.models.anthropic</span><span class="w"> </span><span class="kn">import</span> <span class="n">Claude</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">agno.models.google</span><span class="w"> </span><span class="kn">import</span> <span class="n">Gemini</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">dotenv</span><span class="w"> </span><span class="kn">import</span> <span class="n">load_dotenv</span>
 
-<span class="n">logging</span><span class="o">.</span><span class="n">basicConfig</span><span class="p">(</span><span class="n">level</span><span class="o">=</span><span class="n">logging</span><span class="o">.</span><span class="n">INFO</span><span class="p">)</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">agno.vectordb.chroma</span><span class="w"> </span><span class="kn">import</span> <span class="n">ChromaDb</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">agno.knowledge.json</span><span class="w"> </span><span class="kn">import</span> <span class="n">JSONKnowledgeBase</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">agno.embedder.google</span><span class="w"> </span><span class="kn">import</span> <span class="n">GeminiEmbedder</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">agno.document.chunking.recursive</span><span class="w"> </span><span class="kn">import</span> <span class="n">RecursiveChunking</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">config</span><span class="w"> </span><span class="kn">import</span> <span class="n">MODEL_CONFIG</span><span class="p">,</span> <span class="n">USE_ANTHROPIC</span><span class="p">,</span> <span class="n">AI_PROVIDER</span>
+
+<span class="n">embedder</span> <span class="o">=</span> <span class="n">GeminiEmbedder</span><span class="p">()</span> 
+<span class="n">vector_db</span> <span class="o">=</span> <span class="n">ChromaDb</span><span class="p">(</span><span class="n">collection</span><span class="o">=</span><span class="s2">&quot;sim_suite_data&quot;</span><span class="p">,</span> <span class="n">path</span><span class="o">=</span><span class="s2">&quot;data/chromadb/general&quot;</span><span class="p">,</span> <span class="n">persistent_client</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">embedder</span><span class="o">=</span><span class="n">embedder</span><span class="p">)</span>
+
+<span class="n">knowledge_base</span> <span class="o">=</span> <span class="n">JSONKnowledgeBase</span><span class="p">(</span>
+    <span class="n">path</span><span class="o">=</span><span class="s2">&quot;./data/case_studies/&quot;</span><span class="p">,</span>
+    <span class="n">vector_db</span><span class="o">=</span><span class="n">vector_db</span><span class="p">,</span>
+    <span class="n">chunking_strategy</span><span class="o">=</span><span class="n">RecursiveChunking</span><span class="p">()</span>
+<span class="p">)</span>
+
+<span class="n">report_vector_db</span> <span class="o">=</span> <span class="n">ChromaDb</span><span class="p">(</span><span class="n">collection</span><span class="o">=</span><span class="s2">&quot;sim_suite_reports&quot;</span><span class="p">,</span> <span class="n">path</span><span class="o">=</span><span class="s2">&quot;data/chromadb/reports&quot;</span><span class="p">,</span> <span class="n">persistent_client</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">embedder</span><span class="o">=</span><span class="n">embedder</span><span class="p">)</span>
+
+<span class="n">report_knowledge_base</span> <span class="o">=</span> <span class="n">JSONKnowledgeBase</span><span class="p">(</span>
+    <span class="n">path</span><span class="o">=</span><span class="s2">&quot;./data/reports/&quot;</span><span class="p">,</span>
+    <span class="n">vector_db</span><span class="o">=</span><span class="n">report_vector_db</span><span class="p">,</span>
+    <span class="n">chunking_strategy</span><span class="o">=</span><span class="n">RecursiveChunking</span><span class="p">()</span>
+<span class="p">)</span>
+
 <span class="n">logger</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="vm">__name__</span><span class="p">)</span>
 
-<span class="n">load_dotenv</span><span class="p">()</span>
+<span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;AI Provider selected based on API keys: </span><span class="si">{</span><span class="n">AI_PROVIDER</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
 
-<span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">getenv</span><span class="p">(</span><span class="s2">&quot;GOOGLE_API_KEY&quot;</span><span class="p">):</span>
-    <span class="n">logger</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="s2">&quot;GOOGLE_API_KEY not found in environment variables&quot;</span><span class="p">)</span>
-
-
-<div class="viewcode-block" id="get_model">
-<a class="viewcode-back" href="../../utils.html#utils.common.get_model">[docs]</a>
-<span class="k">def</span><span class="w"> </span><span class="nf">get_model</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="n">Gemini</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Initializes and returns the Gemini model for scenario generation.</span>
-
-<span class="sd">    Returns:</span>
-<span class="sd">        An instance of the Gemini model configured for &#39;gemini-2.0-flash&#39;.</span>
+<div class="viewcode-block" id="get_big_model">
+<a class="viewcode-back" href="../../utils.html#utils.common.get_big_model">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">get_big_model</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="n">Union</span><span class="p">[</span><span class="n">Gemini</span><span class="p">,</span> <span class="n">Claude</span><span class="p">]:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Initializes and returns the primary generation model based on the</span>
+<span class="sd">    centralized configuration.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="k">return</span> <span class="n">Gemini</span><span class="p">(</span><span class="s2">&quot;gemini-2.0-flash&quot;</span><span class="p">)</span></div>
-
-
-
-<div class="viewcode-block" id="get_exam_model">
-<a class="viewcode-back" href="../../utils.html#utils.common.get_exam_model">[docs]</a>
-<span class="k">def</span><span class="w"> </span><span class="nf">get_exam_model</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="n">Gemini</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Initializes and returns the Gemini model for exam generation.</span>
-
-<span class="sd">    Returns:</span>
-<span class="sd">        An instance of the Gemini model configured for &#39;gemini-1.5-flash-latest&#39;.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
-    <span class="k">return</span> <span class="n">Gemini</span><span class="p">(</span><span class="s2">&quot;gemini-1.5-flash-latest&quot;</span><span class="p">)</span></div>
-
-
-
-<div class="viewcode-block" id="extract_json_from_response">
-<a class="viewcode-back" href="../../utils.html#utils.common.extract_json_from_response">[docs]</a>
-<span class="k">def</span><span class="w"> </span><span class="nf">extract_json_from_response</span><span class="p">(</span><span class="n">response_text</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Extracts a JSON object from a model&#39;s text response.</span>
-
-<span class="sd">    This function searches for a JSON object within a string, which may be</span>
-<span class="sd">    plain or enclosed in a markdown code block (```json ... ```). It attempts</span>
-<span class="sd">    to parse the found JSON string into a Python dictionary.</span>
-
-<span class="sd">    Args:</span>
-<span class="sd">        response_text: The text string returned from the AI model.</span>
-
-<span class="sd">    Returns:</span>
-<span class="sd">        A dictionary containing the parsed JSON data.</span>
-
-<span class="sd">    Raises:</span>
-<span class="sd">        ValueError: If the response text is empty, no JSON is found, or the</span>
-<span class="sd">            extracted string is not valid JSON.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
-    <span class="k">if</span> <span class="ow">not</span> <span class="n">response_text</span><span class="p">:</span>
-        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Empty response from AI&quot;</span><span class="p">)</span>
-
-    <span class="n">match</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;```json\s*(\[.*?\]|\{.*?\})\s*```&#39;</span><span class="p">,</span> <span class="n">response_text</span><span class="p">,</span> <span class="n">re</span><span class="o">.</span><span class="n">DOTALL</span><span class="p">)</span>
-    <span class="k">if</span> <span class="n">match</span><span class="p">:</span>
-        <span class="n">json_str</span> <span class="o">=</span> <span class="n">match</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">USE_ANTHROPIC</span><span class="p">:</span>
+        <span class="n">model_name</span> <span class="o">=</span> <span class="n">MODEL_CONFIG</span><span class="p">[</span><span class="s2">&quot;claude_big&quot;</span><span class="p">]</span>
+        <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Initializing BIG model: Claude (&#39;</span><span class="si">{</span><span class="n">model_name</span><span class="si">}</span><span class="s2">&#39;)&quot;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">Claude</span><span class="p">(</span><span class="n">model_name</span><span class="p">)</span>
     <span class="k">else</span><span class="p">:</span>
-        <span class="n">stripped</span> <span class="o">=</span> <span class="n">response_text</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
-        <span class="k">if</span> <span class="n">stripped</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s1">&#39;{&#39;</span><span class="p">)</span> <span class="ow">or</span> <span class="n">stripped</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s1">&#39;[&#39;</span><span class="p">):</span>
-            <span class="n">json_str</span> <span class="o">=</span> <span class="n">response_text</span>
-        <span class="k">else</span><span class="p">:</span>
-            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;No JSON block found in the response.&quot;</span><span class="p">)</span>
-
-    <span class="k">try</span><span class="p">:</span>
-        <span class="k">return</span> <span class="n">json</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="n">json_str</span><span class="o">.</span><span class="n">strip</span><span class="p">())</span>
-    <span class="k">except</span> <span class="n">json</span><span class="o">.</span><span class="n">JSONDecodeError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
-        <span class="n">logger</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;JSON Decode Error: </span><span class="si">{</span><span class="n">e</span><span class="si">}</span><span class="se">\n</span><span class="s2">Response text received: </span><span class="si">{</span><span class="n">json_str</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
-        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Invalid JSON in AI response: </span><span class="si">{</span><span class="n">e</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span> <span class="kn">from</span><span class="w"> </span><span class="nn">e</span>
-    <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
-        <span class="n">logger</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Unexpected error parsing JSON: </span><span class="si">{</span><span class="n">e</span><span class="si">}</span><span class="se">\n</span><span class="s2">Response text received: </span><span class="si">{</span><span class="n">json_str</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
-        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;An unexpected error occurred while parsing JSON.&quot;</span><span class="p">)</span> <span class="kn">from</span><span class="w"> </span><span class="nn">e</span></div>
+        <span class="n">model_name</span> <span class="o">=</span> <span class="n">MODEL_CONFIG</span><span class="p">[</span><span class="s2">&quot;gemini_big&quot;</span><span class="p">]</span>
+        <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Initializing BIG model: Gemini (&#39;</span><span class="si">{</span><span class="n">model_name</span><span class="si">}</span><span class="s2">&#39;)&quot;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">Gemini</span><span class="p">(</span><span class="n">model_name</span><span class="p">)</span></div>
 
 
 
-<div class="viewcode-block" id="sanitize_json_string">
-<a class="viewcode-back" href="../../utils.html#utils.common.sanitize_json_string">[docs]</a>
-<span class="k">def</span><span class="w"> </span><span class="nf">sanitize_json_string</span><span class="p">(</span><span class="n">json_str</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Sanitizes a string to improve its compatibility with JSON parsers.</span>
-
-<span class="sd">    This function removes or replaces characters that are known to cause issues</span>
-<span class="sd">    during JSON decoding, such as zero-width spaces and control characters.</span>
-
-<span class="sd">    Args:</span>
-<span class="sd">        json_str: The JSON string to be sanitized.</span>
-
-<span class="sd">    Returns:</span>
-<span class="sd">        A cleaned JSON string.</span>
+<div class="viewcode-block" id="get_small_model">
+<a class="viewcode-back" href="../../utils.html#utils.common.get_small_model">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">get_small_model</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="n">Union</span><span class="p">[</span><span class="n">Gemini</span><span class="p">,</span> <span class="n">Claude</span><span class="p">]:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Initializes and returns the smaller/faster model based on the</span>
+<span class="sd">    centralized configuration.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="c1"># Replace non-standard quotes</span>
-    <span class="n">json_str</span> <span class="o">=</span> <span class="n">json_str</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s1">&#39;“&#39;</span><span class="p">,</span> <span class="s1">&#39;&quot;&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s1">&#39;”&#39;</span><span class="p">,</span> <span class="s1">&#39;&quot;&#39;</span><span class="p">)</span>
-    <span class="n">json_str</span> <span class="o">=</span> <span class="n">json_str</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;‘&quot;</span><span class="p">,</span> <span class="s2">&quot;&#39;&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;’&quot;</span><span class="p">,</span> <span class="s2">&quot;&#39;&quot;</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">USE_ANTHROPIC</span><span class="p">:</span>
+        <span class="n">model_name</span> <span class="o">=</span> <span class="n">MODEL_CONFIG</span><span class="p">[</span><span class="s2">&quot;claude_small&quot;</span><span class="p">]</span>
+        <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Initializing SMALL model: Claude (&#39;</span><span class="si">{</span><span class="n">model_name</span><span class="si">}</span><span class="s2">&#39;)&quot;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">Claude</span><span class="p">(</span><span class="n">model_name</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">model_name</span> <span class="o">=</span> <span class="n">MODEL_CONFIG</span><span class="p">[</span><span class="s2">&quot;gemini_small&quot;</span><span class="p">]</span>
+        <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Initializing SMALL model: Gemini (&#39;</span><span class="si">{</span><span class="n">model_name</span><span class="si">}</span><span class="s2">&#39;)&quot;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">Gemini</span><span class="p">(</span><span class="n">model_name</span><span class="p">)</span></div>
 
-    <span class="c1"># Remove zero-width spaces and other invisible characters</span>
-    <span class="n">json_str</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">sub</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;[\u200b-\u200d\ufeff]&#39;</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="n">json_str</span><span class="p">)</span>
 
-    <span class="c1"># Remove control characters except for tab, newline, and carriage return</span>
-    <span class="n">json_str</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">sub</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;[\x00-\x08\x0b\x0c\x0e-\x1f\x7f]&#39;</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="n">json_str</span><span class="p">)</span>
+<div class="viewcode-block" id="get_knowledge_base">
+<a class="viewcode-back" href="../../utils.html#utils.common.get_knowledge_base">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">get_knowledge_base</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="n">JSONKnowledgeBase</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Provides access to the knowledge base.&quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="n">knowledge_base</span></div>
 
-    <span class="k">return</span> <span class="n">json_str</span></div>
+
+<div class="viewcode-block" id="get_report_knowledge_base">
+<a class="viewcode-back" href="../../utils.html#utils.common.get_report_knowledge_base">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">get_report_knowledge_base</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="n">JSONKnowledgeBase</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Provides access to the report knowledge base.&quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="n">report_knowledge_base</span></div>
 
 </pre></div>
         </article>

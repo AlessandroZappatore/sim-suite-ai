@@ -8,7 +8,7 @@ Version: 1.1
 """
 from __future__ import annotations
 
-from typing import List, Optional
+from typing import List, Optional, Literal
 
 from pydantic import BaseModel, Field
 
@@ -59,6 +59,6 @@ class LabExamRequest(BaseModel):
         esame_obiettivo: The objective physical examination findings.
     """
     descrizione_scenario: str = Field(description="A detailed description of the clinical scenario, including patient status and pathology.")
-    tipologia_paziente: str = Field(default="Adulto", description="Type of patient to adjust reference ranges (e.g., 'Adulto', 'Pediatrico').")
+    tipologia_paziente: Literal["Adulto", "Pediatrico", "Neonatale", "Prematuro"] = Field(description="Type of patient (Adult, Pediatric, Neonatal, Premature).")
     esame_obiettivo: str = Field(description="Objective exam like eyes, neck, chest, abdomen, etc.")
     patologia: Optional[str] = Field(default=None, description="Optional pathology to focus the lab tests on (e.g., 'Anemia', 'Diabete').")
