@@ -25,6 +25,8 @@ from .mat_model import (
     MATModelRequest, MATModelResponse, MatModelListResponse
 )
 
+from .validation_model import ValidationResult
+
 __all__ = [
     # Scenario models
     "AccessoArterioso", "AccessoVenosso", "BaseScenario", "EsameFisico",
@@ -35,5 +37,7 @@ __all__ = [
     # Medical report models
     "MedicalReportRequest", "MedicalReportResponse",
     # MAT models
-    "MATModelRequest", "MATModelResponse", "MatModelListResponse"
+    "MATModelRequest", "MATModelResponse", "MatModelListResponse",
+    # Validation model
+    "ValidationResult"
 ]

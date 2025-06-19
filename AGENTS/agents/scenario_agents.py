@@ -22,15 +22,30 @@ from models import (
     ScenarioRequest,
     Timeline,
     Sceneggiatura,
+    ValidationResult
 )
 from config import PRESIDI_MEDICI
-from utils import get_big_model, get_knowledge_base
+from utils import get_big_model, get_knowledge_base, get_small_model
 
-# Logger instance
 logger = logging.getLogger(__name__)
 
 
-# --- Agent Definitions ---
+validation_agent = Agent(
+    name="Medical Request Validator",
+    role="An expert in classifying user requests to determine if they are suitable for generating a medical simulation scenario.",
+    model=get_small_model(),
+    response_model=ValidationResult,
+    instructions=[
+        "Your task is to analyze a user's request for a medical scenario.",
+        "Determine if the description and target audience are relevant to a clinical or medical context.",
+        "Invalid requests include jokes, non-medical topics, nonsensical or offensive requests.",
+        "Respond with `is_valid: false` if the request is not appropriate.",
+        "Always provide a concise reason ('reason') in ITALIAN.",
+        "Valid example: { 'description': 'patient with anaphylactic shock', 'target': 'nurses' } -> is_valid: true.",
+        "Invalid example: { 'description': 'tell me a joke about a doctor', 'target': 'comedians' } -> is_valid: false.",
+    ]
+)
+
 info_agent = Agent(
     name="Scenario Info Generator",
     role="An expert in creating the foundational elements of a medical simulation.",
@@ -72,7 +87,21 @@ script_agent = Agent(
 )
 
 
-# --- Prompt Functions ---
+def create_validation_prompt(request: ScenarioRequest) -> str:
+    """Creates the prompt for the request validation agent."""
+    return f"""
+    Analyze the following user request and determine if it is a valid and sensible topic for creating a MEDICAL simulation scenario.
+    A valid request must be related to a clinical context.
+    An invalid request is one that does not make sense in a medical setting (e.g., jokes, random topics).
+
+    ## USER REQUEST TO VALIDATE
+    - Description: "{request.description}"
+    - Target Audience: "{request.target}"
+
+    ## TASK
+    Evaluate the request and respond with your judgment in the required JSON format. The 'reason' field must be in Italian.
+    """
+
 def create_info_prompt(request: ScenarioRequest) -> str:
     """Creates prompt for the Scenario Info Generator agent."""
     difficulty_guidelines = {
@@ -160,6 +189,24 @@ class MedicalScenarioTeam:
     def run(self, request: ScenarioRequest) -> FullScenario:
         """Executes the full scenario generation pipeline using validated Pydantic objects."""
         try:
+            # --- STEP 0: Run Validation Agent ---
+            logger.info("Team Pipeline: Running 'Medical Request Validator'...")
+            validation_prompt = create_validation_prompt(request)
+            validation_response: RunResponse = self._get_agent("Medical Request Validator").run(validation_prompt) # type: ignore
+            
+            validation_content = validation_response.content
+            if not isinstance(validation_content, ValidationResult):
+                raise TypeError(f"Validation agent returned invalid type, got {type(validation_content).__name__}")
+            
+            if not validation_content.is_valid:
+                logger.warning(f"Invalid scenario request blocked. Reason: {validation_content.reason}")
+                raise HTTPException(
+                    status_code=400, 
+                    detail={"error": "Invalid request for a medical scenario.", "reason": validation_content.reason}
+                )
+            
+            logger.info("Team Pipeline: Request validated successfully.")
+            
             # --- STEP 1: Run Info Agent ---
             logger.info("Team Pipeline: Running 'Scenario Info Generator'...")
             info_prompt = create_info_prompt(request)
@@ -208,12 +255,14 @@ class MedicalScenarioTeam:
         except (ValidationError, TypeError) as e:
             logger.error(f"Data validation or type error in pipeline: {e}", exc_info=True)
             raise HTTPException(status_code=422, detail={"error": "Generated content failed validation or typing.", "details": str(e)})
+        except HTTPException as e:
+            raise e
         except Exception as e:
             logger.error(f"Unexpected error in pipeline: {e}", exc_info=True)
             raise HTTPException(status_code=500, detail={"error": "Failed to generate scenario", "message": str(e)})
 
 
-medical_team = MedicalScenarioTeam(members=[info_agent, timeline_agent, script_agent])
+medical_team = MedicalScenarioTeam(members=[validation_agent, info_agent, timeline_agent, script_agent])
 
 
 def generate_medical_scenario(_request: ScenarioRequest) -> FullScenario:
