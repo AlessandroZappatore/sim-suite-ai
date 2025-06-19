@@ -38,14 +38,20 @@ ANTRHOPIC_API_KEY=la_tua_chiave_anthropic
 python main.py
 ```
 
-**Interfaccia SimSuite (Porta 9090):**
+**Interfaccia SimSuite (Porta 9090) 2 possibilità:**
+
+***1. Tramite IntelliJ***
+
 ```bash
 # Vai nella cartella Java
 cd JAVA/sim-suite
-
-# Avvia l'interfaccia SimSuite
-# (Seguire le istruzioni specifiche del progetto Java)
 ```
+Avvia l'applicazione tramite l'ide.
+
+***2. Tramite l'installer (solo windows)***
+1. Scarica l'installer per l'interfaccia da questo link: [Installer windows](https://github.com/AlessandroZappatore/sim-suite-ai/releases/download/1.0/SimSuiteAI_Installer_1.0.0.exe)
+2. Avvia l'installer scaricato e segui le istruzioni a schermo per completare l'installazione.
+
 
 ### 4. Accedi all'Applicazione
 - **SimSuite Interface**: http://localhost:9090
