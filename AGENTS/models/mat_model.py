@@ -47,3 +47,13 @@ class MATModelResponse(BaseModel):
     descrizione: str = Field(
         description="Description of the material."
     )
+
+class MatModelListResponse(BaseModel):
+    """Defines the response model for a list of generated Medical Assessment Tools (MAT).
+
+    Attributes:
+        materials: A list of generated materials or tools.
+    """
+    materials: list[MATModelResponse] = Field(
+        description="List of generated materials or tools."
+    )

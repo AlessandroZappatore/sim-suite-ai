@@ -5,8 +5,8 @@ such as data extraction and model retrieval. The `__all__` variable explicitly
 defines the public API of this package.
 """
 
-from .common import extract_json_from_response, get_exam_model, get_model
+from .common import get_big_model, get_small_model
 
 __all__ = [
-    "extract_json_from_response", "get_exam_model", "get_model"
+    "get_big_model", "get_small_model"
 ]
