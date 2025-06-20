@@ -5,6 +5,7 @@
 **Intelligenza Artificiale per la Simulazione Clinica**
 
 SimSuiteAI è un'estensione che utilizza l'intelligenza artificiale per creare automaticamente scenari di simulazione medica completi e realistici.
+[Link sito SimSuiteAI](https://alessandrozappatore.github.io/sim-suite-ai/)
 
 ---
 
