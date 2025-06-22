@@ -276,15 +276,19 @@ public class MaterialeService {
     public String toStringAllMaterialsByScenarioId(int scenarioId) {
         StringBuilder sb = new StringBuilder();
         List<Materiale> materiali = getMaterialiByScenarioId(scenarioId);
+
         if (materiali.isEmpty()) {
             logger.info("Nessun materiale trovato per generare la stringa per lo scenario con ID {}.", scenarioId);
         }
+
         for (Materiale materiale : materiali) {
-            sb.append(materiale.nome())
+            sb.append("• ")
+                    .append(materiale.nome())
                     .append(": ")
                     .append(materiale.descrizione())
                     .append("\n");
         }
+
         return sb.toString();
     }
 

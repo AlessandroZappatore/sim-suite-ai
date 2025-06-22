@@ -4,7 +4,7 @@ This module contains the core components for generating lists of necessary
 materials for medical simulations. It leverages agno's structured output
 to ensure the generated list of materials is correctly formatted and validated.
 
-Version: 3.2
+Version: 3.3
 """
 
 import os
@@ -24,11 +24,12 @@ logger = logging.getLogger(__name__)
 
 materials_agent = Agent(
     name="Medical Materials Generator",
-    role="An expert medical educator and simulation specialist who generates comprehensive lists of necessary materials for medical simulation scenarios, with general-purpose descriptions.",
+    role="An expert medical educator and simulation specialist who generates focused lists of the most important materials for medical simulation scenarios, with general-purpose descriptions.",
     model=get_small_model(),
     response_model=MatModelListResponse,
     instructions=[
-        "Your task is to generate a comprehensive list of necessary materials for a medical simulation scenario.",
+        "Your task is to generate a FOCUSED list of the MOST IMPORTANT materials for a medical simulation, with a MAXIMUM of 20 items.",
+        "Prioritize only the materials essential for diagnosis, critical interventions, and achieving the main learning objectives.",
         "All text content for 'nome' and 'descrizione' must be in **Italian**.",
         "The materials must be realistic and appropriate for the described scenario, patient type, and target audience.",
         "PRIORITY: If a material from the provided database list is suitable for the scenario, you MUST use its EXACT name.",
@@ -50,7 +51,7 @@ def create_materials_prompt(request: MATModelRequest, existing_materials: List[D
             existing_materials_text += f"- {material['nome']}\n"
 
     return f"""
-    Generate a comprehensive list of necessary materials for the following medical simulation.
+    Generate a focused list of the most important materials for the following medical simulation.
 
     ## SCENARIO CONTEXT
     - Patient Type: {request.tipologia_paziente}
@@ -60,11 +61,12 @@ def create_materials_prompt(request: MATModelRequest, existing_materials: List[D
     {existing_materials_text}
 
     ## INSTRUCTIONS
-    1.  Generate a list of materials needed for this simulation.
-    2.  All names ('nome') and descriptions ('descrizione') must be in Italian.
-    3.  If a material from the database list fits, use its exact name.
-    4.  For new materials, create a specific Italian name.
-    5.  CRITICAL: The description for EACH material must be GENERAL and REUSABLE for a database. Do not mention the specifics of this scenario in the description.
+    1.  Generate a FOCUSED list of the MOST IMPORTANT materials, with a MAXIMUM of 20 items.
+    2.  Prioritize materials directly needed for diagnosis and critical interventions. Avoid common, non-essential items.
+    3.  All names ('nome') and descriptions ('descrizione') must be in Italian.
+    4.  If a material from the database list fits, use its exact name.
+    5.  For new materials, create a specific Italian name.
+    6.  CRITICAL: The description for EACH material must be GENERAL and REUSABLE for a database. Do not mention the specifics of this scenario in the description.
     """
 
 def generate_materials(request: MATModelRequest) -> List[MATModelResponse]:
