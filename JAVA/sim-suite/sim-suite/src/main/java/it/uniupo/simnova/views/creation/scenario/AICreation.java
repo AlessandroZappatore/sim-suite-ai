@@ -9,6 +9,7 @@ import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.html.Div;
 import com.vaadin.flow.component.html.Span;
 import com.vaadin.flow.component.icon.Icon;
+import com.vaadin.flow.component.orderedlayout.BoxSizing;
 import com.vaadin.flow.component.orderedlayout.FlexComponent;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
@@ -43,90 +44,29 @@ import static it.uniupo.simnova.views.ui.helper.support.ErrorExtractor.extractEr
  * Classe che gestisce la creazione di uno scenario utilizzando l'intelligenza artificiale.
  *
  * @author Alessandro Zappatore
- * @version 1.0
+ * @version 1.4
  */
 @PageTitle("AI Creation")
 @Route(value = "ai-creation", layout = MainLayout.class)
 public class AICreation extends Composite<VerticalLayout> {
-    /**
-     * Logger per la registrazione degli eventi e degli errori.
-     */
     private static final Logger logger = LoggerFactory.getLogger(AICreation.class);
-    /**
-     * Istanza di Gson per la serializzazione/deserializzazione JSON.
-     */
     private static final Gson gson = new Gson();
-    /**
-     * Servizio per l'importazione di scenari.
-     */
     private final ScenarioImportService scenarioImportService;
-    /**
-     * Servizio per la gestione dei file.
-     */
     private final FileStorageService fileStorageService;
-    /**
-     * Servizio per le chiamate all'API esterna.
-     */
     private final ExternalApiService externalApiService;
-    /**
-     * Servizio per le notifiche.
-     */
     private final NotifierService notifierService;
-    /**
-     * ExecutorService per l'esecuzione di task in background.
-     */
     private final ExecutorService executorService;
-    /**
-     * Gestore delle notifiche attive.
-     */
     private final ActiveNotifierManager activeNotifierManager;
-    /**
-     * Icona dell'AI utilizzata nell'interfaccia utente.
-     */
     private final Icon aiIcon = FontAwesome.Solid.ROBOT.create();
-    /**
-     * Passo corrente del processo di creazione dello scenario.
-     */
     private int step = 0;
-    /**
-     * Layout orizzontale per i messaggi dell'AI e dell'utente.
-     */
-    private HorizontalLayout aiPresentationMsg, aiMsgStep0, aiMsgStep1, aiMsgStepTarget, aiMsgStep2;
-    /**
-     * Selezione della tipologia di scenario.
-     */
+    private HorizontalLayout aiPresentationMsg, aiMsgStep0, aiMsgStep1, aiMsgStepTarget, aiMsgStep2, aiFinalMsg;
     private Select<String> scenarioTypeSelect;
-    /**
-     * Campo di testo per il target dello scenario.
-     */
     private TextField scenarioTargetField;
-    /**
-     * Area di testo per la breve descrizione dello scenario.
-     */
     private TextArea shortDescription;
-    /**
-     * Selezione della difficoltà dello scenario.
-     */
     private Select<String> difficultySelect;
-    /**
-     * Layouts per i campi di input e i pulsanti di invio.
-     */
-    private VerticalLayout inputTypeLayout, inputTargetLayout, inputDescLayout, inputDiffLayout;
-    /**
-     * Pulsanti per inviare i dati dell'AI.
-     */
+    private HorizontalLayout inputTypeLayout, inputTargetLayout, inputDescLayout, inputDiffLayout;
     private Button sendType, sendTarget, sendDesc, sendDiff, nextButton;
 
-    /**
-     * Costruttore della classe AICreation.
-     *
-     * @param fileStorageService    servizio per la gestione dei file
-     * @param scenarioImportService servizio per l'importazione di scenari
-     * @param externalApiService    servizio per le chiamate all'API esterna
-     * @param notifierService       servizio per le notifiche
-     * @param executorService       servizio per l'esecuzione di task in background
-     * @param activeNotifierManager gestore delle notifiche attive
-     */
     public AICreation(FileStorageService fileStorageService,
                       ScenarioImportService scenarioImportService,
                       ExternalApiService externalApiService,
@@ -139,23 +79,17 @@ public class AICreation extends Composite<VerticalLayout> {
         this.executorService = executorService;
         this.activeNotifierManager = activeNotifierManager;
         aiIcon.setSize("20px");
-
         initView();
     }
 
-    /**
-     * Avvia la generazione dello scenario in un task in background.
-     */
     private void startScenarioGeneration() {
         final String notificationId = activeNotifierManager.show("Generazione scenario in corso...");
         final UI ui = UI.getCurrent();
-
         ScenarioGenerationRequest request = new ScenarioGenerationRequest(
                 shortDescription.getValue(),
                 scenarioTypeSelect.getValue(),
                 scenarioTargetField.getValue()
         );
-
         executorService.submit(() -> {
             try {
                 Optional<String> jsonResponseOptional = externalApiService.generateScenario(request);
@@ -179,14 +113,12 @@ public class AICreation extends Composite<VerticalLayout> {
                 logger.error("Fallimento nel task di generazione scenario in background.", e);
                 String errorTitle = "Errore Critico";
                 String errorDetails;
-
                 if (e instanceof HttpClientErrorException hcee) {
                     errorTitle = "Errore nella Richiesta";
                     errorDetails = extractErrorReasonFromJson(hcee.getResponseBodyAsString(), gson);
                 } else {
                     errorDetails = "Si è verificato un problema tecnico. Controllare i log per maggiori dettagli.";
                 }
-
                 notifierService.notify(ui, new NotifierService.NotificationPayload(
                         NotifierService.Status.ERROR,
                         errorTitle,
@@ -197,9 +129,6 @@ public class AICreation extends Composite<VerticalLayout> {
         });
     }
 
-    /**
-     * Inizializza la vista dell'interfaccia utente per la creazione di uno scenario con l'AI.
-     */
     void initView() {
         VerticalLayout mainLayout = StyleApp.getMainLayout(getContent());
         AppHeader header = new AppHeader(fileStorageService);
@@ -252,9 +181,6 @@ public class AICreation extends Composite<VerticalLayout> {
         });
     }
 
-    /**
-     * Inizializza i componenti dell'interfaccia utente per la creazione dello scenario.
-     */
     private void initComponents() {
         aiPresentationMsg = createAiMessage("Ciao! Sono Leo, il tuo assistente AI, ti aiuterò a creare uno scenario.");
         aiMsgStep0 = createAiMessage("Che tipo di scenario vuoi creare?");
@@ -262,7 +188,7 @@ public class AICreation extends Composite<VerticalLayout> {
         scenarioTypeSelect = FieldGenerator.createSelect("Tipologia Scenario", scenarioTypes, "Quick Scenario", true);
         sendType = new Button("Invia", FontAwesome.Solid.PAPER_PLANE.create());
         styleSendButton(sendType);
-        inputTypeLayout = createInputLayout(scenarioTypeSelect, sendType);
+        inputTypeLayout = createUserInputArea(scenarioTypeSelect, sendType);
         aiMsgStepTarget = createAiMessage("Qual è il target primario di questo scenario? (es. Studenti di medicina, Infermieri specializzati, etc.)");
         scenarioTargetField = FieldGenerator.createTextField("Target Scenario", "Inserisci il target dello scenario", true);
         scenarioTargetField.setValueChangeMode(ValueChangeMode.EAGER);
@@ -270,7 +196,7 @@ public class AICreation extends Composite<VerticalLayout> {
         styleSendButton(sendTarget);
         sendTarget.setEnabled(false);
         scenarioTargetField.addValueChangeListener(e -> sendTarget.setEnabled(e.getValue() != null && !e.getValue().trim().isEmpty()));
-        inputTargetLayout = createInputLayout(scenarioTargetField, sendTarget);
+        inputTargetLayout = createUserInputArea(scenarioTargetField, sendTarget);
         aiMsgStep1 = createAiMessage("Descrivimi brevemente lo scenario che vuoi che io crei");
         shortDescription = FieldGenerator.createTextArea("Breve Descrizione", "Inserisci una breve descrizione dello scenario che vuoi creare", true);
         shortDescription.setMaxLength(500);
@@ -279,52 +205,56 @@ public class AICreation extends Composite<VerticalLayout> {
         styleSendButton(sendDesc);
         sendDesc.setEnabled(false);
         shortDescription.addValueChangeListener(e -> sendDesc.setEnabled(shortDescription.getValue() != null && !shortDescription.getValue().trim().isEmpty()));
-        inputDescLayout = createInputLayout(shortDescription, sendDesc);
+        inputDescLayout = createUserInputArea(shortDescription, sendDesc);
         aiMsgStep2 = createAiMessage("Quanto vuoi che sia difficile?");
         List<String> difficulties = List.of("Facile", "Media", "Difficile");
         difficultySelect = FieldGenerator.createSelect("Difficoltà", difficulties, "Facile", true);
         sendDiff = new Button("Invia", FontAwesome.Solid.PAPER_PLANE.create());
         styleSendButton(sendDiff);
-        inputDiffLayout = createInputLayout(difficultySelect, sendDiff);
+        inputDiffLayout = createUserInputArea(difficultySelect, sendDiff);
+        aiFinalMsg = createAiMessage("Perfetto! Ho tutte le informazioni che mi servono. Sto generando il tuo scenario...");
     }
 
-    /**
-     * Applica lo stile al pulsante di invio.
-     *
-     * @param button il pulsante da stilizzare
-     */
     private void styleSendButton(Button button) {
         button.setWidthFull();
-        button.getStyle().set("margin-top", "0.5em");
-        button.setEnabled(true);
     }
 
     /**
-     * Crea un layout verticale per i campi di input e il pulsante di invio.
+     * Crea l'area di input per l'utente, raggruppando campo, pulsante e icona
+     * in un'unica "bolla" con sfondo e ombra coerenti.
      *
-     * @param field  il campo di input da inserire nel layout
-     * @param button il pulsante di invio da inserire nel layout
-     * @return un layout verticale contenente il campo di input e il pulsante
+     * @param field  il campo di input (es. TextField, Select)
+     * @param button il pulsante di invio
+     * @return un HorizontalLayout che contiene l'area di input, allineato a destra.
      */
-    private VerticalLayout createInputLayout(com.vaadin.flow.component.Component field, Button button) {
-        VerticalLayout layout = new VerticalLayout(field, button);
-        layout.setPadding(false);
-        layout.setSpacing(false);
-        layout.setWidthFull();
-        layout.getStyle()
+    private HorizontalLayout createUserInputArea(com.vaadin.flow.component.Component field, Button button) {
+        VerticalLayout fieldAndButtonStack = new VerticalLayout(field, button);
+        fieldAndButtonStack.setPadding(false);
+        fieldAndButtonStack.setSpacing(true);
+        fieldAndButtonStack.setWidthFull();
+
+        Icon newUserIcon = FontAwesome.Solid.USER.create();
+        newUserIcon.setSize("20px");
+
+        HorizontalLayout bubbleContainer = new HorizontalLayout(fieldAndButtonStack, newUserIcon);
+        bubbleContainer.setPadding(true);
+        bubbleContainer.setBoxSizing(BoxSizing.BORDER_BOX);
+        bubbleContainer.setAlignItems(FlexComponent.Alignment.START);
+        bubbleContainer.getStyle()
                 .set("background", "white")
                 .set("border-radius", "12px")
-                .set("box-shadow", "0 2px 4px rgba(0,0,0,0.04)")
-                .set("padding", "1em");
-        return layout;
+                .set("box-shadow", "var(--lumo-box-shadow-s)")
+                .set("width", "100%")
+                .set("max-width", "450px");
+
+        HorizontalLayout wrapper = new HorizontalLayout(bubbleContainer);
+        wrapper.setWidthFull();
+        wrapper.setJustifyContentMode(FlexComponent.JustifyContentMode.END);
+
+        return wrapper;
     }
 
-    /**
-     * Crea un messaggio AI con un'icona e un testo.
-     *
-     * @param text il testo del messaggio AI
-     * @return un layout orizzontale contenente l'icona e il messaggio
-     */
+
     private HorizontalLayout createAiMessage(String text) {
         HorizontalLayout messageLayout = new HorizontalLayout();
         messageLayout.setAlignItems(FlexComponent.Alignment.BASELINE);
@@ -336,74 +266,28 @@ public class AICreation extends Composite<VerticalLayout> {
         return messageLayout;
     }
 
-    /**
-     * Crea un messaggio di chat con uno stile a bolla.
-     *
-     * @param text   il testo del messaggio
-     * @param isUser true se il messaggio è dell'utente, false se è dell'AI
-     * @return un componente Div contenente il messaggio formattato come bolla
-     */
     private Div createBubble(String text, boolean isUser) {
         Div bubble = new Div(new Span(text));
         bubble.getStyle()
                 .set("padding", "0.7em 1em")
                 .set("border-radius", "16px")
                 .set("margin-top", "0.5em")
-                .set("margin-bottom", "0.5em");
+                .set("margin-bottom", "0.5em")
+                .set("max-width", "70%");
         if (isUser) {
             bubble.getStyle()
                     .set("background", "var(--lumo-primary-color)")
-                    .set("color", "white")
+                    .set("color", "var(--lumo-primary-contrast-color)")
                     .set("margin-right", "0.5em");
         } else {
             bubble.getStyle()
                     .set("background", "var(--lumo-contrast-10pct)")
-                    .set("color", "black")
+                    .set("color", "var(--lumo-body-text-color)")
                     .set("margin-left", "0.5em");
         }
         return bubble;
     }
 
-    /**
-     * Aggiorna il layout della chat in base allo stato attuale del processo di creazione dello scenario.
-     *
-     * @param chatLayout il layout della chat da aggiornare
-     */
-    private void updateChatLayout(VerticalLayout chatLayout) {
-        chatLayout.removeAll();
-        chatLayout.add(aiPresentationMsg, aiMsgStep0);
-        if (step >= 1 && scenarioTypeSelect.getValue() != null) {
-            chatLayout.add(createUserMessage(scenarioTypeSelect.getValue()));
-        }
-        if (step == 0) {
-            chatLayout.add(inputTypeLayout);
-        } else if (step == 1) {
-            chatLayout.add(aiMsgStepTarget, inputTargetLayout);
-        } else if (step >= 2 && scenarioTargetField.getValue() != null && !scenarioTargetField.getValue().trim().isEmpty()) {
-            chatLayout.add(aiMsgStepTarget);
-            chatLayout.add(createUserMessage(scenarioTargetField.getValue()));
-        }
-        if (step == 2) {
-            chatLayout.add(aiMsgStep1, inputDescLayout);
-        } else if (step >= 3 && !shortDescription.isEmpty()) {
-            chatLayout.add(aiMsgStep1);
-            chatLayout.add(createUserMessage(shortDescription.getValue()));
-        }
-        if (step == 3) {
-            chatLayout.add(aiMsgStep2, inputDiffLayout);
-        } else if (step >= 4 && difficultySelect.getValue() != null) {
-            chatLayout.add(aiMsgStep2);
-            chatLayout.add(createUserMessage(difficultySelect.getValue()));
-            nextButton.setVisible(true);
-        }
-    }
-
-    /**
-     * Crea un messaggio dell'utente con un'icona e il testo del messaggio.
-     *
-     * @param messageText il testo del messaggio dell'utente
-     * @return un layout orizzontale contenente l'icona dell'utente e il messaggio
-     */
     private HorizontalLayout createUserMessage(String messageText) {
         HorizontalLayout userMsg = new HorizontalLayout();
         userMsg.setAlignItems(FlexComponent.Alignment.BASELINE);
@@ -412,8 +296,40 @@ public class AICreation extends Composite<VerticalLayout> {
         Div userBubble = createBubble(messageText, true);
         Icon newUserIcon = FontAwesome.Solid.USER.create();
         newUserIcon.setSize("20px");
-        newUserIcon.getStyle().set("margin-right", "0.5em");
+        newUserIcon.getStyle().set("margin-left", "0.5em");
         userMsg.add(userBubble, newUserIcon);
         return userMsg;
+    }
+
+    private void updateChatLayout(VerticalLayout chatLayout) {
+        chatLayout.removeAll();
+        chatLayout.add(aiPresentationMsg, aiMsgStep0);
+        if (step == 0) {
+            chatLayout.add(inputTypeLayout);
+            return;
+        }
+        chatLayout.add(createUserMessage(scenarioTypeSelect.getValue()));
+        chatLayout.add(aiMsgStepTarget);
+        if (step == 1) {
+            chatLayout.add(inputTargetLayout);
+            return;
+        }
+        chatLayout.add(createUserMessage(scenarioTargetField.getValue()));
+        chatLayout.add(aiMsgStep1);
+        if (step == 2) {
+            chatLayout.add(inputDescLayout);
+            return;
+        }
+        chatLayout.add(createUserMessage(shortDescription.getValue()));
+        chatLayout.add(aiMsgStep2);
+        if (step == 3) {
+            chatLayout.add(inputDiffLayout);
+            return;
+        }
+        chatLayout.add(createUserMessage(difficultySelect.getValue()));
+        if (step == 4) {
+            chatLayout.add(aiFinalMsg);
+            nextButton.setVisible(true);
+        }
     }
 }

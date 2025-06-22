@@ -16,6 +16,9 @@ SimSuiteAI è un'estensione che utilizza l'intelligenza artificiale per creare a
 # Vai nella cartella AGENTS
 cd AGENTS
 
+# Se non esiste, crea l'ambiente virtuale
+python -m venv aienv
+
 # Attiva l'ambiente virtuale
 aienv\Scripts\activate  # Windows
 # oppure
@@ -26,9 +29,11 @@ pip install -r requirements.txt
 ```
 
 ### 2. Configura le API Key
-Crea un file `.env` nella cartella `AGENTS/` con:
+Crea un file `.env` nella cartella `AGENTS/` con una delle seguenti chiavi:
 ```env
+# Scegli UNA delle due opzioni:
 GOOGLE_API_KEY=la_tua_chiave_google
+# OPPURE
 ANTRHOPIC_API_KEY=la_tua_chiave_anthropic
 ```
 
@@ -52,6 +57,9 @@ Avvia l'applicazione tramite l'ide.
 ***2. Tramite l'installer (solo windows)***
 1. Scarica l'installer per l'interfaccia da questo link: [Installer windows](https://github.com/AlessandroZappatore/sim-suite-ai/releases/download/1.0/SimSuiteAI_Installer_1.0.0.exe)
 2. Avvia l'installer scaricato e segui le istruzioni a schermo per completare l'installazione.
+3. Per dubbi sull'uso dell'installer consulta [SimSuite.it](https://simsuite.it)
+
+**⚠️ Importante**: Per la compatibilità con SimSuite, sposta il file `database.db` nella cartella padre (fuori da `sim-suite-ai/`)
 
 
 ### 4. Accedi all'Applicazione
@@ -91,7 +99,7 @@ Avvia l'applicazione tramite l'ide.
 
 - Python 3.12+
 - Connessione Internet
-- API Key Google AI o Anthropic
+- API Key Google AI o Anthropic (una delle due)
 - Java (per interfaccia SimSuite)
 
 ---
@@ -103,7 +111,7 @@ sim-suite-ai/
 ├── AGENTS/          # Backend AI (Python)
 ├── JAVA/           # Interfaccia SimSuite (Java)
 ├── DOCS/           # Documentazione
-└── database.db     # Database scenari
+└── database.db     # Database scenari (da spostare nella cartella padre)
 ```
 
 ---
@@ -112,15 +120,20 @@ sim-suite-ai/
 
 **Il backend non parte?**
 - Verifica che l'ambiente virtuale sia attivo
-- Controlla che la API key sia configurata
+- Controlla che almeno una API key sia configurata
 
 **Non riesco ad accedere a SimSuite?**
 - Assicurati che l'interfaccia Java sia avviata sulla porta 9090
-- Controlla che il backend sia attivo sulla porta 8001
+- Consulta [SimSuite.it](https://simsuite.it) per supporto sull'interfaccia
+
+**Non riesco a creare uno scenario?**
+- Controlla che il file `database.db` sia posizionato nella cartella padre (fuori da `sim-suite-ai/`)
+- Verifica la connessione tra frontend e backend
 
 **Errori di generazione?**
+- Controlla che il backend sia attivo sulla porta 8001
 - Verifica la connessione internet
-- Controlla la validità della API key Google
+- Controlla la validità della API key configurata
 
 
 **Buona simulazione! 🏥**

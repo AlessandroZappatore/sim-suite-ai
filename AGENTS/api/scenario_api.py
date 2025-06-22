@@ -16,7 +16,6 @@ from models import FullScenario, ScenarioRequest
 
 from config import DIFFICULTY_LEVELS_CONFIG
 
-# Configure logging
 logger = logging.getLogger(__name__)
 
 router = APIRouter(

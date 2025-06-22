@@ -13,7 +13,6 @@ from fastapi import APIRouter
 from agents import generate_lab_exams
 from models import LabExamRequest, LabExamResponse
 
-# Configure logging
 logger = logging.getLogger(__name__)
 
 router = APIRouter(

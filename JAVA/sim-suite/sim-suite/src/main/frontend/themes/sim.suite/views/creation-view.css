@@ -1,233 +1,220 @@
 .creation-view {
-  padding: 2px;
-  box-sizing: border-box;
-  display: block;
-  position: relative;
+  /* Contenitore principale a tutta altezza e scorrevole */
   height: 100%;
   overflow-y: auto;
-  --cv-blue: 212 96% 54%;
-  --cv-purple: 259 97% 66%;
-  --cv-dropzone-border-color: hsl(var(--cv-blue) / 0.5);
-  --cv-dropzone-bg-color: hsl(var(--cv-blue) / 0.2);
-  --cv-droptarget-border-color: hsl(var(--cv-purple) / 1);
-  --cv-droptarget-bg-color: hsl(var(--cv-purple) / 0.4);
-  --cv-stripe-width: 1.5px;
-  --cv-stripe-gap: 9px;
-  --cv-stripe-color: hsl(var(--cv-blue) / 0.2);
-  --cv-layout-border-color: var(--lumo-contrast-40pct);
-  --cv-checkerboard-color1: hsl(0 0% 0% / 0.05);
-  --cv-checkerboard-color2: hsl(0 0% 100% / 0.05);
-  --cv-checkerboard-size: 16px;
+  background-color: var(--lumo-contrast-5pct);
+  box-sizing: border-box;
+  position: relative; /* Necessario per gli elementi posizionati in modo assoluto */
 }
 
-.creation-view[dragging] {
-  --cv-checkerboard-color1: hsl(var(--cv-blue) / 0.2);
-  --cv-checkerboard-color2: hsl(var(--cv-blue) / 0.1);
-  --cv-layout-border-color: var(--cv-dropzone-border-color);
+.scenario-container {
+  /* Contenitore che raggruppa i pulsanti di scenario */
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem; /* Spaziatura moderna tra i pulsanti */
+  width: min(90%, 800px); /* Larghezza massima ma responsive */
+  margin: 2rem auto; /* Centratura e spaziatura verticale */
+  padding: 1rem;
 }
 
-.creation-view .preview-container {
-  display: contents;
-}
+/* ==========================================================================
+   2. Stile dei Pulsanti di Scenario (Responsive e Varianti)
+   ========================================================================== */
 
-/* The root layout is not necessarily inside a flex box so width/height needs to be used */
-.creation-view .preview-container > .layout[style*='align-self: stretch'] {
+/* --- Stile di base per tutti i pulsanti --- */
+.scenario-button {
+  /* Layout Flex per allineare icona e testo */
+  display: flex;
+  align-items: center;
+  justify-content: flex-start; /* Allinea il contenuto a sinistra */
+
+  /* Dimensioni e Spaziatura */
   width: 100%;
-}
-.creation-view .preview-container > .layout[style*='flex-grow: 1'] {
-  height: 100%;
+  min-height: 80px;
+  height: auto; /* Permette al pulsante di crescere con il contenuto */
+  padding: 1.5rem;
+  text-align: left;
+
+  /* Aspetto */
+  border: none;
+  border-radius: 12px;
+  box-shadow: var(--lumo-box-shadow-s);
+  cursor: pointer;
+
+  /* Animazione */
+  transition: transform 0.2s ease, box-shadow 0.2s ease, background-color 0.2s ease;
 }
 
-/* Apply some default gap and padding to layouts that don't have inline styles for them while dragging. */
-.creation-view[dragging] .layout:not([style*='gap:']) {
-  gap: 8px;
+/* --- Elementi interni del pulsante --- */
+.scenario-button .buttonIcon {
+  flex-shrink: 0; /* Evita che l'icona si restringa */
+  margin-right: 1.25rem;
 }
 
-.creation-view[dragging] .layout:not([style*='padding:'], [empty]) {
-  padding: 8px;
+.scenario-button .titleSpan {
+  font-size: 1.2rem;
+  font-weight: 600;
+  line-height: 1.3;
 }
 
-.creation-view .cover-overlay {
+.scenario-button .descSpan {
+  font-size: var(--lumo-font-size-s);
+  color: var(--lumo-secondary-text-color);
+  line-height: 1.4;
+  margin-top: 0.25rem;
+  white-space: normal; /* Assicura che la descrizione vada a capo */
+}
+
+/* --- Stati Interattivi (Hover, Active) --- */
+.scenario-button:hover {
+  transform: translateY(-3px);
+  box-shadow: var(--lumo-box-shadow-m);
+}
+
+.scenario-button:active {
+  transform: translateY(1px);
+  box-shadow: var(--lumo-box-shadow-xs);
+}
+
+/* --- Varianti di Colore --- */
+/* Stile predefinito (blu) */
+.scenario-button {
+  background-color: var(--lumo-primary-color);
+  color: var(--lumo-primary-contrast-color);
+}
+.scenario-button:hover {
+  background-color: var(--lumo-primary-color-50pct);
+}
+
+
+.scenario-button.ai-creation-button {
+  background-color: var(--lumo-success-color);
+  color: var(--lumo-success-contrast-color);
+}
+.scenario-button.ai-creation-button:hover {
+  background-color: var(--lumo-success-text-color);
+}
+
+/* --- Logica per descrizione breve/lunga (sostituisce il JavaScript) --- */
+.long-desc { display: block; }
+.short-desc { display: none; }
+
+/* --- Stili Responsive --- */
+@media (max-width: 600px) {
+  /* Su mobile, mostra la descrizione breve e nascondi quella lunga */
+  .long-desc { display: none; }
+  .short-desc { display: block; }
+
+  .scenario-button {
+    padding: 1rem;
+    flex-direction: column; /* Impila icona e testo verticalmente */
+    align-items: flex-start; /* Allinea tutto a sinistra */
+  }
+
+  .scenario-button .buttonIcon {
+    margin-right: 0;
+    margin-bottom: 0.75rem; /* Spazio tra icona e titolo */
+  }
+}
+
+/* ==========================================================================
+   3. Stile del Visual UI Builder (Drag & Drop)
+   ========================================================================== */
+
+/* --- Variabili specifiche per l'editor --- */
+.creation-view {
+  --editor-blue: 212 96% 54%;
+  --editor-purple: 259 97% 66%;
+
+  --editor-dropzone-border: hsl(var(--editor-blue) / 0.5);
+  --editor-dropzone-bg: hsl(var(--editor-blue) / 0.2);
+
+  --editor-target-outline: hsl(var(--editor-purple) / 1);
+  --editor-target-bg: hsl(var(--editor-purple) / 0.4);
+
+  --editor-stripe-color: hsl(var(--editor-blue) / 0.15);
+
+  --editor-checkerboard-light: var(--lumo-contrast-5pct);
+  --editor-checkerboard-dark: var(--lumo-contrast-10pct);
+  --editor-checkerboard-size: 16px;
+
+  --editor-layout-border: var(--lumo-contrast-40pct);
+}
+
+/* --- Macchinari dell'editor (Overlays e Drop Zones) --- */
+.overlays, .drop-zones {
   position: absolute;
-  border-radius: 1px;
-}
-
-.creation-view:not([starting-drag]) .cover-overlay.editable-hovering {
-  outline: 2px solid hsl(var(--cv-blue) / 1);
-  outline-offset: -1px;
-}
-
-.creation-view:not([starting-drag]) .cover-overlay.editable-editing {
-  outline: 1px solid hsl(var(--cv-blue) / 1);
-  outline-offset: -1px;
-  box-shadow: inset 0 0 0 2px var(--lumo-base-color);
-}
-
-.creation-view .overlays,
-.creation-view .drop-zones {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
+  inset: 0; /* Scorciatoia per top, right, bottom, left = 0 */
   z-index: 1;
 }
 
+/* Le Drop Zones sono interattive solo durante il trascinamento */
 .creation-view:not([dragging]) .drop-zones {
   pointer-events: none;
 }
 
-.creation-view .drop-zone {
+.drop-zone {
   position: absolute;
   box-sizing: border-box;
-  border-radius: 1px;
-  min-height: 10px;
-  min-width: 10px;
+  border-radius: 2px;
+  transition: background-color 0.2s ease, outline-color 0.2s ease;
+}
+
+/* --- Stato: Trascinamento in corso --- */
+.creation-view[dragging] {
+  --editor-layout-border: var(--editor-dropzone-border);
+  --editor-checkerboard-light: hsl(var(--editor-blue) / 0.2);
+  --editor-checkerboard-dark: hsl(var(--editor-blue) / 0.1);
 }
 
 .creation-view[dragging] .drop-zone:not([empty-layout]) {
-  outline: 1px dashed var(--cv-dropzone-border-color);
+  outline: 1px dashed var(--editor-dropzone-border);
   outline-offset: -2px;
-  background-color: var(--cv-dropzone-bg-color);
-}
-
-.creation-view .drop-zone[remaining-space] {
-  background: repeating-linear-gradient(
-    -45deg,
-    var(--cv-stripe-color),
-    var(--cv-stripe-color) var(--cv-stripe-width),
-    transparent var(--cv-stripe-width),
-    transparent var(--cv-stripe-gap)
-  );
+  background-color: var(--editor-dropzone-bg);
 }
 
 .creation-view[dragging] .drop-zone[drag-over] {
-  background: var(--cv-droptarget-bg-color);
-  outline: 1px solid var(--cv-droptarget-border-color);
-  outline-offset: -1px;
+  background-color: var(--editor-target-bg);
+  outline: 2px solid var(--editor-target-outline);
   box-shadow: inset 0 0 0 2px var(--lumo-base-color);
 }
 
-.drop-zone[empty-layout] {
-  z-index: -1;
-}
-
-.creation-view:not([readonly]) .layout[empty],
-vaadin-form-layout[empty] {
-  border-radius: 1px;
-  background: repeating-conic-gradient(var(--cv-checkerboard-color1) 0% 25%, var(--cv-checkerboard-color2) 0% 50%) 50% /
-    var(--cv-checkerboard-size) var(--cv-checkerboard-size);
-  background-clip: content-box;
-  outline: 1px dashed var(--cv-layout-border-color);
+/* --- Layout Vuoti e Speciali --- */
+.layout[empty] {
+  border-radius: 2px;
+  background: repeating-conic-gradient(var(--editor-checkerboard-dark) 0% 25%, var(--editor-checkerboard-light) 0% 50%) 50% / var(--editor-checkerboard-size) var(--editor-checkerboard-size);
+  outline: 1px dashed var(--editor-layout-border);
   outline-offset: -2px;
-}
-.creation-view[dragging]:not([readonly]) vaadin-form-layout[empty] {
-  background: transparent;
-}
-
-.creation-view .layout[empty]::before {
-  content: '';
-  display: block;
+  min-height: 48px;
   min-width: 64px;
-  min-height: 32px;
 }
 
+.drop-zone[remaining-space] {
+  background: repeating-linear-gradient(-45deg, var(--editor-stripe-color), var(--editor-stripe-color) 2px, transparent 2px, transparent 10px);
+}
+
+/* --- Overlay di Selezione --- */
+.cover-overlay {
+  position: absolute;
+  pointer-events: none; /* Lascia passare i click */
+  border-radius: 1px;
+  outline-offset: -1px;
+  transition: outline 0.2s ease, box-shadow 0.2s ease;
+}
+
+.creation-view:not([starting-drag]) .cover-overlay.editable-hovering {
+  outline: 2px solid hsl(var(--editor-blue) / 1);
+}
+
+.creation-view:not([starting-drag]) .cover-overlay.editable-editing {
+  outline: 1px solid hsl(var(--editor-blue) / 1);
+  box-shadow: inset 0 0 0 2px var(--lumo-base-color);
+}
+
+/* --- Modalità Speciali (Readonly, Editing) --- */
 .creation-view[readonly] .drop-zones,
-.creation-view[readonly] .overlays {
-  display: none;
-}
-
+.creation-view[readonly] .overlays,
 .creation-view[inline-editing] .drop-zones,
 .creation-view[inline-editing] .overlays {
   display: none;
-}
-.creation-view .content-wrapper[contenteditable='true'] {
-  display: inline-block;
-  overflow: hidden;
-  width: 100%;
-}
-
-.creation-view[dragging] vaadin-form-layout {
-  padding: 8px;
-}
-.creation-view vaadin-form-layout[empty]::before {
-  content: '';
-  display: block;
-  min-width: 64px;
-  min-height: 32px;
-}
-
-.creation-view[dragging] vaadin-form-layout:not([empty])::after {
-  content: '';
-  display: block;
-  min-width: 64px;
-  min-height: 32px;
-}
-
-@media (max-width: 768px) {
-  .scenario-button {
-    padding: 0.75rem !important;
-  }
-
-  .scenario-button span {
-    font-size: 0.9rem !important;
-  }
-
-  .scenario-button [part="prefix"] {
-    margin-right: 0.3rem !important;
-  }
-}
-
-.scenario-button {
-  white-space: normal !important;
-  word-break: break-word !important;
-  overflow-wrap: anywhere !important;
-  height: auto !important; /* Rimuovi l'altezza fissa */
-  min-height: 80px !important; /* Imposta un'altezza minima invece che fissa */
-}
-
-.scenario-button .descSpan {
-  white-space: normal !important;
-  word-break: break-word !important;
-  overflow-wrap: anywhere !important;
-}
-
-@media (max-width: 600px) {
-  .scenario-button {
-    padding: 1rem 0.75rem !important; /* Riduci il padding su mobile */
-    height: auto !important; /* Altezza automatica */
-  }
-
-  .scenario-button content {
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-  }
-
-  .scenario-button .buttonIcon {
-    margin-bottom: 0.5rem !important;
-  }
-
-  .scenario-button .titleSpan,
-  .scenario-button .descSpan {
-    width: 100% !important;
-    text-align: left !important;
-  }
-}
-
-
-.scenario-button:hover {
-  transform: translateY(-2px) !important;
-  box-shadow: 0 4px 8px rgba(0,0,0,0.15) !important;
-  background-color: var(--lumo-primary-color-50pct) !important;
-}
-
-.creation-view {
-  background-size: cover;
-}
-
-.scenario-container {
-  display: flex;
-  flex-direction: column;
-  gap: 1rem;
 }

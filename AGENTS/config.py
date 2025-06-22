@@ -33,7 +33,7 @@ LOGGING_CONFIG: Dict[str, Any] = {
 }
 
 PROJECT_ROOT = os.path.dirname(os.path.abspath(__file__))
-DATABASE_PATH = os.path.join(PROJECT_ROOT, "..", "database.db") 
+DATABASE_PATH = os.path.join(PROJECT_ROOT, "..", "..", "database.db")
 
 GOOGLE_API_KEY = os.getenv("GOOGLE_API_KEY")
 ANTHROPIC_API_KEY = os.getenv("ANTHROPIC_API_KEY")

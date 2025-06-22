@@ -18,9 +18,15 @@
             </div>            <ul class="nav-menu">
                 <li><a href="#home" class="nav-link">Home</a></li>
                 <li><a href="#overview" class="nav-link">Panoramica</a></li>
-                <li><a href="#ai-features" class="nav-link">Intelligenza Artificiale</a></li>
+                <li><a href="#ai-features" class="nav-link">AI Features</a></li>
                 <li><a href="#technology" class="nav-link">Tecnologie</a></li>
-                <li><a href="#setup" class="nav-link">Installazione</a></li>
+                <li class="nav-dropdown">
+                    <a href="#setup" class="nav-link dropdown-toggle">Guida <i class="fas fa-chevron-down"></i></a>
+                    <ul class="dropdown-menu">
+                        <li><a href="#setup" class="dropdown-link">Installazione</a></li>
+                        <li><a href="#troubleshooting" class="dropdown-link">Risoluzione Problemi</a></li>
+                    </ul>
+                </li>
                 <li><a href="#simnova" class="nav-link">Simnova</a></li>
             </ul>
             <div class="hamburger">
@@ -632,14 +638,14 @@
                         <div class="step-header">
                             <span class="step-number">1</span>
                             <h3>Configurazione delle API Key</h3>
-                        </div>
-                        <div class="step-content">
-                            <p>Crea un file <code>.env</code> nella cartella <code>AGENTS</code> e configura le tue API key segrete:</p>
+                        </div>                        <div class="step-content">
+                            <p>Crea un file <code>.env</code> nella cartella <code>AGENTS</code> con una delle seguenti chiavi (non è necessario configurarle entrambe):</p>
                             <div class="code-block">
                                 <pre><code># File: AGENTS/.env
+# Scegli UNA delle due opzioni:
 GOOGLE_API_KEY=your_google_api_key_here
-ANTHROPIC_API_KEY=your_anthropic_api_key_here
-# Aggiungi altre API key necessarie</code></pre>
+# OPPURE
+ANTHROPIC_API_KEY=your_anthropic_api_key_here</code></pre>
                             </div>
                         </div>
                     </div>
@@ -647,15 +653,17 @@ ANTHROPIC_API_KEY=your_anthropic_api_key_here
                         <div class="step-header">
                             <span class="step-number">2</span>
                             <h3>Configurazione Environment Python</h3>
-                        </div>
-                        <div class="step-content">
-                            <p>Prima di avviare il backend, attiva l'environment virtuale e installa le dipendenze:</p>
+                        </div>                        <div class="step-content">
+                            <p>Prima di avviare il backend, crea (se necessario) e attiva l'environment virtuale:</p>
                             <div class="code-block">
                                 <pre><code>cd AGENTS
+# Se non esiste, crea l'ambiente virtuale
+python -m venv aienv
+# Attiva l'ambiente virtuale
 aienv\Scripts\activate
-uv pip install -r requirements.txt</code></pre>
+pip install -r requirements.txt</code></pre>
                             </div>
-                            <p><strong>Nota:</strong> Assicurati che l'environment virtuale <code>aienv</code> sia già stato creato nella cartella AGENTS.</p>
+                            <p><strong>Nota:</strong> Se l'environment virtuale <code>aienv</code> esiste già, puoi saltare il comando di creazione.</p>
                         </div>
                     </div>
                     
@@ -684,8 +692,7 @@ uv pip install -r requirements.txt</code></pre>
                                     <div class="option-header">
                                         <i class="fas fa-code"></i>
                                         <h4>Opzione 1: IntelliJ IDEA</h4>
-                                    </div>
-                                    <p>Per sviluppatori o utenti che hanno accesso al codice sorgente:</p>
+                                    </div>                                    <p>Per sviluppatori o utenti che hanno accesso al codice sorgente:</p>
                                     <div class="setup-instructions">
                                         <div class="instruction">
                                             <i class="fas fa-folder-open"></i>
@@ -721,6 +728,10 @@ uv pip install -r requirements.txt</code></pre>
                                             <i class="fas fa-rocket"></i>
                                             <span>Avvia SimSuiteAI dal menu Start</span>
                                         </div>
+                                        <div class="instruction">
+                                            <i class="fas fa-info-circle"></i>
+                                            <span>Per dubbi consulta <a href="https://simsuite.it" target="_blank">SimSuite.it</a></span>
+                                        </div>
                                     </div>
                                     <a href="https://github.com/AlessandroZappatore/sim-suite-ai/releases/download/1.0/SimSuiteAI_Installer_1.0.0.exe" class="btn btn-primary">
                                         <i class="fas fa-download"></i>
@@ -728,13 +739,22 @@ uv pip install -r requirements.txt</code></pre>
                                     </a>
                                 </div>
                             </div>
+                            
+                            <div class="important-note">
+                                <div class="note-icon">
+                                    <i class="fas fa-exclamation-triangle"></i>
+                                </div>
+                                <div class="note-content">
+                                    <h4>⚠️ Importante: Posizione Database</h4>
+                                    <p>Per la compatibilità con SimSuite, è necessario spostare il file <code>database.db</code> nella cartella padre (fuori da <code>sim-suite-ai/</code>). Questo garantisce il corretto funzionamento dell'applicazione.</p>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
                   <div class="requirements">
                     <h3>Requisiti di Sistema</h3>
-                    <div class="requirements-grid">
-                        <div class="requirement">
+                    <div class="requirements-grid">                        <div class="requirement">
                             <i class="fab fa-python"></i>
                             <span>Python 3.12+</span>
                         </div>
@@ -752,13 +772,121 @@ uv pip install -r requirements.txt</code></pre>
                         </div>
                         <div class="requirement">
                             <i class="fas fa-key"></i>
-                            <span>API Keys AI</span>
+                            <span>API Key Google AI o Anthropic (una delle due)</span>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
-    </section>    <!-- Simnova Section -->
+    </section>
+
+    <!-- Troubleshooting Section -->
+    <section id="troubleshooting" class="section bg-light">
+        <div class="container">
+            <div class="section-header">
+                <h2 class="section-title">❓ Risoluzione Problemi</h2>
+                <p class="section-subtitle">Soluzioni alle problematiche più comuni durante l'installazione e l'utilizzo</p>
+            </div>
+            
+            <div class="troubleshooting-content">
+                <div class="trouble-grid">
+                    <div class="trouble-card">
+                        <div class="trouble-icon backend">
+                            <i class="fas fa-server"></i>
+                        </div>
+                        <h3>Il backend non parte?</h3>
+                        <div class="trouble-solutions">
+                            <div class="solution">
+                                <i class="fas fa-check-circle"></i>
+                                <span>Verifica che l'ambiente virtuale sia attivo</span>
+                            </div>
+                            <div class="solution">
+                                <i class="fas fa-check-circle"></i>
+                                <span>Controlla che almeno una API key sia configurata</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="trouble-card">
+                        <div class="trouble-icon interface">
+                            <i class="fas fa-desktop"></i>
+                        </div>
+                        <h3>Non riesco ad accedere a SimSuite?</h3>
+                        <div class="trouble-solutions">
+                            <div class="solution">
+                                <i class="fas fa-check-circle"></i>
+                                <span>Assicurati che l'interfaccia Java sia avviata sulla porta 9090</span>
+                            </div>
+                            <div class="solution">
+                                <i class="fas fa-check-circle"></i>
+                                <span>Consulta <a href="https://simsuite.it" target="_blank" style="color: #007bff;">SimSuite.it</a> per supporto sull'interfaccia</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="trouble-card">
+                        <div class="trouble-icon scenario">
+                            <i class="fas fa-file-medical"></i>
+                        </div>
+                        <h3>Non riesco a creare uno scenario?</h3>
+                        <div class="trouble-solutions">
+                            <div class="solution">
+                                <i class="fas fa-check-circle"></i>
+                                <span>Controlla che il file <code>database.db</code> sia posizionato nella cartella padre</span>
+                            </div>
+                            <div class="solution">
+                                <i class="fas fa-check-circle"></i>
+                                <span>Verifica la connessione tra frontend e backend</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="trouble-card">
+                        <div class="trouble-icon generation">
+                            <i class="fas fa-robot"></i>
+                        </div>
+                        <h3>Errori di generazione?</h3>
+                        <div class="trouble-solutions">
+                            <div class="solution">
+                                <i class="fas fa-check-circle"></i>
+                                <span>Controlla che il backend sia attivo sulla porta 8001</span>
+                            </div>
+                            <div class="solution">
+                                <i class="fas fa-check-circle"></i>
+                                <span>Verifica la connessione internet</span>
+                            </div>
+                            <div class="solution">
+                                <i class="fas fa-check-circle"></i>
+                                <span>Controlla la validità della API key configurata</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="additional-help">
+                    <div class="help-card">
+                        <div class="help-icon">
+                            <i class="fas fa-life-ring"></i>
+                        </div>
+                        <h3>Hai ancora problemi?</h3>
+                        <p>Se i problemi persistono, consulta la documentazione completa o contatta il supporto attraverso il repository GitHub.</p>
+                        <div class="help-links">
+                            <a href="https://github.com/AlessandroZappatore/sim-suite-ai" class="btn btn-secondary">
+                                <i class="fab fa-github"></i>
+                                Repository GitHub
+                            </a>
+                            <a href="https://simsuite.it" class="btn btn-secondary">
+                                <i class="fas fa-globe"></i>
+                                SimSuite.it
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Simnova Section -->
     <section id="simnova" class="section">
         <div class="container">
             <div class="section-header">
