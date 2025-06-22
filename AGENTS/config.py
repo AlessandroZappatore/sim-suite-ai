@@ -43,10 +43,8 @@ def _get_database_path() -> str:
     """
     import winreg
     
-    # List of possible installer locations
     possible_installer_paths: list[str] = []
     
-    # Method 1: Use environment variables (most reliable)
     programfiles_x86 = os.environ.get("PROGRAMFILES(X86)")
     if programfiles_x86:
         possible_installer_paths.append(os.path.join(programfiles_x86, "SimSuiteAI", "database.db"))
@@ -55,9 +53,7 @@ def _get_database_path() -> str:
     if programfiles:
         possible_installer_paths.append(os.path.join(programfiles, "SimSuiteAI", "database.db"))
     
-    # Method 2: Try to get Program Files paths from Windows Registry
     try:
-        # Get Program Files path from registry
         with winreg.OpenKey(winreg.HKEY_LOCAL_MACHINE, 
                            r"SOFTWARE\Microsoft\Windows\CurrentVersion") as key:
             try:
@@ -72,15 +68,12 @@ def _get_database_path() -> str:
             except FileNotFoundError:
                 pass
     except Exception:
-        # If registry access fails, continue with other methods
         pass
-      # Method 3: Check common drive locations as last resort
     drives = [os.environ.get("SYSTEMDRIVE", "C:")]
     if "C:" not in drives:
         drives.append("C:")
     
     for drive in drives:
-        # Look for any folder that starts with "Program" in the drive root
         try:
             drive_root = os.path.join(drive, os.sep)
             if os.path.exists(drive_root):
@@ -90,15 +83,12 @@ def _get_database_path() -> str:
                         item.lower().startswith(("program", "programm", "archivo", "fichier", "arquivo"))):
                         possible_installer_paths.append(os.path.join(item_path, "SimSuiteAI", "database.db"))
         except (OSError, PermissionError):
-            # Skip if we can't access the drive
             pass
     
-    # Check each installer location
     for installer_path in possible_installer_paths:
         if installer_path and os.path.exists(installer_path):
             return installer_path
     
-    # If no installer path found, always use development location
     dev_db_path = os.path.join(PROJECT_ROOT, "..", "..", "database.db")
     return dev_db_path
 
