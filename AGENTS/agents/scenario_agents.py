@@ -6,7 +6,7 @@ process. It defines specialist agents for different parts of a scenario
 a MedicalScenarioTeam class to orchestrate the generation pipeline using
 agno's structured output capabilities.
 
-Version: 5.0.1 
+Version: 5.1
 """
 
 import logging
@@ -103,7 +103,7 @@ def create_validation_prompt(request: ScenarioRequest) -> str:
     """
 
 def create_info_prompt(request: ScenarioRequest) -> str:
-    """Creates prompt for the Scenario Info Generator agent."""
+    """Creates the prompt for the Scenario Info Generator agent."""
     difficulty_guidelines = {
         "Facile": {"complications": "Scenario semplice...", "parameters": "Parametri vitali stabili...", "timeline": "Evoluzione lineare...", "actions": "Azioni cliniche di base..."},
         "Medio": {"complications": "Scenario con complessità moderata...", "parameters": "Parametri vitali con alterazioni moderate...", "timeline": "Evoluzione con qualche imprevisto...", "actions": "Combinazione di azioni di base e avanzate..."},
@@ -138,7 +138,7 @@ def create_info_prompt(request: ScenarioRequest) -> str:
     """
 
 def create_timeline_prompt(base_scenario: BaseScenario, difficulty: str) -> str:
-    """Creates the simplified prompt for the Clinical Timeline Generator agent."""
+    """Creates the prompt for the Clinical Timeline Generator agent."""
     difficulty_timeline_rules = {
         "Facile": "Evoluzione graduale e stabile. Tempi lenti (5-10 min).",
         "Medio": "Evoluzione moderatamente dinamica. Tempi normali (2-5 min).",
@@ -161,7 +161,7 @@ def create_timeline_prompt(base_scenario: BaseScenario, difficulty: str) -> str:
     """
 
 def create_script_prompt(full_context: FullScenario) -> str:
-    """Creates the simplified prompt for the Patient Script Writer agent."""
+    """Creates the prompt for the Patient Script Writer agent."""
     context_json = full_context.model_dump_json(indent=2)
     return f"""
     Given the complete medical scenario below, write a detailed script for the simulated patient.

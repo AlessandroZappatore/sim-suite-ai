@@ -1,10 +1,9 @@
 """Main entry point for the Medical Simulation Suite AI.
 
 Initializes and configures the main FastAPI application. This module serves as
-the primary entry point, mounting all service-specific sub-applications
-(e.g., scenarios, exams) and defining core health check endpoints.
+the primary entry point, including router and defining core health check endpoints.
 
-Version: 4.2.0
+Version: 4.3.0
 """
 
 import logging

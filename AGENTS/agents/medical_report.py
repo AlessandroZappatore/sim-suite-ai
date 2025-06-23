@@ -37,7 +37,7 @@ medical_report_agent = Agent(
 
 
 def create_medical_report_prompt(request: MedicalReportRequest) -> str:
-    """Creates the simplified prompt for the medical report generation agent.
+    """Creates the prompt for the medical report generation agent.
 
     Args:
         request: The user's request containing the clinical context.

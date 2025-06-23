@@ -42,7 +42,7 @@ materials_agent = Agent(
 
 
 def create_materials_prompt(request: MATModelRequest, existing_materials: List[Dict[str, Any]]) -> str:
-    """Creates the simplified prompt for the materials generation agent."""
+    """Creates the prompt for the materials generation agent."""
     existing_materials_text = ""
     if existing_materials:
         existing_materials_text = "\n\n## DATABASE MATERIALS\n"
